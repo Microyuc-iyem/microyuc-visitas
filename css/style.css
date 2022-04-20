@@ -4,6 +4,26 @@
     box-sizing: inherit;
 }
 
+html {
+    font-size: 62.5%;
+}
+
 body {
     box-sizing: border-box;
+    color: #343a40;
+    line-height: 1.7;
+    font-weight: 400;
+    font-family: sans-serif;
+}
+
+.encabezado-primario {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 2.4rem;
+    margin-bottom: 6.9rem;
+}
+
+.formulario {
+    max-width: 128rem;
+    margin: 0 auto;
 }
