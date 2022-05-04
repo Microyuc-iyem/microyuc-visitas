@@ -1,4 +1,5 @@
 <?php
+
 require './librerias/phpword/vendor/autoload.php';
 
 $numero_expediente = $_POST['numero_expediente'];
@@ -16,6 +17,7 @@ $monto_inicial = $_POST['monto_inicial'];
 $mensualidades_vencidas = $_POST['mensualidades_vencidas'];
 $adeudo_total = $_POST['adeudo_total'];
 $nombre_archivo = 'IYE' . $_POST['numero_expediente'] . ' ' . $_POST['nombre_cliente'] . '.docx';
+$nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
 
@@ -34,6 +36,7 @@ $templateProcessor->setValue('monto_inicial', $monto_inicial);
 $templateProcessor->setValue('mensualidades_vencidas', $mensualidades_vencidas);
 $templateProcessor->setValue('adeudo_total', $adeudo_total);
 
-header("Content-Disposition: attachment; filename=$nombre_archivo");
+header("Content-Type: application/msword; charset=utf-8");
+header('Content-Disposition: attachment; filename="'."$nombre_archivo_decodificado".'"');
 $templateProcessor->saveAs("php://output");
 ?>
