@@ -36,7 +36,7 @@ $templateProcessor->setValue('monto_inicial', $monto_inicial);
 $templateProcessor->setValue('mensualidades_vencidas', $mensualidades_vencidas);
 $templateProcessor->setValue('adeudo_total', $adeudo_total);
 
-header("Content-Type: application/msword; charset=utf-8");
 header('Content-Disposition: attachment; filename="'."$nombre_archivo_decodificado".'"');
+
 $templateProcessor->saveAs("php://output");
 ?>
