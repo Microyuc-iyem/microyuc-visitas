@@ -10,7 +10,9 @@
 </head>
 <body>
 <header>
+<nav>
 
+</nav>
 </header>
 <div class="container">
     <div class="letterGeneratorForm__container">
@@ -72,7 +74,7 @@
                        required>
             </div>
             <div>
-                <label for="adeudo_total">Adeuto total<span class="asterisk">*</span>: </label>
+                <label for="adeudo_total">Adeudo total<span class="asterisk">*</span>: </label>
                 <input class="letterGeneratorForm__input" type="number" id="adeudo_total" name="adeudo_total" required>
             </div>
             <div class="letterGeneratorForm__btnContainer">
