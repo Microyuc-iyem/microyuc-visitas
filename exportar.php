@@ -3,6 +3,15 @@
 require './librerias/phpword/vendor/autoload.php';
 include './config/db_connect.php';
 
+$fmt = datefmt_create(
+    'es-MX',
+    IntlDateFormatter::FULL,
+    IntlDateFormatter::FULL,
+    'America/Mexico_City',
+    IntlDateFormatter::GREGORIAN,
+    "MMMM 'de' yyyy"
+);
+
 $numero_expediente = $_POST['numero_expediente'];
 $nombre_cliente = $_POST['nombre_cliente'];
 $calle = $_POST['calle'];
@@ -25,9 +34,13 @@ $adeudo_total = $_POST['adeudo_total'];
 $nombre_archivo = 'IYE' . $numero_expediente . ' ' . $nombre_cliente . '.docx';
 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
-$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
+$pagos_fecha_inicial_conv = date_create($pagos_fecha_inicial);
+$pagos_fecha_final_conv = date_create($pagos_fecha_final);
 
-$meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
+date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
+
+$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
 
 $templateProcessor->setValue('numero_expediente', $numero_expediente);
 $templateProcessor->setValue('nombre_cliente', $nombre_cliente);
@@ -41,8 +54,8 @@ $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($_POST['fech
 $templateProcessor->setValue('documentacion', $documentacion);
 $templateProcessor->setValue('comprobacion_monto', $comprobacion_monto);
 $templateProcessor->setValue('comprobacion_tipo', $comprobacion_tipo);
-$templateProcessor->setValue('pagos_fecha_inicial', date('F \d\e Y', strtotime($pagos_fecha_inicial)));
-$templateProcessor->setValue('pagos_fecha_final', date('F \d\e Y', strtotime($pagos_fecha_final)));
+$templateProcessor->setValue('pagos_fecha_inicial', datefmt_format($fmt, $pagos_fecha_inicial_conv));
+$templateProcessor->setValue('pagos_fecha_final', datefmt_format($fmt, $pagos_fecha_final_conv));
 $templateProcessor->setValue('tipo_credito', $tipo_credito);
 $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($_POST['fecha_otorgamiento'])));
 $templateProcessor->setValue('monto_inicial', $monto_inicial);
