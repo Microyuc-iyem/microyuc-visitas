@@ -29,7 +29,6 @@ $pagos_fecha_final = $_POST['pagos_fecha_final'];
 $tipo_credito = $_POST['tipo_credito'];
 $fecha_otorgamiento = $_POST['fecha_otorgamiento'];
 $monto_inicial = $_POST['monto_inicial'];
-$mensualidades_vencidas = $_POST['mensualidades_vencidas'];
 $adeudo_total = $_POST['adeudo_total'];
 $nombre_archivo = 'IYE' . $numero_expediente . ' ' . $nombre_cliente . '.docx';
 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
@@ -39,6 +38,10 @@ $pagos_fecha_final_conv = date_create($pagos_fecha_final);
 
 date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
 date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
+
+$intervalo_meses = $pagos_fecha_final_conv->diff($pagos_fecha_inicial_conv);
+$total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
+$mensualidades_vencidas = $total_meses;
 
 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
 
@@ -79,7 +82,7 @@ $pagos_fecha_final = mysqli_real_escape_string($conn, $_POST['pagos_fecha_final'
 $tipo_credito = mysqli_real_escape_string($conn, $_POST['tipo_credito']);
 $fecha_otorgamiento = mysqli_real_escape_string($conn, $_POST['fecha_otorgamiento']);
 $monto_inicial = mysqli_real_escape_string($conn, $_POST['monto_inicial']);
-$mensualidades_vencidas = mysqli_real_escape_string($conn, $_POST['mensualidades_vencidas']);
+$mensualidades_vencidas = mysqli_real_escape_string($conn, $mensualidades_vencidas);
 $adeudo_total = mysqli_real_escape_string($conn, $_POST['adeudo_total']);
 
 $sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma, 
