@@ -1,141 +1,52 @@
-<?php
-
-include ('./config/db_connect.php');
-
-// Write query for all acreditados
-$sql = 'SELECT nombre, folio, municipio, email, direccion_particular FROM acreditado ORDER BY nombre';
-
-// make query and & get result
-$result = mysqli_query($conn, $sql);
-
-// Fetch the resulting rows as an array
-$acreditados = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-// Free result from memory
-mysqli_free_result($result);
-
-// Close connection
-mysqli_close($conn);
-
-?>
-
 <!doctype html>
-<html lang="es-MX">
+<html lang="es_MX" class="h-full bg-gray-50">
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./css/main.css">
-    <title>Microyuc | Generador de Carta</title>
+    <title>Inicio de sesión</title>
 </head>
-<body>
-<header>
-    <nav>
-        <h4 class="text-6xl">Acreditados</h4>
+<body class="h-full">
+<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
         <div>
-            <?php foreach ($acreditados as $acreditado) { ?>
-            <p>
-                <?php echo htmlspecialchars($acreditado['nombre'])?>
-                <?php echo htmlspecialchars($acreditado['folio'])?>
-            </p>
-            <?php } ?>
+            <img class="mx-auto h-242 w-auto" src="./img/microyucfondo.png"
+                 alt="Workflow">
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Inicia sesión a tu cuenta</h2>
         </div>
-    </nav>
-</header>
-<div class="container">
-    <div class="letterGeneratorForm__container">
-        <h1 class="primary-heading">Generador de carta Microyuc</h1>
-        <form class="letterGeneratorForm" action="./exportar.php" method="post">
-            <div>
-                <label for="numero_expediente">Número de expediente<span class="asterisk">*</span>:</label>
-                <input class="letterGeneratorForm__input" type="text" id="numero_expediente"
-                       name="numero_expediente" required>
+        <form class="mt-8 space-y-6" action="#" method="POST">
+            <input type="hidden" name="remember" value="true">
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="usuario" class="sr-only">Usuario</label>
+                    <input id="usuario" name="usuario" type="text" autocomplete="text" required
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           placeholder="Nombre de usuario">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Contraseña</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           placeholder="Contraseña">
+                </div>
             </div>
+
             <div>
-                <label for="nombre_cliente">Nombre del cliente<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="text" id="nombre_cliente" name="nombre_cliente"
-                       required>
-            </div>
-            <div>
-                <label for="calle">Calle: </label>
-                <input class="letterGeneratorForm__input" type="text" id="calle" name="calle">
-            </div>
-            <div>
-                <label for="cruzamientos">Cruzamientos: </label>
-                <input class="letterGeneratorForm__input" type="text" id="cruzamientos" name="cruzamientos">
-            </div>
-            <div>
-                <label for="numero_direccion">Número: </label>
-                <input class="letterGeneratorForm__input" type="number" id="numero_direccion"
-                       name="numero_direccion">
-            </div>
-            <div>
-                <label for="colonia_fraccionamiento">Colonia/fraccionamiento: </label>
-                <input class="letterGeneratorForm__input" type="text" id="colonia_fraccionamiento"
-                       name="colonia_fraccionamiento">
-            </div>
-            <div>
-                <label for="localidad">Localidad: </label>
-                <input class="letterGeneratorForm__input" type="text" id="localidad" name="localidad">
-            </div>
-            <div>
-                <label for="municipio">Municipio: </label>
-                <input class="letterGeneratorForm__input" type="text" id="municipio" name="municipio">
-            </div>
-            <div>
-                <label for="fecha_firma">Fecha de firma de anexos<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="date" id="fecha_firma" name="fecha_firma" required>
-            </div>
-            <div>
-                <label for="documentacion">Documentación: </label>
-                <input class="letterGeneratorForm__input" type="text" id="documentacion" name="documentacion">
-            </div>
-            <div>
-                <label for="comprobacion_monto">Monto de comprobación: </label>
-                <input class="letterGeneratorForm__input" type="number" id="comprobacion_monto" name="comprobacion_monto">
-            </div>
-            <div>
-                <label for="comprobacion_tipo">Tipo de comprobación: </label>
-                <input class="letterGeneratorForm__input" type="text" id="comprobacion_tipo" name="comprobacion_tipo">
-            </div>
-            <div>
-                <label for="pagos_fecha_inicial">Fecha inicial<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="month" id="pagos_fecha_inicial" name="pagos_fecha_inicial" required>
-            </div>
-            <div>
-                <label for="pagos_fecha_final">Fecha final<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="month" id="pagos_fecha_final" name="pagos_fecha_final" required>
-            </div>
-            <div>
-                <label for="tipo_credito">Tipo de crédito<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="text" id="tipo_credito" name="tipo_credito"
-                       required>
-            </div>
-            <div>
-                <label for="fecha_otorgamiento">Fecha de otorgamiento del crédito<span class="asterisk">*</span>:
-                </label>
-                <input class="letterGeneratorForm__input" type="date" id="fecha_otorgamiento"
-                       name="fecha_otorgamiento" required>
-            </div>
-            <div>
-                <label for="monto_inicial">Monto inicial<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="number" id="monto_inicial" name="monto_inicial"
-                       required>
-            </div>
-            <div>
-                <label for="mensualidades_vencidas">Mensualidades vencidas<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="number" id="mensualidades_vencidas"
-                       name="mensualidades_vencidas"
-                       required>
-            </div>
-            <div>
-                <label for="adeudo_total">Adeudo total<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="number" id="adeudo_total" name="adeudo_total"
-                       required>
-            </div>
-            <div class="letterGeneratorForm__btnContainer">
-                <input class="btn btn--animated" type="submit" value="Generar archivo">
+                <button type="submit"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <!-- Heroicon name: solid/lock-closed -->
+            <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd"
+                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </span>
+                    Iniciar sesión
+                </button>
             </div>
         </form>
     </div>
