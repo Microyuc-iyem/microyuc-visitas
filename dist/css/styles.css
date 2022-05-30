@@ -14,4 +14,127 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+.login__container .login__form, .login__container, .login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login {
+  height: 100vh;
+  background-color: #f2f6ff;
+}
+.login__img {
+  width: 65%;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 30em) {
+  .login__img {
+    width: 60%;
+  }
+}
+@media (min-width: 45em) {
+  .login__img {
+    max-width: 55%;
+  }
+}
+@media (min-width: 60em) {
+  .login__img {
+    width: 45%;
+  }
+}
+@media (min-width: 75em) {
+  .login__img {
+    width: 30%;
+  }
+}
+.login__container {
+  background-color: #fff;
+  border-radius: 0.9375rem;
+  padding: 2.1875rem;
+  margin-inline: 1.125rem;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+@media (min-width: 30em) {
+  .login__container {
+    margin-inline: 0;
+    width: 65%;
+    height: auto;
+  }
+}
+@media (min-width: 45em) {
+  .login__container {
+    max-width: 55%;
+  }
+}
+@media (min-width: 60em) {
+  .login__container {
+    width: 45%;
+  }
+}
+@media (min-width: 75em) {
+  .login__container {
+    width: 30%;
+  }
+}
+.login__container .login__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #0494c4;
+  margin-bottom: 0.3125rem;
+}
+@media (min-width: 45em) {
+  .login__container .login__title {
+    font-size: 1.875rem;
+  }
+}
+.login__container .login__subtitle {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #424242;
+  margin-bottom: 2.25rem;
+}
+@media (min-width: 45em) {
+  .login__container .login__subtitle {
+    font-size: 1rem;
+  }
+}
+.login__container .login__form {
+  width: 100%;
+}
+.login__container .login__form label {
+  width: 100%;
+}
+.login__container .login__form label .login__input {
+  width: 100%;
+  margin-bottom: 0.9375rem;
+  padding: 0.625rem;
+  border-radius: 0.3125rem;
+  font-size: 0.875rem;
+  outline: #242c5c solid 2px;
+  border: none;
+  background-color: #fff;
+  color: #000;
+}
+.login__container .login__form label *:focus {
+  outline: #0494c4 solid 2px;
+}
+.login__container .login__form .login__btn {
+  width: 100%;
+  border: none;
+  background-color: #5bb8d9;
+  border-radius: 0.3125rem;
+  color: #fff;
+  padding: 0.625rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+}
+.login__container .login__form .login__btn:hover {
+  background-color: #045c94;
+}
+
 /*# sourceMappingURL=styles.css.map */
