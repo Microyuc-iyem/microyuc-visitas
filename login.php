@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es_MX">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./dist/css/styles.css">
     <title>Microyuc | Inicio de sesión</title>
 </head>
-<body style="">
+<body>
 <div class="login">
     <img src="./img/microyucfondo.png" alt="Logo de Microyuc" class="login__img">
     <div class="login__container">
