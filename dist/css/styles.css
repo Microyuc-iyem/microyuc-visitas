@@ -32,22 +32,22 @@ body {
 }
 @media (min-width: 30em) {
   .login__img {
-    width: 60%;
+    width: 55%;
   }
 }
 @media (min-width: 45em) {
   .login__img {
-    max-width: 55%;
+    max-width: 45%;
   }
 }
 @media (min-width: 60em) {
   .login__img {
-    width: 45%;
+    width: 35%;
   }
 }
 @media (min-width: 75em) {
   .login__img {
-    width: 30%;
+    width: 20%;
   }
 }
 .login__container {
