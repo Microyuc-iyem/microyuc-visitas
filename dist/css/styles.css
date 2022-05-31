@@ -14,6 +14,75 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+.dashboard .sidebar {
+  height: 100vh;
+  box-shadow: 1px 50px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: 0.875rem;
+}
+.dashboard .sidebar__image {
+  width: 100%;
+  height: auto;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.dashboard .sidebar__nav {
+  width: 100%;
+}
+.dashboard__main {
+  background-color: #f6f6f6;
+  z-index: -1;
+}
+
+.sidebar__title {
+  color: #cbcbcb;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: -0.03125rem;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar__list {
+  list-style: none;
+}
+.sidebar__list:last-of-type {
+  margin-bottom: 0.75rem;
+}
+
+.sidebar__icon {
+  width: 1rem;
+}
+
+.sidebar__link {
+  width: 100%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.5rem;
+}
+.sidebar__link:link, .sidebar__link:visited {
+  text-decoration: none;
+  color: #343a40;
+  padding: 0.375rem 0.5rem;
+}
+.sidebar__link:hover, .sidebar__link:active {
+  background-color: #5bb8d9;
+  color: #fff;
+  border-radius: 0.3125rem;
+}
+
+.hidden {
+  display: none;
+}
+
 .login__container .login__form, .login__container, .login {
   display: flex;
   justify-content: center;
