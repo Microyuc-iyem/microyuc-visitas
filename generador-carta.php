@@ -12,7 +12,7 @@
 <div class="container">
     <div class="letterGeneratorForm__container">
         <h1 class="primary-heading">Generador de carta Microyuc</h1>
-        <form class="letterGeneratorForm" action="./exportar.php" method="post">
+        <form class="letterGeneratorForm" action="exportar-carta.php" method="post">
             <div>
                 <label for="numero_expediente">Número de expediente<span class="asterisk">*</span>:</label>
                 <input class="letterGeneratorForm__input" type="text" id="numero_expediente"
