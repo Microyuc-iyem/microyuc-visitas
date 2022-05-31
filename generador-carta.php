@@ -1,65 +1,14 @@
-<?php
-
-include('./config/db_connect.php');
-
-// Write query for all acreditados
-$sql = 'SELECT nombre, folio, municipio, email, direccion_particular FROM acreditado ORDER BY nombre';
-
-// make query and & get result
-$result = mysqli_query($conn, $sql);
-
-// Fetch the resulting rows as an array
-$acreditados = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-// Free result from memory
-mysqli_free_result($result);
-
-// Close connection
-mysqli_close($conn);
-
-$fmt = datefmt_create(
-    'es-MX',
-    IntlDateFormatter::FULL,
-    IntlDateFormatter::FULL,
-    'America/Mexico_City',
-    IntlDateFormatter::GREGORIAN,
-    "MMMM 'de' yyyy"
-);
-
-$origin = new DateTime('2022-07-02');
-$target = new DateTime('2023-09-02');
-$interval = $target->diff($origin);
-
-$totalMonths = 12 * $interval->y + $interval->m;
-echo $totalMonths;
-
-
-?>
-
 <!doctype html>
-<html lang="es-MX">
+<html lang="es">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./dist/css/styles.css">
     <title>Microyuc | Generador de Carta</title>
 </head>
 <body>
-<header>
-    <nav>
-        <h4 class="text-6xl">Acreditados</h4>
-        <div>
-            <?php foreach ($acreditados as $acreditado) { ?>
-                <p>
-                    <?php echo htmlspecialchars($acreditado['nombre']) ?>
-                    <?php echo htmlspecialchars($acreditado['folio']) ?>
-                </p>
-            <?php } ?>
-        </div>
-    </nav>
-</header>
 <div class="container">
     <div class="letterGeneratorForm__container">
         <h1 class="primary-heading">Generador de carta Microyuc</h1>
@@ -84,7 +33,7 @@ echo $totalMonths;
             </div>
             <div>
                 <label for="numero_direccion">Número: </label>
-                <input class="letterGeneratorForm__input" type="number" id="numero_direccion"
+                <input type="number" id="numero_direccion"
                        name="numero_direccion">
             </div>
             <div>
@@ -110,12 +59,19 @@ echo $totalMonths;
             </div>
             <div>
                 <label for="comprobacion_monto">Monto de comprobación: </label>
-                <input class="letterGeneratorForm__input" type="number" id="comprobacion_monto"
-                       name="comprobacion_monto">
+                <input type="number" id="comprobacion_monto"
+                       name="comprobacion_monto" step="0.01" min="0">
             </div>
             <div>
                 <label for="comprobacion_tipo">Tipo de comprobación: </label>
-                <input class="letterGeneratorForm__input" type="text" id="comprobacion_tipo" name="comprobacion_tipo">
+                <!--                <input type="text" id="comprobacion_tipo" name="comprobacion_tipo">-->
+                <select id="comprobacion_tipo" name="comprobacion_tipo">
+                    <option value="capital de trabajo">Capital de trabajo</option>
+                    <option value="activo fijo">Activo fijo</option>
+                    <option value="adecuaciones">Adecuaciones</option>
+                    <option value="insumos">Insumos</option>
+                    <option value="certificaciones">Certificaciones</option>
+                </select>
             </div>
             <div>
                 <label for="pagos_fecha_inicial">Fecha inicial<span class="asterisk">*</span>: </label>
@@ -140,12 +96,12 @@ echo $totalMonths;
             </div>
             <div>
                 <label for="monto_inicial">Monto inicial<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="number" id="monto_inicial" name="monto_inicial"
+                <input type="number" id="monto_inicial" name="monto_inicial" step="0.01" min="0"
                        required>
             </div>
             <div>
                 <label for="adeudo_total">Adeudo total<span class="asterisk">*</span>: </label>
-                <input class="letterGeneratorForm__input" type="number" id="adeudo_total" name="adeudo_total"
+                <input type="number" id="adeudo_total" name="adeudo_total" step="0.01" min="0"
                        required>
             </div>
             <div class="letterGeneratorForm__btnContainer">
@@ -154,5 +110,12 @@ echo $totalMonths;
         </form>
     </div>
 </div>
+<!--<script>-->
+<!--    const submitBtnEl = document.querySelector('.btn');-->
+<!--    const formInputEl = document.querySelectorAll('.letterGeneratorForm__input');-->
+<!--    submitBtnEl.addEventListener('click', () => {-->
+<!--        formInputEl.value = '';-->
+<!--    });-->
+<!--</script>-->
 </body>
 </html>
