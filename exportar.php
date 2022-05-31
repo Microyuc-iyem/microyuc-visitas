@@ -55,15 +55,15 @@ $templateProcessor->setValue('localidad', $localidad);
 $templateProcessor->setValue('municipio', $municipio);
 $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($_POST['fecha_firma'])));
 $templateProcessor->setValue('documentacion', $documentacion);
-$templateProcessor->setValue('comprobacion_monto', $comprobacion_monto);
+$templateProcessor->setValue('comprobacion_monto', number_format($comprobacion_monto, 2));
 $templateProcessor->setValue('comprobacion_tipo', $comprobacion_tipo);
 $templateProcessor->setValue('pagos_fecha_inicial', datefmt_format($fmt, $pagos_fecha_inicial_conv));
 $templateProcessor->setValue('pagos_fecha_final', datefmt_format($fmt, $pagos_fecha_final_conv));
 $templateProcessor->setValue('tipo_credito', $tipo_credito);
 $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($_POST['fecha_otorgamiento'])));
-$templateProcessor->setValue('monto_inicial', $monto_inicial);
+$templateProcessor->setValue('monto_inicial', number_format($monto_inicial, 2));
 $templateProcessor->setValue('mensualidades_vencidas', $mensualidades_vencidas);
-$templateProcessor->setValue('adeudo_total', $adeudo_total);
+$templateProcessor->setValue('adeudo_total', number_format($adeudo_total, 2));
 
 $numero_expediente = mysqli_real_escape_string($conn, $_POST['numero_expediente']);
 $nombre_cliente = mysqli_real_escape_string($conn, $_POST['nombre_cliente']);
@@ -85,14 +85,17 @@ $monto_inicial = mysqli_real_escape_string($conn, $_POST['monto_inicial']);
 $mensualidades_vencidas = mysqli_real_escape_string($conn, $mensualidades_vencidas);
 $adeudo_total = mysqli_real_escape_string($conn, $_POST['adeudo_total']);
 
-$sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma, 
+$sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                   documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, tipo_credito, fecha_otorgamiento, monto_inicial,
                   mensualidades_vencidas, adeudo_total) VALUES('$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                                '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total')";
 
 if (mysqli_query($conn, $sql)) {
+    header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
+//    $ruta_guardado = './archivos/cartas/' . $nombre_archivo;
+//    $templateProcessor->saveAs($ruta_guardado);
     $templateProcessor->saveAs("php://output");
 } else {
     echo 'Error de consulta: ' . mysqli_error($conn);
