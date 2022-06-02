@@ -21,12 +21,12 @@ CREATE TABLE carta
     monto_inicial           FLOAT(200, 2) NOT NULL,
     mensualidades_vencidas  INT           NOT NULL,
     adeudo_total            FLOAT(200, 2) NOT NULL,
-    archivo                 VARCHAR(255)
+    nombre_archivo          VARCHAR(255)
 );
 
 CREATE TABLE bitacora
 (
-    id                   INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id                   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     fecha_creacion       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     acreditado_nombre    VARCHAR(255) NOT NULL,
     folio                VARCHAR(255) NOT NULL,
@@ -40,21 +40,20 @@ CREATE TABLE bitacora
     aval_telefono        VARCHAR(255),
     aval_email           VARCHAR(255),
     aval_direccion       VARCHAR(255),
-    gestion_fecha1       DATE         NOT NULL,
-    gestion_via1         VARCHAR(255) NOT NULL,
-    gestion_comentarios1 VARCHAR(255) NOT NULL,
-    gestion_fecha2       DATE,
-    gestion_via2         VARCHAR(255),
-    gestion_comentarios2 VARCHAR(255),
-    gestion_fecha3       DATE,
-    gestion_via3         VARCHAR(255),
-    gestion_comentarios3 VARCHAR(255),
-    gestion_fecha4       DATE,
-    gestion_via4         VARCHAR(255),
-    gestion_comentarios4 VARCHAR(255),
-    gestion_fecha5       DATE,
-    gestion_via5         VARCHAR(255),
-    gestion_comentarios5 VARCHAR(255),
+    gestion_fecha        DATE         NOT NULL,
+    gestion_via          VARCHAR(255) NOT NULL,
+    gestion_comentarios  VARCHAR(255) NOT NULL,
     evidencia_fecha      DATE         NOT NULL,
-    evidencia_fotografia VARCHAR(255)
-)
+    evidencia_fotografia VARCHAR(255),
+    nombre_archivo       VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE usuario
+(
+    id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre   VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO usuario
+VALUES (null, 'Admin', '123456789@MY');
