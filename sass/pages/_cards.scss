@@ -1,0 +1,45 @@
+@use "../abstracts" as a;
+
+%main-padding {
+  padding-inline: a.rem(36);
+}
+
+.main__table {
+  grid-column-start: 2;
+  margin-top: a.rem(36);
+  @extend %main-padding;
+}
+
+.main__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main__title {
+  letter-spacing: -1px;
+}
+
+.main__subtitle {
+  font-size: a.rem(14);
+}
+
+.main__icon {
+  width: a.rem(18);
+}
+
+.main__btn {
+  color: #fff;
+  padding: a.rem(8) a.rem(12);
+  border: none;
+  background-color: a.$secondary-dark;
+  border-radius: a.rem(8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: a.rem(10);
+
+  &:hover {
+    background-color: a.$secondary;
+  }
+}
