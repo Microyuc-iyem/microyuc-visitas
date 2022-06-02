@@ -1,8 +1,9 @@
 <?php
-
+// Require database connection and PHPWord library
 require './librerias/phpword/vendor/autoload.php';
 include './config/db_connect.php';
 
+//Set date format to replace in the docx
 $fmt = datefmt_create(
     'es-MX',
     IntlDateFormatter::FULL,
@@ -12,6 +13,7 @@ $fmt = datefmt_create(
     "MMMM 'de' yyyy"
 );
 
+// Assign post received inputs to variables
 $numero_expediente = $_POST['numero_expediente'];
 $nombre_cliente = $_POST['nombre_cliente'];
 $calle = $_POST['calle'];
@@ -30,21 +32,30 @@ $tipo_credito = $_POST['tipo_credito'];
 $fecha_otorgamiento = $_POST['fecha_otorgamiento'];
 $monto_inicial = $_POST['monto_inicial'];
 $adeudo_total = $_POST['adeudo_total'];
+// Create variable with filename
 $nombre_archivo = 'IYE' . $numero_expediente . ' ' . $nombre_cliente . '.docx';
+// Encode filename so that UTF-8 characters work
 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
+// Create a date using the dates recieved by post
 $pagos_fecha_inicial_conv = date_create($pagos_fecha_inicial);
 $pagos_fecha_final_conv = date_create($pagos_fecha_final);
 
+// Add 1 day to the created days, so it's easier to calculate the difference between dates
 date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
 date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
 
+// Calculate the month interval diff
 $intervalo_meses = $pagos_fecha_final_conv->diff($pagos_fecha_inicial_conv);
+// Calculation so that it only gives the total in months
 $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
+// Assign the total months to variable to set the value in the template
 $mensualidades_vencidas = $total_meses;
 
+// Create new instance of PHPWord template processor using the required template file
 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
 
+// Set values in template with post received inputs and calculated variables
 $templateProcessor->setValue('numero_expediente', $numero_expediente);
 $templateProcessor->setValue('nombre_cliente', $nombre_cliente);
 $templateProcessor->setValue('calle', $calle);
@@ -65,6 +76,7 @@ $templateProcessor->setValue('monto_inicial', number_format($monto_inicial, 2));
 $templateProcessor->setValue('mensualidades_vencidas', $mensualidades_vencidas);
 $templateProcessor->setValue('adeudo_total', number_format($adeudo_total, 2));
 
+// Escape strings to insert into the database table
 $numero_expediente = mysqli_real_escape_string($conn, $_POST['numero_expediente']);
 $nombre_cliente = mysqli_real_escape_string($conn, $_POST['nombre_cliente']);
 $calle = mysqli_real_escape_string($conn, $_POST['calle']);
@@ -85,18 +97,30 @@ $monto_inicial = mysqli_real_escape_string($conn, $_POST['monto_inicial']);
 $mensualidades_vencidas = mysqli_real_escape_string($conn, $mensualidades_vencidas);
 $adeudo_total = mysqli_real_escape_string($conn, $_POST['adeudo_total']);
 
+// Query
 $sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                   documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, tipo_credito, fecha_otorgamiento, monto_inicial,
                   mensualidades_vencidas, adeudo_total) VALUES('$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                                '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total')";
 
+// Validation of query
 if (mysqli_query($conn, $sql)) {
+
+    // Path where generated file is saved
+    $ruta_guardado = './files/cartas/' . $nombre_archivo;
+    $templateProcessor->saveAs($ruta_guardado);
+
+    header('Content-Description: File Transfer');
     header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
-//    $ruta_guardado = './files/cartas/' . $nombre_archivo;
-//    $templateProcessor->saveAs($ruta_guardado);
-    $templateProcessor->saveAs("php://output");
+    header('Content-Transfer-Encoding: binary');
+
+    ob_clean();
+    flush();
+    // Send generated file stored in the server to the browser
+    readfile($ruta_guardado);
+    exit;
 } else {
     echo 'Error de consulta: ' . mysqli_error($conn);
 }

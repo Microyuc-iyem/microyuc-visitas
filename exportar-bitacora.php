@@ -3,7 +3,7 @@
 include('./config/db_connect.php');
 require './librerias/phpword/vendor/autoload.php';
 
-//Set date format to replace
+//Set date format to replace in the docx
 $fmt = datefmt_create(
     'es-MX',
     IntlDateFormatter::FULL,
