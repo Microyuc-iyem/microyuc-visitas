@@ -1,3 +1,28 @@
+<?php
+session_start();
+include('./config/db_connect.php');
+if (isset($_SESSION['login'])) {
+    header("Location: inicio.php");
+}
+
+$sql = 'SELECT nombre, password FROM usuario';
+
+$result = mysqli_query($conn, $sql);
+
+$usuarios = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+if ($_POST) {
+    if ($_POST['user'] == "Admin" && $_POST['password'] == "123456789@MY") {
+        $_SESSION['login'] = true;
+        header("Location: inicio.php");
+    } else {
+        echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
+    }
+
+}
+
+?>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -14,12 +39,13 @@
     <div class="login__container">
         <h1 class="login__title">Iniciar sesión</h1>
         <p class="login__subtitle">Introduce tus credenciales para iniciar sesión.</p>
-        <form action="" method="post" class="login__form">
+        <form action="login.php" method="post" class="login__form">
             <label for="user">
                 <input type="text" id="user" name="user" placeholder="Usuario" class="login__input" required>
             </label>
             <label for="password">
-                <input type="password" id="password" name="password" placeholder="Contraseña" class="login__input" required>
+                <input type="password" id="password" name="password" placeholder="Contraseña" class="login__input"
+                       required>
             </label>
             <input type="submit" value="Iniciar sesión" class="login__btn">
         </form>
