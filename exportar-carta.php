@@ -94,7 +94,7 @@ $sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos
 if (mysqli_query($conn, $sql)) {
     header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
-//    $ruta_guardado = './archivos/cartas/' . $nombre_archivo;
+//    $ruta_guardado = './files/cartas/' . $nombre_archivo;
 //    $templateProcessor->saveAs($ruta_guardado);
     $templateProcessor->saveAs("php://output");
 } else {
