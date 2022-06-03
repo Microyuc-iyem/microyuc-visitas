@@ -2,17 +2,17 @@
 include('./config/db_connect.php');
 session_start();
 if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
+    header("Location: index.php");
 }
 
 // Write query for all acreditados
-$sql = 'SELECT nombre_cliente, numero_expediente, fecha_creacion, comprobacion_tipo, comprobacion_monto, tipo_credito, fecha_otorgamiento, monto_inicial, mensualidades_vencidas, adeudo_total FROM carta ORDER BY fecha_creacion DESC';
+$sql = 'SELECT nombre_cliente, numero_expediente, fecha_creacion, comprobacion_tipo, comprobacion_monto, tipo_credito, fecha_otorgamiento, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);
 
 // Fetch the resulting rows as an array
-$acreditados = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$cartas = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Free result from memory
 mysqli_free_result($result);
@@ -29,7 +29,7 @@ mysqli_free_result($result);
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./dist/css/styles.css">
-    <title>Microyuc | Tablero de cartas</title>
+    <title>Microyuc | Panel de cartas</title>
 </head>
 <body>
 <div class="dashboard">
@@ -52,7 +52,7 @@ mysqli_free_result($result);
             <div class="sidebar__apps">
                 <h2 class="sidebar__title">Apps</h2>
                 <ul class="sidebar__list">
-                    <li><a href="./cartas.php" class="sidebar__link sidebar__link--active">
+                    <li><a href="./generador-carta.php" class="sidebar__link sidebar__link--active">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -60,7 +60,7 @@ mysqli_free_result($result);
                                       d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                             <span>Cartas</span></a></li>
-                    <li><a href="./bitacoras.php" class="sidebar__link">
+                    <li><a href="./generador-bitacora.php" class="sidebar__link">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -72,7 +72,7 @@ mysqli_free_result($result);
         </nav>
     </aside>
     <main class="main">
-        <div class="main__table">
+        <div class="main__app">
             <div class="main__header">
                 <div>
                     <h1 class="main__title">Cartas</h1>
@@ -87,14 +87,17 @@ mysqli_free_result($result);
                         }
                         ?></span>
                 </div>
-                <button type="button" class="main__btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Nueva carta
-                </button>
+                <div class="main__btnContainer">
+                    <a href="">Exportar Excel</a>
+                    <a href="./generador-carta.php" class="main__btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Nueva carta
+                    </a>
+                </div>
             </div>
             <input type="text" placeholder="Busca por nombre, folio...">
             <table>
@@ -105,12 +108,6 @@ mysqli_free_result($result);
                     </th>
                     <th>
                         Folio
-                    </th>
-                    <th>
-                        Monto de comprobación
-                    </th>
-                    <th>
-                        Tipo de comprobación
                     </th>
                     <th>
                         Tipo de crédito
@@ -130,27 +127,27 @@ mysqli_free_result($result);
                     <th>
                         Fecha de creación
                     </th>
-                    <!--                    <th>-->
-                    <!--                        Archivo-->
-                    <!--                    </th>-->
+                    <th>
+                        Archivo
+                    </th>
                     <th>
 
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($acreditados as $acreditado): ?>
+                <?php foreach ($cartas as $carta): ?>
                     <tr>
-                        <td><?= $acreditado['nombre_cliente'] ?></td>
-                        <td><?= $acreditado['numero_expediente'] ?></td>
-                        <td><?= '$' . number_format($acreditado['comprobacion_monto'], 2); ?></td>
-                        <td><?= ucfirst($acreditado['comprobacion_tipo']); ?></td>
-                        <td><?= $acreditado['tipo_credito']; ?></td>
-                        <td><?= date("d-m-Y", strtotime($acreditado['fecha_otorgamiento'])); ?></td>
-                        <td><?= '$' . number_format($acreditado['monto_inicial'], 2); ?></td>
-                        <td><?= $acreditado['mensualidades_vencidas']; ?></td>
-                        <td><?= '$' . number_format($acreditado['adeudo_total'], 2); ?></td>
-                        <td><?= date("d-m-Y H:i a", strtotime($acreditado['fecha_creacion'])); ?></td>
+                        <td><?= $carta['nombre_cliente'] ?></td>
+                        <td><?= $carta['numero_expediente'] ?></td>
+                        <td><?= $carta['tipo_credito']; ?></td>
+                        <td><?= date("d-m-Y", strtotime($carta['fecha_otorgamiento'])); ?></td>
+                        <td><?= '$' . number_format($carta['monto_inicial'], 2); ?></td>
+                        <td><?= $carta['mensualidades_vencidas']; ?></td>
+                        <td><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
+                        <td><?= date("d-m-Y H:i a", strtotime($carta['fecha_creacion'])); ?></td>
+                        <td><a href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a></td>
+                        <td>Eliminar</td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

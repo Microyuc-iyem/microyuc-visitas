@@ -4,7 +4,7 @@ require './librerias/phpword/vendor/autoload.php';
 
 session_start();
 if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
+    header("Location: index.php");
 }
 
 // Write query for all acreditados
@@ -26,7 +26,7 @@ $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./dist/css/styles.css">
-    <title>Microyuc | Tablero de cartas</title>
+    <title>Microyuc | Panel de bitácoras</title>
 </head>
 <body>
 <div class="dashboard">
@@ -49,7 +49,7 @@ $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <div class="sidebar__apps">
                 <h2 class="sidebar__title">Apps</h2>
                 <ul class="sidebar__list">
-                    <li><a href="./cartas.php" class="sidebar__link sidebar__link--active">
+                    <li><a href="./generador-carta.php" class="sidebar__link">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -57,7 +57,7 @@ $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                       d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                             <span>Cartas</span></a></li>
-                    <li><a href="./bitacoras.php" class="sidebar__link">
+                    <li><a href="./generador-bitacora.php" class="sidebar__link sidebar__link--active">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -69,7 +69,7 @@ $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
         </nav>
     </aside>
     <main class="main">
-        <div class="main__table">
+        <div class="main__app">
             <form action="exportar-bitacora.php" method="post" enctype="multipart/form-data">
                 <div>
                     <label for="acreditado_nombre">Nombre del acreditado<span class="asterisk">*</span>:</label>
