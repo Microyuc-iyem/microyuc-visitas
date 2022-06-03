@@ -1,7 +1,7 @@
 <?php
 // Require database connection and PHPWord library
 require './librerias/phpword/vendor/autoload.php';
-include './config/db_connect.php';
+require_once './config/db_connect.php';
 
 //Set date format to replace in the docx
 $fmt = datefmt_create(

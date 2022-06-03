@@ -1,5 +1,5 @@
 <?php
-include('./config/db_connect.php');
+require_once './config/db_connect.php';
 require './librerias/phpword/vendor/autoload.php';
 
 session_start();

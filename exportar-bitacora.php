@@ -1,6 +1,6 @@
 <?php
 // Require database connection and PHPWord library
-include('./config/db_connect.php');
+require_once './config/db_connect.php';
 require './librerias/phpword/vendor/autoload.php';
 
 //Set date format to replace in the docx
