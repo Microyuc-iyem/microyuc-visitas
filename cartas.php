@@ -88,7 +88,7 @@ mysqli_free_result($result);
                         ?></span>
                 </div>
                 <div class="main__btnContainer">
-                    <a href="">Exportar Excel</a>
+                    <a href="./cartas-excel.php">Exportar Excel</a>
                     <a href="./generador-carta.php" class="main__btn">
                         <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" stroke-width="2">
@@ -100,52 +100,54 @@ mysqli_free_result($result);
                 </div>
             </div>
             <input type="text" placeholder="Busca por nombre, folio...">
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
-                    <th>
+                    <th scope="col" colspan="2">
+                        Cliente
+                    </th>
+                    <th scope="col" colspan="3">
+                        Pagos
+                    </th>
+                    <th scope="col" colspan="3">
+                        Acciones
+                    </th>
+                </tr>
+                </thead>
+                <thead>
+                <tr>
+                    <th scope="col">
                         Acreditado
                     </th>
-                    <th>
+                    <th scope="col">
                         Folio
                     </th>
-                    <th>
-                        Tipo de crédito
-                    </th>
-                    <th>
-                        Fecha de otorgamiento
-                    </th>
-                    <th>
+                    <th scope="col">
                         Monto inicial
                     </th>
-                    <th>
+                    <th scope="col" class="test-width">
                         Mensualidades vencidas
                     </th>
-                    <th>
+                    <th scope="col" class="test-width">
                         Adeudo total
                     </th>
-                    <th>
+                    <th scope="col">
                         Fecha de creación
                     </th>
-                    <th>
+                    <th scope="col" colspan="2">
                         Archivo
-                    </th>
-                    <th>
-
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($cartas as $carta): ?>
                     <tr>
-                        <td><?= $carta['nombre_cliente'] ?></td>
+                        <td class="table__data--left"><?= $carta['nombre_cliente'] ?></td>
                         <td><?= $carta['numero_expediente'] ?></td>
-                        <td><?= $carta['tipo_credito']; ?></td>
-                        <td><?= date("d-m-Y", strtotime($carta['fecha_otorgamiento'])); ?></td>
                         <td><?= '$' . number_format($carta['monto_inicial'], 2); ?></td>
                         <td><?= $carta['mensualidades_vencidas']; ?></td>
                         <td><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
-                        <td><?= date("d-m-Y H:i a", strtotime($carta['fecha_creacion'])); ?></td>
+                        <td><?= date("d-m-Y", strtotime($carta['fecha_creacion'])); ?></td>
                         <td><a href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a></td>
                         <td>Eliminar</td>
                     </tr>
