@@ -1,0 +1,25 @@
+@use "../abstracts" as a;
+
+.table {
+  width: 100%;
+  border: black solid 1px;
+
+}
+
+tr, th, td {
+  border: black solid 1px;
+}
+
+th {
+  font-size: a.rem(13);
+}
+
+td {
+  font-size: a.rem(12);
+  padding: a.rem(6);
+  text-align: center;
+}
+
+.table__data--left {
+  text-align: left;
+}
