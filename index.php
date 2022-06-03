@@ -39,7 +39,7 @@ if ($_POST) {
     <div class="login__container">
         <h1 class="login__title">Iniciar sesión</h1>
         <p class="login__subtitle">Introduce tus credenciales para iniciar sesión.</p>
-        <form action="login.php" method="post" class="login__form">
+        <form action="index.php" method="post" class="login__form">
             <label for="user">
                 <input type="text" id="user" name="user" placeholder="Usuario" class="login__input" required>
             </label>

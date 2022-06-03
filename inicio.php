@@ -2,7 +2,7 @@
 include('./config/db_connect.php');
 session_start();
 if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
+    header("Location: index.php");
 }
 ?>
 <!doctype html>
@@ -36,7 +36,7 @@ if (!isset($_SESSION['login'])) {
             <div class="sidebar__apps">
                 <h2 class="sidebar__title">Apps</h2>
                 <ul class="sidebar__list">
-                    <li><a href="./cartas.php" class="sidebar__link">
+                    <li><a href="./generador-carta.php" class="sidebar__link">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -44,7 +44,7 @@ if (!isset($_SESSION['login'])) {
                                       d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                             <span>Cartas</span></a></li>
-                    <li><a href="./bitacoras.php" class="sidebar__link">
+                    <li><a href="./generador-bitacora.php" class="sidebar__link">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
