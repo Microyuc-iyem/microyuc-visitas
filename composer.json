@@ -1,0 +1,14 @@
+{
+  "name": "vendor_name/microyuc-proyecto",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "sigfr",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  }
+}
