@@ -144,7 +144,7 @@ if (isset($_GET['id'])) {
                         Fecha de creación
                     </th>
                     <th scope="col" colspan="2" class="table__head">
-                        Archivo
+                        Acciones
                     </th>
                 </tr>
                 </thead>
