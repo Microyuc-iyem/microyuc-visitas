@@ -2,29 +2,50 @@
 
 .table {
   width: 100%;
-  border: black solid 1px;
-
+  background-color: #fff;
+  border-radius: a.rem(8);
+  box-shadow: a.$base-shadow;
+  margin-bottom: a.rem(24);
+  padding: a.rem(16) a.rem(12);
+  border-collapse: collapse;
+  overflow: hidden;
 }
 
-tr, th, td {
-  border: black solid 1px;
-}
-
-th {
-  font-size: a.rem(14);
-}
-
-td {
+.table__data {
   font-size: a.rem(13);
-  padding: a.rem(6);
+  padding: a.rem(10) a.rem(8);
   text-align: center;
 }
 
-.table__data--left {
+.table__head {
+  padding: a.rem(18) a.rem(14);
+  font-size: a.rem(14);
+}
+
+.table__row--body {
+  padding: a.rem(16) a.rem(12);
+
+  &:hover {
+    background-color: lighten(a.$primary, 25);
+    border-radius: a.rem(6);
+  }
+}
+
+.table__data--bold {
+  font-weight: 600;
   text-align: left;
 }
 
-.test-width {
+.table__head--width {
   width: 0;
   padding: a.rem(5);
+}
+
+.table__data--link:link, .table__data--link:visited {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.table__data--red {
+  color: lighten(red, 10);
 }
