@@ -99,57 +99,59 @@ mysqli_free_result($result);
                     </a>
                 </div>
             </div>
-            <input type="text" placeholder="Busca por nombre, folio...">
+            <input type="text" placeholder="Busca por nombre, folio..." style="margin-bottom: 24px">
             <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col" colspan="2">
-                        Cliente
-                    </th>
-                    <th scope="col" colspan="3">
-                        Pagos
-                    </th>
-                    <th scope="col" colspan="3">
-                        Acciones
-                    </th>
-                </tr>
-                </thead>
-                <thead>
-                <tr>
-                    <th scope="col">
+<!--                <thead class="table__superhead">-->
+<!--                <tr>-->
+<!--                    <th scope="col" colspan="2" class="table__superhead--column">-->
+<!--                        Cliente-->
+<!--                    </th>-->
+<!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
+<!--                        Pagos-->
+<!--                    </th>-->
+<!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
+<!--                        Acciones-->
+<!--                    </th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+                <thead class="table__head">
+                <tr class="table__row--head">
+                    <th scope="col" class="table__head">
                         Acreditado
                     </th>
-                    <th scope="col">
+                    <th scope="col" class="table__head table__data--left">
                         Folio
                     </th>
-                    <th scope="col">
+                    <th scope="col" class="table__head table__data--left">
                         Monto inicial
                     </th>
-                    <th scope="col" class="test-width">
+                    <th scope="col" class="table__head table__head--width">
                         Mensualidades vencidas
                     </th>
-                    <th scope="col" class="test-width">
+                    <th scope="col" class="table__head table__data--left">
                         Adeudo total
                     </th>
-                    <th scope="col">
+                    <th scope="col" class="table__head">
                         Fecha de creación
                     </th>
-                    <th scope="col" colspan="2">
+                    <th scope="col" colspan="2" class="table__head">
                         Archivo
                     </th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="table__body">
                 <?php foreach ($cartas as $carta): ?>
-                    <tr>
-                        <td class="table__data--left"><?= $carta['nombre_cliente'] ?></td>
-                        <td><?= $carta['numero_expediente'] ?></td>
-                        <td><?= '$' . number_format($carta['monto_inicial'], 2); ?></td>
-                        <td><?= $carta['mensualidades_vencidas']; ?></td>
-                        <td><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
-                        <td><?= date("d-m-Y", strtotime($carta['fecha_creacion'])); ?></td>
-                        <td><a href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a></td>
-                        <td>Eliminar</td>
+                    <tr class="table__row--body">
+                        <td class="table__data table__data--bold"><?= $carta['nombre_cliente'] ?></td>
+                        <td class="table__data table__data--left"><?= $carta['numero_expediente'] ?></td>
+                        <td class="table__data table__data--left"><?= '$' . number_format($carta['monto_inicial'], 2); ?></td>
+                        <td class="table__data"><?= $carta['mensualidades_vencidas']; ?></td>
+                        <td class="table__data table__data--left"><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
+                        <td class="table__data"><?= date("d-m-Y", strtotime($carta['fecha_creacion'])); ?></td>
+                        <td class="table__data"><a class="table__data--link"
+                                                   href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a>
+                        </td>
+                        <td class="table__data table__data--red">Eliminar</td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
