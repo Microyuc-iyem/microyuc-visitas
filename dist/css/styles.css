@@ -176,7 +176,8 @@ body {
   font-weight: 500;
 }
 
-.table__data--red {
+.table__data--red:link, .table__data--red:visited {
+  text-decoration: none;
   color: #ff3333;
 }
 

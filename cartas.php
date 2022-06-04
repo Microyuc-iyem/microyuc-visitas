@@ -6,7 +6,7 @@ if (!isset($_SESSION['login'])) {
 }
 
 // Write query for all acreditados
-$sql = 'SELECT nombre_cliente, numero_expediente, fecha_creacion, comprobacion_tipo, comprobacion_monto, tipo_credito, fecha_otorgamiento, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
+$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, comprobacion_tipo, comprobacion_monto, tipo_credito, fecha_otorgamiento, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);
@@ -16,6 +16,12 @@ $cartas = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Free result from memory
 mysqli_free_result($result);
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $delete = mysqli_query($conn, "DELETE FROM carta WHERE id = '$id';");
+    header('Location: cartas.php');
+}
 
 // Close connection
 //mysqli_close($conn);
@@ -101,19 +107,19 @@ mysqli_free_result($result);
             </div>
             <input type="text" placeholder="Busca por nombre, folio..." style="margin-bottom: 24px">
             <table class="table">
-<!--                <thead class="table__superhead">-->
-<!--                <tr>-->
-<!--                    <th scope="col" colspan="2" class="table__superhead--column">-->
-<!--                        Cliente-->
-<!--                    </th>-->
-<!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
-<!--                        Pagos-->
-<!--                    </th>-->
-<!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
-<!--                        Acciones-->
-<!--                    </th>-->
-<!--                </tr>-->
-<!--                </thead>-->
+                <!--                <thead class="table__superhead">-->
+                <!--                <tr>-->
+                <!--                    <th scope="col" colspan="2" class="table__superhead--column">-->
+                <!--                        Cliente-->
+                <!--                    </th>-->
+                <!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
+                <!--                        Pagos-->
+                <!--                    </th>-->
+                <!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
+                <!--                        Acciones-->
+                <!--                    </th>-->
+                <!--                </tr>-->
+                <!--                </thead>-->
                 <thead class="table__head">
                 <tr class="table__row--head">
                     <th scope="col" class="table__head">
@@ -151,7 +157,8 @@ mysqli_free_result($result);
                         <td class="table__data"><a class="table__data--link"
                                                    href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a>
                         </td>
-                        <td class="table__data table__data--red">Eliminar</td>
+                        <td class="table__data"><a class="table__data--red" href="./cartas.php?id=<?= $carta['id'] ?>">Eliminar</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
