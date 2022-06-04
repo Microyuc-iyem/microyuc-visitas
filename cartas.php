@@ -19,7 +19,10 @@ mysqli_free_result($result);
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
+    $resultado = mysqli_query($conn, "SELECT nombre_archivo FROM carta WHERE id = '$id';");
+    $filename = $resultado->fetch_array()['nombre_archivo'] ?? '';
     $delete = mysqli_query($conn, "DELETE FROM carta WHERE id = '$id';");
+    unlink('./files/cartas/' . $filename);
     header('Location: cartas.php');
 }
 
