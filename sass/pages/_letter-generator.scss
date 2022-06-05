@@ -21,11 +21,15 @@
     row-gap: a.rem(16);
     column-gap: a.rem(18);
 
-    &--accredited, &--payment {
+    &--accreditedLogbook, &--aval {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    &--accredited, &--payment, &--process {
       grid-template-columns: 1fr 1fr 1fr;
     }
 
-    &--verification {
+    &--verification, &--evidence {
       grid-template-columns: 1fr 1fr;
     }
 
@@ -56,6 +60,12 @@
         box-shadow: a.$base-shadow;
         border-radius: a.rem(5);
         padding: a.rem(6) a.rem(6);
+
+        &--file {
+          padding: 0;
+          box-shadow: none;
+          border-radius: 0;
+        }
       }
     }
   }

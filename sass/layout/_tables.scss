@@ -44,9 +44,11 @@
 .table__data--link:link, .table__data--link:visited {
   text-decoration: none;
   font-weight: 500;
+  color: a.$primary-dark;
 }
 
 .table__data--red:link, .table__data--red:visited {
   text-decoration: none;
   color: lighten(red, 10);
+  font-weight: 500;
 }

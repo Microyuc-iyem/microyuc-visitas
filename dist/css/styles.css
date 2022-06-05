@@ -174,11 +174,13 @@ body {
 .table__data--link:link, .table__data--link:visited {
   text-decoration: none;
   font-weight: 500;
+  color: #045c94;
 }
 
 .table__data--red:link, .table__data--red:visited {
   text-decoration: none;
   color: #ff3333;
+  font-weight: 500;
 }
 
 .hidden {
@@ -360,10 +362,13 @@ body {
   row-gap: 1rem;
   column-gap: 1.125rem;
 }
-.form__fieldset--accredited, .form__fieldset--payment {
+.form__fieldset--accreditedLogbook, .form__fieldset--aval {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.form__fieldset--accredited, .form__fieldset--payment, .form__fieldset--process {
   grid-template-columns: 1fr 1fr 1fr;
 }
-.form__fieldset--verification {
+.form__fieldset--verification, .form__fieldset--evidence {
   grid-template-columns: 1fr 1fr;
 }
 .form__fieldset .form__legend {
@@ -389,6 +394,11 @@ body {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
   border-radius: 0.3125rem;
   padding: 0.375rem 0.375rem;
+}
+.form__fieldset .form__division .form__input--file {
+  padding: 0;
+  box-shadow: none;
+  border-radius: 0;
 }
 .form__container--btn {
   display: flex;
