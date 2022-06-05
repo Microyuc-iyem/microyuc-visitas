@@ -59,7 +59,7 @@ $templateProcessor->setValue('gestion_fecha', date("d-m-Y", strtotime($gestion_f
 $templateProcessor->setValue('gestion_via', $gestion_via);
 $templateProcessor->setValue('gestion_comentarios', $gestion_comentarios);
 $templateProcessor->setValue('evidencia_fecha', datefmt_format($fmt, strtotime($evidencia_fecha)));
-$templateProcessor->setImageValue('evidencia_fotografia', './uploads/' . $evidencia_fotografia);
+$templateProcessor->setImageValue('evidencia_fotografia', array('path' => './uploads/' . $evidencia_fotografia, 'width' => 1200));
 
 // Escape strings to insert into the database table
 $acreditado_nombre = mysqli_real_escape_string($conn, $_POST['acreditado_nombre']);
