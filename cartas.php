@@ -6,7 +6,7 @@ if (!isset($_SESSION['login'])) {
 }
 
 // Write query for all acreditados
-$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, comprobacion_tipo, comprobacion_monto, tipo_credito, fecha_otorgamiento, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
+$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);
@@ -25,9 +25,6 @@ if (isset($_GET['id'])) {
     unlink('./files/cartas/' . $filename);
     header('Location: cartas.php');
 }
-
-// Close connection
-//mysqli_close($conn);
 ?>
 
 <!doctype html>
