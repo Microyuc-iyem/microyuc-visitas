@@ -58,7 +58,7 @@ $templateProcessor->setValue('aval_direccion', $aval_direccion);
 $templateProcessor->setValue('gestion_fecha', date("d-m-Y", strtotime($gestion_fecha)));
 $templateProcessor->setValue('gestion_via', $gestion_via);
 $templateProcessor->setValue('gestion_comentarios', $gestion_comentarios);
-$templateProcessor->setValue('evidencia_fecha', datefmt_format($fmt, strtotime($evidencia_fecha)));
+$templateProcessor->setValue('evidencia_fecha', datefmt_format($fmt, date_add(date_create($evidencia_fecha), date_interval_create_from_date_string('1 day'))));
 $templateProcessor->setImageValue('evidencia_fotografia', array('path' => './uploads/' . $evidencia_fotografia, 'width' => 1200));
 
 // Escape strings to insert into the database table
