@@ -13,7 +13,7 @@ if (!isset($_SESSION['login'])) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./dist/css/styles.css">
-    <title>Microyuc | Generador de cartas</title>
+    <title>Microyuc | Generador de bitácoras</title>
 </head>
 <body>
 <div class="dashboard">
