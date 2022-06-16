@@ -50,7 +50,7 @@ $intervalo_meses = $pagos_fecha_final_conv->diff($pagos_fecha_inicial_conv);
 // Calculation so that it only gives the total in months
 $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
 // Assign the total months to variable to set the value in the template
-$mensualidades_vencidas = $total_meses;
+$mensualidades_vencidas = $total_meses + 1;
 
 // Create new instance of PHPWord template processor using the required template file
 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
