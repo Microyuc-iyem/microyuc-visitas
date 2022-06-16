@@ -33,7 +33,7 @@ $fecha_otorgamiento = $_POST['fecha_otorgamiento'];
 $monto_inicial = $_POST['monto_inicial'];
 $adeudo_total = $_POST['adeudo_total'];
 // Create variable with filename
-$nombre_archivo = 'IYE' . $numero_expediente . ' ' . $nombre_cliente . '.docx';
+$nombre_archivo = $numero_expediente . ' ' . $nombre_cliente . '.docx';
 // Encode filename so that UTF-8 characters work
 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 

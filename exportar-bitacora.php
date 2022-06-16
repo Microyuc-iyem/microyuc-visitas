@@ -35,7 +35,7 @@ $evidencia_fotografia = $_FILES['evidencia_fotografia']['name'];
 move_uploaded_file($_FILES['evidencia_fotografia']['tmp_name'], './uploads/' . $_FILES['evidencia_fotografia']['name']);
 
 // Create variable with filename
-$nombre_archivo = 'IYE' . $folio . ' ' . $acreditado_nombre . ' - Bitácora.docx';
+$nombre_archivo = $folio . ' ' . $acreditado_nombre . ' - Bitácora.docx';
 // Encode filename so that UTF-8 characters work
 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
