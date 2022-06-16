@@ -77,7 +77,7 @@ if (!isset($_SESSION['login'])) {
                             <label class="form__label" for="numero_expediente">Número de expediente<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="numero_expediente"
-                                   name="numero_expediente" pattern="^[0-9\-]+$" required>
+                                   name="numero_expediente" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="nombre_cliente">Nombre del cliente<span

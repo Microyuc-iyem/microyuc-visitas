@@ -82,7 +82,7 @@ if (!isset($_SESSION['login'])) {
                             <label class="form__label" for="folio">Folio<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="text" id="folio"
-                                   name="folio" pattern="^[0-9\-]+$"
+                                   name="folio"
                                    required>
                         </div>
                         <div class="form__division">
