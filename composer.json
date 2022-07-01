@@ -11,6 +11,7 @@
   ],
   "require": {
     "ext-mysqli": "*",
-    "ext-intl": "*"
+    "ext-intl": "*",
+    "ext-fileinfo": "*"
   }
 }
