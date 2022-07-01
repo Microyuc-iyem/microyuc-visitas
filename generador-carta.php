@@ -1,8 +1,128 @@
 <?php
-require_once './config/db_connect.php';
-session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: index.php");
+require './config/db_connect.php';
+require './librerias/phpword/vendor/autoload.php';
+require './includes/functions.php';
+
+check_login();
+
+if (($_SERVER['REQUEST_METHOD'] === 'POST') && (isset($_POST)) && (!empty($_POST))) {
+
+    $fmt = set_date_format();
+
+// Assign post received inputs to variables
+    $numero_expediente = $_POST['numero_expediente'] ?? false;
+    $nombre_cliente = $_POST['nombre_cliente'] ?? false;
+    $calle = $_POST['calle'] ?? '';
+    $cruzamientos = $_POST['cruzamientos'] ?? '';
+    $numero_direccion = $_POST['numero_direccion'] ?? '';
+    $colonia_fraccionamiento = $_POST['colonia_fraccionamiento'] ?? '';
+    $localidad = $_POST['localidad'] ?? false;
+    $municipio = $_POST['municipio'] ?? false;
+    $fecha_firma = $_POST['fecha_firma'] ?? false;
+    $documentacion = $_POST['documentacion'] ?? '';
+    $comprobacion_monto = is_numeric($_POST['comprobacion_monto']) ? $_POST['comprobacion_monto'] : false;
+    $comprobacion_tipo = $_POST['comprobacion_tipo'] ?? false;
+    $pagos_fecha_inicial = $_POST['pagos_fecha_inicial'] ?? false;
+    $pagos_fecha_final = $_POST['pagos_fecha_final'] ?? false;
+    $tipo_credito = $_POST['tipo_credito'] ?? false;
+    $fecha_otorgamiento = $_POST['fecha_otorgamiento'] ?? false;
+    $monto_inicial = is_numeric($_POST['monto_inicial']) ? $_POST['monto_inicial'] : false;
+    $adeudo_total = is_numeric($_POST['adeudo_total']) ? $_POST['adeudo_total'] : false;
+
+// Create variable with filename
+    if (preg_match('/(^IYE{1,1})([\d\-]+)/', $numero_expediente)) {
+        $nombre_archivo = $numero_expediente . ' ' . $nombre_cliente . '.docx';
+    }
+// Encode filename so that UTF-8 characters work
+    if (isset($nombre_archivo)) {
+        $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
+    }
+
+// Create a date using the dates recieved by post
+    $pagos_fecha_inicial_conv = date_create($pagos_fecha_inicial);
+    $pagos_fecha_final_conv = date_create($pagos_fecha_final);
+
+// Add 1 day to the created days, so it's easier to calculate the difference between dates
+    date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
+    date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
+
+// Calculate the month interval diff
+    $intervalo_meses = $pagos_fecha_final_conv->diff($pagos_fecha_inicial_conv);
+// Calculation so that it only gives the total in months
+    $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
+// Assign the total months to variable to set the value in the template
+    $mensualidades_vencidas = $total_meses + 1;
+
+// Create new instance of PHPWord template processor using the required template file
+    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
+
+// Set values in template with post received inputs and calculated variables
+    $templateProcessor->setValue('numero_expediente', $numero_expediente);
+    $templateProcessor->setValue('nombre_cliente', $nombre_cliente);
+    $templateProcessor->setValue('calle', $calle);
+    $templateProcessor->setValue('cruzamientos', $cruzamientos);
+    $templateProcessor->setValue('numero_direccion', $numero_direccion);
+    $templateProcessor->setValue('colonia_fraccionamiento', $colonia_fraccionamiento);
+    $templateProcessor->setValue('localidad', $localidad);
+    $templateProcessor->setValue('municipio', $municipio);
+    $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($_POST['fecha_firma'])));
+    $templateProcessor->setValue('documentacion', $documentacion);
+    $templateProcessor->setValue('comprobacion_monto', number_format($comprobacion_monto, 2));
+    $templateProcessor->setValue('comprobacion_tipo', $comprobacion_tipo);
+    $templateProcessor->setValue('pagos_fecha_inicial', datefmt_format($fmt, $pagos_fecha_inicial_conv));
+    $templateProcessor->setValue('pagos_fecha_final', datefmt_format($fmt, $pagos_fecha_final_conv));
+    $templateProcessor->setValue('tipo_credito', $tipo_credito);
+    $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($_POST['fecha_otorgamiento'])));
+    $templateProcessor->setValue('monto_inicial', number_format($monto_inicial, 2));
+    $templateProcessor->setValue('mensualidades_vencidas', $mensualidades_vencidas);
+    $templateProcessor->setValue('adeudo_total', number_format($adeudo_total, 2));
+
+// Escape strings to insert into the database table
+    $numero_expediente = mysqli_real_escape_string($conn, $_POST['numero_expediente']);
+    $nombre_cliente = mysqli_real_escape_string($conn, $_POST['nombre_cliente']);
+    $calle = mysqli_real_escape_string($conn, $_POST['calle']);
+    $cruzamientos = mysqli_real_escape_string($conn, $_POST['cruzamientos']);
+    $numero_direccion = mysqli_real_escape_string($conn, $_POST['numero_direccion']);
+    $colonia_fraccionamiento = mysqli_real_escape_string($conn, $_POST['colonia_fraccionamiento']);
+    $localidad = mysqli_real_escape_string($conn, $_POST['localidad']);
+    $municipio = mysqli_real_escape_string($conn, $_POST['municipio']);
+    $fecha_firma = mysqli_real_escape_string($conn, $_POST['fecha_firma']);
+    $documentacion = mysqli_real_escape_string($conn, $_POST['documentacion']);
+    $comprobacion_monto = mysqli_real_escape_string($conn, $_POST['comprobacion_monto']);
+    $comprobacion_tipo = mysqli_real_escape_string($conn, $_POST['comprobacion_tipo']);
+    $pagos_fecha_inicial = mysqli_real_escape_string($conn, $_POST['pagos_fecha_inicial']);
+    $pagos_fecha_final = mysqli_real_escape_string($conn, $_POST['pagos_fecha_final']);
+    $tipo_credito = mysqli_real_escape_string($conn, $_POST['tipo_credito']);
+    $fecha_otorgamiento = mysqli_real_escape_string($conn, $_POST['fecha_otorgamiento']);
+    $monto_inicial = mysqli_real_escape_string($conn, $_POST['monto_inicial']);
+    $mensualidades_vencidas = mysqli_real_escape_string($conn, $mensualidades_vencidas);
+    $adeudo_total = mysqli_real_escape_string($conn, $_POST['adeudo_total']);
+
+// Query
+    $sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
+                  documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, tipo_credito, fecha_otorgamiento, monto_inicial,
+                  mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
+                                                               '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
+                                                               '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
+
+// Validation of query
+    if (mysqli_query($conn, $sql)) {
+
+        // Path where generated file is saved
+        $ruta_guardado = './files/cartas/' . $nombre_archivo;
+        $templateProcessor->saveAs($ruta_guardado);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
+        header('Content-Length: ' . filesize($ruta_guardado));
+        ob_clean();
+        flush();
+        // Send generated file stored in the server to the browser
+        readfile($ruta_guardado);
+        exit;
+    } else {
+        echo 'Error de consulta: ' . mysqli_error($conn);
+    }
 }
 ?>
 
@@ -70,14 +190,14 @@ if (!isset($_SESSION['login'])) {
                 </a>
             </div>
             <div>
-                <form class="form" action="exportar-carta.php" method="post">
+                <form class="form" action="generador-carta.php" method="post">
                     <fieldset class="form__fieldset form__fieldset--accredited">
                         <legend class="form__legend">Información del acreditado</legend>
                         <div class="form__division">
                             <label class="form__label" for="numero_expediente">Número de expediente<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="numero_expediente"
-                                   name="numero_expediente" required>
+                                   name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+)" value="IYE" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="nombre_cliente">Nombre del cliente<span
