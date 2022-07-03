@@ -1,5 +1,6 @@
 <?php
-require_once './config/db_connect.php';
+require './config/db_connect.php';
+
 session_start();
 if (!isset($_SESSION['login'])) {
     header("Location: index.php");
