@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 function check_login(): void
 {
     session_start();
@@ -19,4 +21,29 @@ function set_date_format(): IntlDateFormatter
         IntlDateFormatter::GREGORIAN,
         "MMMM 'de' yyyy"
     );
+}
+
+function is_greater_than_0($number): bool
+{
+    return $number >= 0;
+}
+
+function validate_number($number): string
+{
+    if (!is_numeric($number)) {
+        return 'El campo debe tener un valor numérico.';
+    } else {
+        if (!is_greater_than_0($number)) {
+            return 'El monto debe ser mayor o igual a 0.';
+        }
+        return '';
+    }
+}
+
+function validate_variable($variable): string {
+    if ($variable !== '' && $variable !== false) {
+        return '';
+    } else {
+        return 'Por favor, llene este campo correctamente.';
+    }
 }
