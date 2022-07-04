@@ -41,9 +41,9 @@ function validate_number($number): string
 }
 
 function validate_variable($variable): string {
-    if ($variable !== '' && $variable !== false) {
+    if ($variable !== '') {
         return '';
     } else {
-        return 'Por favor, llene este campo correctamente.';
+        return 'Este campo es requerido.';
     }
 }
