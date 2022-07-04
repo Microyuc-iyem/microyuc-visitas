@@ -5,55 +5,80 @@ require './includes/functions.php';
 
 check_login();
 
-$numero_expediente = '';
-$nombre_cliente = '';
-$calle = '';
-$cruzamientos = '';
-$numero_direccion = '';
-$colonia_fraccionamiento = '';
-$localidad = '';
-$municipio = '';
-$fecha_firma = '';
-$documentacion = '';
-$comprobacion_monto = '';
-$comprobacion_tipo = '';
-$pagos_fecha_inicial = '';
-$pagos_fecha_final = '';
-$tipo_credito = '';
-$fecha_otorgamiento = '';
-$monto_inicial = '';
-$adeudo_total = '';
+$carta = [
+    'numero_expediente' => '',
+    'nombre_cliente' => '',
+    'calle' => '',
+    'cruzamientos' => '',
+    'numero_direccion' => '',
+    'colonia_fraccionamiento' => '',
+    'localidad' => '',
+    'municipio' => '',
+    'fecha_firma' => '',
+    'documentacion' => '',
+    'comprobacion_monto' => '',
+    'comprobacion_tipo' => '',
+    'pagos_fecha_inicial' => '',
+    'pagos_fecha_final' => '',
+    'tipo_credito' => '',
+    'fecha_otorgamiento' => '',
+    'monto_inicial' => '',
+    'mensualidades_vencidas' => '',
+    'adeudo_total' => '',
+];
 
-if (($_SERVER['REQUEST_METHOD'] === 'POST') && (isset($_POST)) && (!empty($_POST))) {
+$errores = [
+    'numero_expediente' => '',
+    'nombre_cliente' => '',
+    'calle' => '',
+    'cruzamientos' => '',
+    'numero_direccion' => '',
+    'colonia_fraccionamiento' => '',
+    'localidad' => '',
+    'municipio' => '',
+    'fecha_firma' => '',
+    'documentacion' => '',
+    'comprobacion_monto' => '',
+    'comprobacion_tipo' => '',
+    'tipo_credito' => '',
+    'fecha_otorgamiento' => '',
+    'monto_inicial' => '',
+    'mensualidades_vencidas' => '',
+    'adeudo_total' => '',
+
+];
+
+$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $fmt = set_date_format();
 
 // Assign post received inputs to variables
-    $numero_expediente = $_POST['numero_expediente'] ?? false;
-    $nombre_cliente = $_POST['nombre_cliente'] ?? false;
-    $calle = $_POST['calle'] ?? '';
-    $cruzamientos = $_POST['cruzamientos'] ?? '';
-    $numero_direccion = $_POST['numero_direccion'] ?? '';
-    $colonia_fraccionamiento = $_POST['colonia_fraccionamiento'] ?? '';
-    $localidad = $_POST['localidad'] ?? false;
-    $municipio = $_POST['municipio'] ?? false;
-    $fecha_firma = $_POST['fecha_firma'] ?? false;
-    $documentacion = $_POST['documentacion'] ?? '';
-    $comprobacion_monto = $_POST['comprobacion_monto'] ?? false;
-    $comprobacion_tipo = $_POST['comprobacion_tipo'] ?? false;
-    $pagos_fecha_inicial = $_POST['pagos_fecha_inicial'] ?? false;
-    $pagos_fecha_final = $_POST['pagos_fecha_final'] ?? false;
-    $tipo_credito = $_POST['tipo_credito'] ?? false;
-    $fecha_otorgamiento = $_POST['fecha_otorgamiento'] ?? false;
-    $monto_inicial = $_POST['monto_inicial'] ?? false;
-    $adeudo_total = $_POST['adeudo_total'] ?? false;
+    $carta['numero_expediente'] = $_POST['numero_expediente'] ?? '';
+    $carta['nombre_cliente'] = $_POST['nombre_cliente'] ?? '';
+    $carta['calle'] = $_POST['calle'] ?? '';
+    $carta['cruzamientos'] = $_POST['cruzamientos'] ?? '';
+    $carta['numero_direccion'] = $_POST['numero_direccion'] ?? '';
+    $carta['colonia_fraccionamiento'] = $_POST['colonia_fraccionamiento'] ?? '';
+    $carta['localidad'] = $_POST['localidad'] ?? '';
+    $carta['municipio'] = $_POST['municipio'] ?? '';
+    $carta['fecha_firma'] = $_POST['fecha_firma'] ?? '';
+    $carta['documentacion'] = $_POST['documentacion'] ?? '';
+    $carta['comprobacion_monto'] = $_POST['comprobacion_monto'] ?? '';
+    $carta['comprobacion_tipo'] = $_POST['comprobacion_tipo'] ?? '';
+    $carta['pagos_fecha_inicial'] = $_POST['pagos_fecha_inicial'] ?? '';
+    $carta['pagos_fecha_final'] = $_POST['pagos_fecha_final'] ?? '';
+    $carta['tipo_credito'] = $_POST['tipo_credito'] ?? '';
+    $carta['fecha_otorgamiento'] = $_POST['fecha_otorgamiento'] ?? '';
+    $carta['monto_inicial'] = $_POST['monto_inicial'] ?? '';
+    $carta['adeudo_total'] = $_POST['adeudo_total'] ?? '';
 
 // Create variable with filename
-    if (preg_match('/(^IYE{1,1})([\d\-]+)/', $numero_expediente)) {
-        $nombre_archivo = $numero_expediente . ' ' . $nombre_cliente . '.docx';
-        $numero_expediente_error = '';
+    if (preg_match('/(^IYE{1,1})([\d\-]+)/', $carta['numero_expediente'])) {
+        $nombre_archivo = $carta['numero_expediente'] . ' ' . $carta['nombre_cliente'] . '.docx';
     } else {
-        $numero_expediente_error = 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
+        $errores['numero_expediente'] = 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     }
 
 // Encode filename so that UTF-8 characters work
@@ -61,20 +86,20 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && (isset($_POST)) && (!empty($_POST
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
     }
 
-    $nombre_cliente_error = validate_variable($nombre_cliente);
-    $localidad_error = validate_variable($localidad);
-    $municipio_error = validate_variable($municipio);
-    $fecha_firma_error = validate_variable($fecha_firma);
-    $comprobacion_monto_error = validate_number($comprobacion_monto);
-    $comprobacion_tipo_error = validate_variable($comprobacion_tipo);
-    $tipo_credito_error = validate_variable($tipo_credito);
-    $fecha_otorgamiento_error = validate_variable($fecha_otorgamiento);
-    $monto_inicial_error = validate_number($monto_inicial);
-    $adeudo_total_error = validate_number($adeudo_total);
+    $errores['nombre_cliente'] = validate_required_variable($carta['nombre_cliente']);
+    $errores['localidad'] = validate_required_variable($carta['localidad']);
+    $errores['municipio'] = validate_required_variable($carta['municipio']);
+    $errores['fecha_firma'] = validate_required_variable($carta['fecha_firma']);
+    $errores['comprobacion_monto'] = validate_number($carta['comprobacion_monto']);
+    $errores['comprobacion_tipo'] = in_array($carta['comprobacion_tipo'], $tipos_comprobacion) ? '' : 'Por favor, seleccione una opción correcta.';
+    $errores['tipo_credito'] = validate_required_variable($carta['tipo_credito']);
+    $errores['fecha_otorgamiento'] = validate_required_variable($carta['fecha_otorgamiento']);
+    $errores['monto_inicial'] = validate_number($carta['monto_inicial']);
+    $errores['adeudo_total'] = validate_number($carta['adeudo_total']);
 
 // Create a date using the dates recieved by post
-    $pagos_fecha_inicial_conv = date_create($pagos_fecha_inicial);
-    $pagos_fecha_final_conv = date_create($pagos_fecha_final);
+    $pagos_fecha_inicial_conv = date_create($carta['pagos_fecha_inicial']);
+    $pagos_fecha_final_conv = date_create($carta['pagos_fecha_final']);
 
 // Add 1 day to the created days, so it's easier to calculate the difference between dates
     date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
@@ -87,66 +112,66 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && (isset($_POST)) && (!empty($_POST
         $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
 
 // Assign the total months to variable to set the value in the template
-        $mensualidades_vencidas = $total_meses + 1;
+        $carta['mensualidades_vencidas'] = $total_meses + 1;
 
-        if ($mensualidades_vencidas > 1) {
+        if ($carta['mensualidades_vencidas'] > 1) {
             $pagos = 'Correspondientes a los meses de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv) . ' a ' . datefmt_format($fmt, $pagos_fecha_final_conv);
-            $pagos_error = '';
-        } elseif ($mensualidades_vencidas === 1) {
+        } elseif ($carta['mensualidades_vencidas'] === 1) {
             $pagos = 'Correspondientes al mes de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv);
-            $pagos_error = '';
         } else {
-            $pagos_error = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
+            $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
         }
     } else {
-        $pagos_error = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
+        $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
     }
 
-    if ((!$numero_expediente_error) && (!$nombre_cliente_error) && (!$localidad_error) && (!$municipio_error) && (!$fecha_firma_error) && (!$comprobacion_monto_error) && (!$comprobacion_tipo_error) && (!$pagos_error) && (!$tipo_credito_error) && (!$fecha_otorgamiento_error) && (!$monto_inicial_error) && (!$adeudo_total_error)) {
+    $generacion_invalida = implode($errores);
+
+    if (!$generacion_invalida) {
 
 // Create new instance of PHPWord template processor using the required template file
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('numero_expediente', $numero_expediente);
-        $templateProcessor->setValue('nombre_cliente', $nombre_cliente);
-        $templateProcessor->setValue('calle', $calle);
-        $templateProcessor->setValue('cruzamientos', $cruzamientos);
-        $templateProcessor->setValue('numero_direccion', $numero_direccion);
-        $templateProcessor->setValue('colonia_fraccionamiento', $colonia_fraccionamiento);
-        $templateProcessor->setValue('localidad', $localidad);
-        $templateProcessor->setValue('municipio', $municipio);
-        $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($_POST['fecha_firma'])));
-        $templateProcessor->setValue('documentacion', $documentacion);
-        $templateProcessor->setValue('comprobacion_monto', number_format($comprobacion_monto, 2));
-        $templateProcessor->setValue('comprobacion_tipo', $comprobacion_tipo);
+        $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
+        $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
+        $templateProcessor->setValue('calle', $carta['calle']);
+        $templateProcessor->setValue('cruzamientos', $carta['cruzamientos']);
+        $templateProcessor->setValue('numero_direccion', $carta['numero_direccion']);
+        $templateProcessor->setValue('colonia_fraccionamiento', $carta['colonia_fraccionamiento']);
+        $templateProcessor->setValue('localidad', $carta['localidad']);
+        $templateProcessor->setValue('municipio', $carta['municipio']);
+        $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
+        $templateProcessor->setValue('documentacion', $carta['documentacion']);
+        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
+        $templateProcessor->setValue('comprobacion_tipo', strtolower($carta['comprobacion_tipo']));
         $templateProcessor->setValue('pagos', $pagos);
-        $templateProcessor->setValue('tipo_credito', $tipo_credito);
-        $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($_POST['fecha_otorgamiento'])));
-        $templateProcessor->setValue('monto_inicial', number_format($monto_inicial, 2));
-        $templateProcessor->setValue('mensualidades_vencidas', $mensualidades_vencidas);
-        $templateProcessor->setValue('adeudo_total', number_format($adeudo_total, 2));
+        $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
+        $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($carta['fecha_otorgamiento'])));
+        $templateProcessor->setValue('monto_inicial', number_format($carta['monto_inicial'], 2));
+        $templateProcessor->setValue('mensualidades_vencidas', $carta['mensualidades_vencidas']);
+        $templateProcessor->setValue('adeudo_total', number_format($carta['adeudo_total'], 2));
 
 // Escape strings to insert into the database table
-        $numero_expediente = mysqli_real_escape_string($conn, $_POST['numero_expediente']);
-        $nombre_cliente = mysqli_real_escape_string($conn, $_POST['nombre_cliente']);
-        $calle = mysqli_real_escape_string($conn, $_POST['calle']);
-        $cruzamientos = mysqli_real_escape_string($conn, $_POST['cruzamientos']);
-        $numero_direccion = mysqli_real_escape_string($conn, $_POST['numero_direccion']);
-        $colonia_fraccionamiento = mysqli_real_escape_string($conn, $_POST['colonia_fraccionamiento']);
-        $localidad = mysqli_real_escape_string($conn, $_POST['localidad']);
-        $municipio = mysqli_real_escape_string($conn, $_POST['municipio']);
-        $fecha_firma = mysqli_real_escape_string($conn, $_POST['fecha_firma']);
-        $documentacion = mysqli_real_escape_string($conn, $_POST['documentacion']);
-        $comprobacion_monto = mysqli_real_escape_string($conn, $_POST['comprobacion_monto']);
-        $comprobacion_tipo = mysqli_real_escape_string($conn, $_POST['comprobacion_tipo']);
-        $pagos_fecha_inicial = mysqli_real_escape_string($conn, $_POST['pagos_fecha_inicial']);
-        $pagos_fecha_final = mysqli_real_escape_string($conn, $_POST['pagos_fecha_final']);
-        $tipo_credito = mysqli_real_escape_string($conn, $_POST['tipo_credito']);
-        $fecha_otorgamiento = mysqli_real_escape_string($conn, $_POST['fecha_otorgamiento']);
-        $monto_inicial = mysqli_real_escape_string($conn, $_POST['monto_inicial']);
-        $mensualidades_vencidas = mysqli_real_escape_string($conn, $mensualidades_vencidas);
-        $adeudo_total = mysqli_real_escape_string($conn, $_POST['adeudo_total']);
+        $numero_expediente = mysqli_real_escape_string($conn, $carta['numero_expediente']);
+        $nombre_cliente = mysqli_real_escape_string($conn, $carta['nombre_cliente']);
+        $calle = mysqli_real_escape_string($conn, $carta['calle']);
+        $cruzamientos = mysqli_real_escape_string($conn, $carta['cruzamientos']);
+        $numero_direccion = mysqli_real_escape_string($conn, $carta['numero_direccion']);
+        $colonia_fraccionamiento = mysqli_real_escape_string($conn, $carta['colonia_fraccionamiento']);
+        $localidad = mysqli_real_escape_string($conn, $carta['localidad']);
+        $municipio = mysqli_real_escape_string($conn, $carta['municipio']);
+        $fecha_firma = mysqli_real_escape_string($conn, $carta['fecha_firma']);
+        $documentacion = mysqli_real_escape_string($conn, $carta['documentacion']);
+        $comprobacion_monto = floatval(mysqli_real_escape_string($conn, $carta['comprobacion_monto']));
+        $comprobacion_tipo = mysqli_real_escape_string($conn, $carta['comprobacion_tipo']);
+        $pagos_fecha_inicial = mysqli_real_escape_string($conn, $carta['pagos_fecha_inicial']);
+        $pagos_fecha_final = mysqli_real_escape_string($conn, $carta['pagos_fecha_final']);
+        $tipo_credito = mysqli_real_escape_string($conn, $carta['tipo_credito']);
+        $fecha_otorgamiento = mysqli_real_escape_string($conn, $carta['fecha_otorgamiento']);
+        $monto_inicial = floatval(mysqli_real_escape_string($conn, $carta['monto_inicial']));
+        $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $carta['mensualidades_vencidas']));
+        $adeudo_total = floatval(mysqli_real_escape_string($conn, $carta['adeudo_total']));
 
 // Query
         $sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
@@ -257,13 +282,15 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && (isset($_POST)) && (!empty($_POST
                             <label class="form__label" for="numero_expediente">Número de expediente<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="numero_expediente"
-                                   name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+)" value="IYE" required>
+                                   name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+)"
+                                   value="<?= $carta['numero_expediente'] === '' ? 'IYE' : htmlspecialchars($carta['numero_expediente']) ?>"
+                                   required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="nombre_cliente">Nombre del cliente<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="text" id="nombre_cliente"
-                                   name="nombre_cliente"
+                                   name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
@@ -324,11 +351,9 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && (isset($_POST)) && (!empty($_POST
                             <label class="form__label" for="comprobacion_tipo">Tipo de comprobación<span
                                         class="asterisk">*</span>: </label>
                             <select class="form__input" id="comprobacion_tipo" name="comprobacion_tipo" required>
-                                <option value="capital de trabajo">Capital de trabajo</option>
-                                <option value="activo fijo">Activo fijo</option>
-                                <option value="adecuaciones">Adecuaciones</option>
-                                <option value="insumos">Insumos</option>
-                                <option value="certificaciones">Certificaciones</option>
+                                <?php foreach ($tipos_comprobacion as $tipos) : ?>
+                                    <option value="<?= htmlspecialchars($tipos) ?>" <?= $carta['comprobacion_tipo'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </fieldset>
