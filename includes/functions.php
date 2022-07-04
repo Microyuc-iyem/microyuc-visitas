@@ -40,7 +40,7 @@ function validate_number($number): string
     }
 }
 
-function validate_variable($variable): string {
+function validate_required_variable($variable): string {
     if ($variable !== '') {
         return '';
     } else {
