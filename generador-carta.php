@@ -369,8 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form__division">
                             <label class="form__label" for="documentacion"></label>
                             <textarea class="form__input" id="documentacion"
-                                      name="documentacion"
-                                      value="<?= htmlspecialchars($carta['documentacion']) ?>"></textarea>
+                                      name="documentacion"><?= htmlspecialchars($carta['documentacion']) ?></textarea>
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--verification">
