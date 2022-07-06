@@ -5,6 +5,8 @@ require './includes/functions.php';
 
 check_login();
 
+$fmt = set_date_format();
+
 $carta = [
     'numero_expediente' => '',
     'nombre_cliente' => '',
@@ -45,89 +47,114 @@ $errores = [
     'monto_inicial' => '',
     'mensualidades_vencidas' => '',
     'adeudo_total' => '',
-
 ];
 
 $tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
 
+$filtros = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $fmt = set_date_format();
+    // Setting filter settings
+    $filtros['numero_expediente']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['numero_expediente']['options']['regexp'] = '/(^IYE{1,1})([\d\-]+$)/';
+    $filtros['nombre_cliente']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['nombre_cliente']['options']['regexp'] = '/^[A-zÀ-ÿ ]+$/';
+    $filtros['calle']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['calle']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['calle']['options']['default'] = '';
+    $filtros['cruzamientos']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['cruzamientos']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['cruzamientos']['options']['default'] = '';
+    $filtros['numero_direccion']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['numero_direccion']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['numero_direccion']['options']['default'] = '';
+    $filtros['colonia_fraccionamiento']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['colonia_fraccionamiento']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['colonia_fraccionamiento']['options']['default'] = '';
+    $filtros['localidad']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['localidad']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['municipio']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['municipio']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['fecha_firma']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['fecha_firma']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['documentacion']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['documentacion']['options']['default'] = '';
+    $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
+    $filtros['comprobacion_monto']['options']['min_range'] = 1;
+    $filtros['comprobacion_tipo']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['comprobacion_tipo']['options']['regexp'] = '/^(Capital de trabajo|Activo fijo|Adecuaciones|Insumos|Certificaciones)+$/';
+    $filtros['pagos_fecha_inicial']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['pagos_fecha_final']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['tipo_credito']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['tipo_credito']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['fecha_otorgamiento']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['fecha_otorgamiento']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['monto_inicial']['filter'] = FILTER_VALIDATE_FLOAT;
+    $filtros['monto_inicial']['options']['min_range'] = 1;
+    $filtros['adeudo_total']['filter'] = FILTER_VALIDATE_FLOAT;
+    $filtros['adeudo_total']['options']['min_range'] = 1;
 
-// Assign post received inputs to variables
-    $carta['numero_expediente'] = $_POST['numero_expediente'] ?? '';
-    $carta['nombre_cliente'] = $_POST['nombre_cliente'] ?? '';
-    $carta['calle'] = $_POST['calle'] ?? '';
-    $carta['cruzamientos'] = $_POST['cruzamientos'] ?? '';
-    $carta['numero_direccion'] = $_POST['numero_direccion'] ?? '';
-    $carta['colonia_fraccionamiento'] = $_POST['colonia_fraccionamiento'] ?? '';
-    $carta['localidad'] = $_POST['localidad'] ?? '';
-    $carta['municipio'] = $_POST['municipio'] ?? '';
-    $carta['fecha_firma'] = $_POST['fecha_firma'] ?? '';
-    $carta['documentacion'] = $_POST['documentacion'] ?? '';
-    $carta['comprobacion_monto'] = $_POST['comprobacion_monto'] ?? '';
-    $carta['comprobacion_tipo'] = $_POST['comprobacion_tipo'] ?? '';
-    $carta['pagos_fecha_inicial'] = $_POST['pagos_fecha_inicial'] ?? '';
-    $carta['pagos_fecha_final'] = $_POST['pagos_fecha_final'] ?? '';
-    $carta['tipo_credito'] = $_POST['tipo_credito'] ?? '';
-    $carta['fecha_otorgamiento'] = $_POST['fecha_otorgamiento'] ?? '';
-    $carta['monto_inicial'] = $_POST['monto_inicial'] ?? '';
-    $carta['adeudo_total'] = $_POST['adeudo_total'] ?? '';
+    $carta = filter_input_array(INPUT_POST, $filtros);
 
-// Create variable with filename
-    if (preg_match('/(^IYE{1,1})([\d\-]+)/', $carta['numero_expediente'])) {
-        $nombre_archivo = $carta['numero_expediente'] . ' ' . $carta['nombre_cliente'] . '.docx';
-    } else {
-        $errores['numero_expediente'] = 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
-    }
-
-// Encode filename so that UTF-8 characters work
-    if (isset($nombre_archivo)) {
-        $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
-    }
-
-    $errores['nombre_cliente'] = validate_required_variable($carta['nombre_cliente']);
-    $errores['localidad'] = validate_required_variable($carta['localidad']);
-    $errores['municipio'] = validate_required_variable($carta['municipio']);
-    $errores['fecha_firma'] = validate_required_variable($carta['fecha_firma']);
-    $errores['comprobacion_monto'] = validate_number($carta['comprobacion_monto']);
+    // Create error messages
+    $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
+    $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
+    $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
+    $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
+    $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor a 0.';
     $errores['comprobacion_tipo'] = in_array($carta['comprobacion_tipo'], $tipos_comprobacion) ? '' : 'Por favor, seleccione una opción correcta.';
-    $errores['tipo_credito'] = validate_required_variable($carta['tipo_credito']);
-    $errores['fecha_otorgamiento'] = validate_required_variable($carta['fecha_otorgamiento']);
-    $errores['monto_inicial'] = validate_number($carta['monto_inicial']);
-    $errores['adeudo_total'] = validate_number($carta['adeudo_total']);
+    $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Este campo es requerido.';
+    $errores['fecha_otorgamiento'] = $carta['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['monto_inicial'] = $carta['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
+    $errores['adeudo_total'] = $carta['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
 
+    if (!$errores['pagos_fecha_inicial'] && !$errores['pagos_fecha_final']) {
 // Create a date using the dates recieved by post
-    $pagos_fecha_inicial_conv = date_create($carta['pagos_fecha_inicial']);
-    $pagos_fecha_final_conv = date_create($carta['pagos_fecha_final']);
+        $pagos_fecha_inicial_conv = date_create($carta['pagos_fecha_inicial']);
+        $pagos_fecha_final_conv = date_create($carta['pagos_fecha_final']);
 
 // Add 1 day to the created days, so it's easier to calculate the difference between dates
-    date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
-    date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
+        date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
+        date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
 
 // Calculate the month interval diff
-    $intervalo_meses = $pagos_fecha_inicial_conv->diff($pagos_fecha_final_conv);
-    if (!$intervalo_meses->format('%r') == '-') {
-        // Calculation so that it only gives the total in months
-        $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
+        $intervalo_meses = $pagos_fecha_inicial_conv->diff($pagos_fecha_final_conv);
+        if ($intervalo_meses->format('%r') != '-') {
+            // Calculation so that it only gives the total in months
+            $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
 
 // Assign the total months to variable to set the value in the template
-        $carta['mensualidades_vencidas'] = $total_meses + 1;
+            $carta['mensualidades_vencidas'] = $total_meses + 1;
 
-        if ($carta['mensualidades_vencidas'] > 1) {
-            $pagos = 'Correspondientes a los meses de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv) . ' a ' . datefmt_format($fmt, $pagos_fecha_final_conv);
-        } elseif ($carta['mensualidades_vencidas'] === 1) {
-            $pagos = 'Correspondientes al mes de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv);
+            if ($carta['mensualidades_vencidas'] > 1) {
+                $pagos = 'Correspondientes a los meses de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv) . ' a ' . datefmt_format($fmt, $pagos_fecha_final_conv);
+            } elseif ($carta['mensualidades_vencidas'] === 1) {
+                $pagos = 'Correspondientes al mes de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv);
+            } else {
+                $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
+            }
         } else {
             $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
         }
-    } else {
-        $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
     }
 
     $generacion_invalida = implode($errores);
 
     if (!$generacion_invalida) {
+
+        // Create variable with filename
+        $nombre_archivo = $carta['numero_expediente'] . ' ' . $carta['nombre_cliente'] . '.docx';
+
+        // Encode filename so that UTF-8 characters work
+        $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
+
 
 // Create new instance of PHPWord template processor using the required template file
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
@@ -209,6 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 ?>
 
 <!doctype html>
@@ -282,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="numero_expediente">Número de expediente<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="numero_expediente"
-                                   name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+)"
+                                   name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+$)"
                                    value="<?= $carta['numero_expediente'] === '' ? 'IYE' : htmlspecialchars($carta['numero_expediente']) ?>"
                                    required>
                         </div>
@@ -295,38 +323,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="calle">Calle: </label>
-                            <input class="form__input" type="text" id="calle" name="calle">
+                            <input class="form__input" type="text" id="calle" name="calle"
+                                   value="<?= htmlspecialchars($carta['calle']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="cruzamientos">Cruzamientos: </label>
-                            <input class="form__input" type="text" id="cruzamientos" name="cruzamientos">
+                            <input class="form__input" type="text" id="cruzamientos" name="cruzamientos"
+                                   value="<?= htmlspecialchars($carta['cruzamientos']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="numero_direccion">Número: </label>
                             <input class="form__input" type="text" id="numero_direccion"
-                                   name="numero_direccion">
+                                   name="numero_direccion" value="<?= htmlspecialchars($carta['numero_direccion']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="colonia_fraccionamiento">Colonia/fraccionamiento: </label>
                             <input class="form__input" type="text" id="colonia_fraccionamiento"
-                                   name="colonia_fraccionamiento">
+                                   name="colonia_fraccionamiento"
+                                   value="<?= htmlspecialchars($carta['colonia_fraccionamiento']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="localidad">Localidad<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="localidad" name="localidad"
+                                   value="<?= htmlspecialchars($carta['localidad']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="municipio">Municipio<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="municipio" name="municipio"
+                                   value="<?= htmlspecialchars($carta['municipio']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="fecha_firma">Fecha de firma de anexos<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="date" id="fecha_firma" name="fecha_firma"
+                                   value="<?= htmlspecialchars($carta['fecha_firma']) ?>"
                                    required>
                         </div>
                     </fieldset>
@@ -335,7 +369,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form__division">
                             <label class="form__label" for="documentacion"></label>
                             <textarea class="form__input" id="documentacion"
-                                      name="documentacion"></textarea>
+                                      name="documentacion"
+                                      value="<?= htmlspecialchars($carta['documentacion']) ?>"></textarea>
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--verification">
@@ -345,7 +380,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="number" id="comprobacion_monto"
-                                   name="comprobacion_monto" step="0.01" min="0" required>
+                                   name="comprobacion_monto" step="0.01" min="0"
+                                   value="<?= htmlspecialchars($carta['comprobacion_monto']) ?>" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="comprobacion_tipo">Tipo de comprobación<span
@@ -363,19 +399,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="pagos_fecha_inicial">Fecha inicial<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="month" id="pagos_fecha_inicial"
-                                   name="pagos_fecha_inicial" required>
+                                   name="pagos_fecha_inicial"
+                                   value="<?= htmlspecialchars($carta['pagos_fecha_inicial']) ?>" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="pagos_fecha_final">Fecha final<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="month" id="pagos_fecha_final"
                                    name="pagos_fecha_final"
+                                   value="<?= htmlspecialchars($carta['pagos_fecha_final']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="tipo_credito">Tipo de crédito<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="tipo_credito" name="tipo_credito"
+                                   value="<?= htmlspecialchars($carta['tipo_credito']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
@@ -383,20 +422,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="date" id="fecha_otorgamiento"
-                                   name="fecha_otorgamiento" required>
+                                   name="fecha_otorgamiento"
+                                   value="<?= htmlspecialchars($carta['fecha_otorgamiento']) ?>" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="monto_inicial">Monto inicial<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="number" id="monto_inicial" name="monto_inicial" step="0.01"
-                                   min="0"
+                                   min="0" value="<?= htmlspecialchars($carta['monto_inicial']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="adeudo_total">Adeudo total<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="number" id="adeudo_total" name="adeudo_total" step="0.01"
-                                   min="0"
+                                   min="0" value="<?= htmlspecialchars($carta['adeudo_total']) ?>"
                                    required>
                         </div>
                     </fieldset>
