@@ -23,7 +23,15 @@ function set_date_format(): IntlDateFormatter
     );
 }
 
-function is_greater_than_0($number): bool
+function create_filename($filename, $upload_path)              // Function to make filename
 {
-    return $number >= 0;
+    $basename   = pathinfo($filename, PATHINFO_FILENAME);      // Get basename
+    $extension  = pathinfo($filename, PATHINFO_EXTENSION);     // Get extension
+    $basename   = preg_replace('/[^A-zÀ-ÿ\d]/', '-', $basename); // Clean basename
+    $i          = 0;                                           // Counter
+    while (file_exists($upload_path . $filename)) {            // If file exists
+        $i        = $i + 1;                                    // Update counter
+        $filename = $basename . $i . '.' . $extension;         // New filepath
+    }
+    return $filename;                                          // Return filename
 }
