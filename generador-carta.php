@@ -212,9 +212,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!is_dir('./files/')) {
                 mkdir('./files/');
-                if (!is_dir('./files/cartas/')) {
-                    mkdir('./files/cartas/');
-                }
+            }
+
+            if (!is_dir('./files/cartas/')) {
+                mkdir('./files/cartas/');
             }
 
             // Path where generated file is saved
