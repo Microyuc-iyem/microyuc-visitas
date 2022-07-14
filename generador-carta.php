@@ -42,6 +42,8 @@ $errores = [
     'documentacion' => '',
     'comprobacion_monto' => '',
     'comprobacion_tipo' => '',
+    'pagos_fecha_inicial' => '',
+    'pagos_fecha_final' => '',
     'tipo_credito' => '',
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
@@ -309,6 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <fieldset class="form__fieldset form__fieldset--accredited">
                         <legend class="form__legend">Información del acreditado</legend>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['numero_expediente'] ?></p>
                             <label class="form__label" for="numero_expediente">Número de expediente<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="numero_expediente"
@@ -317,6 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['nombre_cliente'] ?></p>
                             <label class="form__label" for="nombre_cliente">Nombre del cliente<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="text" id="nombre_cliente"
@@ -324,27 +328,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['calle'] ?></p>
                             <label class="form__label" for="calle">Calle: </label>
                             <input class="form__input" type="text" id="calle" name="calle"
                                    value="<?= htmlspecialchars($carta['calle']) ?>">
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['cruzamientos'] ?></p>
                             <label class="form__label" for="cruzamientos">Cruzamientos: </label>
                             <input class="form__input" type="text" id="cruzamientos" name="cruzamientos"
                                    value="<?= htmlspecialchars($carta['cruzamientos']) ?>">
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['numero_direccion'] ?></p>
                             <label class="form__label" for="numero_direccion">Número: </label>
                             <input class="form__input" type="text" id="numero_direccion"
                                    name="numero_direccion" value="<?= htmlspecialchars($carta['numero_direccion']) ?>">
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['colonia_fraccionamiento'] ?></p>
                             <label class="form__label" for="colonia_fraccionamiento">Colonia/fraccionamiento: </label>
                             <input class="form__input" type="text" id="colonia_fraccionamiento"
                                    name="colonia_fraccionamiento"
                                    value="<?= htmlspecialchars($carta['colonia_fraccionamiento']) ?>">
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['localidad'] ?></p>
                             <label class="form__label" for="localidad">Localidad<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="localidad" name="localidad"
@@ -352,6 +361,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['municipio'] ?></p>
                             <label class="form__label" for="municipio">Municipio<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="municipio" name="municipio"
@@ -359,6 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['fecha_firma'] ?></p>
                             <label class="form__label" for="fecha_firma">Fecha de firma de anexos<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="date" id="fecha_firma" name="fecha_firma"
@@ -369,6 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <fieldset class="form__fieldset">
                         <legend class="form__legend">Documentación</legend>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['documentacion'] ?></p>
                             <label class="form__label" for="documentacion"></label>
                             <textarea class="form__input" id="documentacion"
                                       name="documentacion"><?= htmlspecialchars($carta['documentacion']) ?></textarea>
@@ -377,6 +389,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <fieldset class="form__fieldset form__fieldset--verification">
                         <legend class="form__legend">Comprobación</legend>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['comprobacion_monto'] ?></p>
                             <label class="form__label" for="comprobacion_monto">Monto de comprobación<span
                                         class="asterisk">*</span>:
                             </label>
@@ -385,6 +398,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    value="<?= htmlspecialchars($carta['comprobacion_monto']) ?>" required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['comprobacion_tipo'] ?></p>
                             <label class="form__label" for="comprobacion_tipo">Tipo de comprobación<span
                                         class="asterisk">*</span>: </label>
                             <select class="form__input" id="comprobacion_tipo" name="comprobacion_tipo" required>
@@ -397,6 +411,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <fieldset class="form__fieldset form__fieldset--payment">
                         <legend class="form__legend">Pagos</legend>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['pagos_fecha_inicial'] ?></p>
                             <label class="form__label" for="pagos_fecha_inicial">Fecha inicial<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="month" id="pagos_fecha_inicial"
@@ -404,6 +419,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    value="<?= htmlspecialchars($carta['pagos_fecha_inicial']) ?>" required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['pagos_fecha_final'] ?></p>
                             <label class="form__label" for="pagos_fecha_final">Fecha final<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="month" id="pagos_fecha_final"
@@ -412,6 +428,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['tipo_credito'] ?></p>
                             <label class="form__label" for="tipo_credito">Tipo de crédito<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="tipo_credito" name="tipo_credito"
@@ -419,6 +436,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['fecha_otorgamiento'] ?></p>
                             <label class="form__label" for="fecha_otorgamiento">Fecha de otorgamiento del crédito<span
                                         class="asterisk">*</span>:
                             </label>
@@ -427,6 +445,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    value="<?= htmlspecialchars($carta['fecha_otorgamiento']) ?>" required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['monto_inicial'] ?></p>
                             <label class="form__label" for="monto_inicial">Monto inicial<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="number" id="monto_inicial" name="monto_inicial" step="0.01"
@@ -434,6 +453,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
+                            <p class="form__error"><?= $errores['adeudo_total'] ?></p>
                             <label class="form__label" for="adeudo_total">Adeudo total<span class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="number" id="adeudo_total" name="adeudo_total" step="0.01"
