@@ -47,7 +47,6 @@ $errores = [
     'tipo_credito' => '',
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
-    'mensualidades_vencidas' => '',
     'adeudo_total' => '',
 ];
 
@@ -111,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor a 0.';
     $errores['comprobacion_tipo'] = in_array($carta['comprobacion_tipo'], $tipos_comprobacion) ? '' : 'Por favor, seleccione una opción correcta.';
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
     $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Este campo es requerido.';
     $errores['fecha_otorgamiento'] = $carta['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['monto_inicial'] = $carta['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
@@ -141,10 +140,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($carta['mensualidades_vencidas'] === 1) {
                 $pagos = 'Correspondientes al mes de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv);
             } else {
-                $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
+                $errores['pagos_fecha_final'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
             }
         } else {
-            $errores['mensualidades_vencidas'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
+            $errores['pagos_fecha_final'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
         }
     }
 
