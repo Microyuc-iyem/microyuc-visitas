@@ -1,7 +1,7 @@
 <?php
 // Require database connection and PHPWord library
 require './config/db_connect.php';
-require './librerias/phpword/vendor/autoload.php';
+require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
 check_login();

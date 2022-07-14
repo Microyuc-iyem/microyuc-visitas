@@ -1,6 +1,6 @@
 <?php
 require './config/db_connect.php';
-require './librerias/phpword/vendor/autoload.php';
+require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
 check_login();
@@ -247,18 +247,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./dist/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <title>Microyuc | Generador de cartas</title>
 </head>
 <body>
 <div class="dashboard">
     <aside class="sidebar">
-        <a href="./inicio.php"><img src="./img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
+        <a href="inicio.php"><img src="../img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
         <nav class="sidebar__nav">
             <div class="sidebar__dashboard">
                 <h2 class="sidebar__title">Tablero</h2>
                 <ul class="sidebar__list">
-                    <li><a href="./inicio.php" class="sidebar__link">
+                    <li><a href="inicio.php" class="sidebar__link">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -271,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="sidebar__apps">
                 <h2 class="sidebar__title">Apps</h2>
                 <ul class="sidebar__list">
-                    <li><a href="./generador-carta.php" class="sidebar__link sidebar__link--active">
+                    <li><a href="generador-carta.php" class="sidebar__link sidebar__link--active">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                       d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                             <span>Cartas</span></a></li>
-                    <li><a href="./generador-bitacora.php" class="sidebar__link">
+                    <li><a href="generador-bitacora.php" class="sidebar__link">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -294,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="main__app">
             <div class="main__header">
                 <h1 class="main__title">Generador de cartas</h1>
-                <a href="./cartas.php" class="main__btn">
+                <a href="cartas.php" class="main__btn">
                     <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
