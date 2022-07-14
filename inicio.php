@@ -12,13 +12,13 @@ if (!isset($_SESSION['login'])) {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../dist/css/styles.css">
+    <link rel="stylesheet" href="dist/css/styles.css">
     <title>Microyuc | Inicio</title>
 </head>
 <body>
 <div class="dashboard">
     <aside class="sidebar">
-        <a href="inicio.php"><img src="../img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
+        <a href="inicio.php"><img src="img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
         <nav class="sidebar__nav">
             <div class="sidebar__dashboard">
                 <h2 class="sidebar__title">Tablero</h2>

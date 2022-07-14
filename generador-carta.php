@@ -116,17 +116,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['adeudo_total'] = $carta['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
 
     if (!$errores['pagos_fecha_inicial'] && !$errores['pagos_fecha_final']) {
-// Create a date using the dates recieved by post
-        $pagos_fecha_inicial_conv = date_create($carta['pagos_fecha_inicial']);
-        $pagos_fecha_final_conv = date_create($carta['pagos_fecha_final']);
+// Create a DateTime object using the dates recieved by post
+        $pagos_fecha_inicial_conv = new DateTime($carta['pagos_fecha_inicial']);
+        $pagos_fecha_final_conv = new DateTime($carta['pagos_fecha_final']);
 
 // Add 1 day to the created days, so it's easier to calculate the difference between dates
-        date_add($pagos_fecha_inicial_conv, date_interval_create_from_date_string('1 day'));
-        date_add($pagos_fecha_final_conv, date_interval_create_from_date_string('1 day'));
+        $interval = new DateInterval('P1D');
+        $pagos_fecha_inicial_conv->add($interval);
+        $pagos_fecha_final_conv->add($interval);
 
 // Calculate the month interval diff
         $intervalo_meses = $pagos_fecha_inicial_conv->diff($pagos_fecha_final_conv);
-        if ($intervalo_meses->format('%r') != '-') {
+        if ($intervalo_meses->invert === 0) {
             // Calculation so that it only gives the total in months
             $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
 
@@ -247,13 +248,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../dist/css/styles.css">
+    <link rel="stylesheet" href="dist/css/styles.css">
     <title>Microyuc | Generador de cartas</title>
 </head>
 <body>
 <div class="dashboard">
     <aside class="sidebar">
-        <a href="inicio.php"><img src="../img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
+        <a href="inicio.php"><img src="img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
         <nav class="sidebar__nav">
             <div class="sidebar__dashboard">
                 <h2 class="sidebar__title">Tablero</h2>

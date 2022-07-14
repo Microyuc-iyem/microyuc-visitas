@@ -30,12 +30,12 @@ if ($_POST) {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../dist/css/styles.css">
+    <link rel="stylesheet" href="dist/css/styles.css">
     <title>Microyuc | Inicio de sesión</title>
 </head>
 <body>
 <div class="login">
-    <img src="../img/microyucfondo.png" alt="Logo de Microyuc" class="login__img">
+    <img src="img/microyucfondo.png" alt="Logo de Microyuc" class="login__img">
     <div class="login__container">
         <h1 class="login__title">Iniciar sesión</h1>
         <p class="login__subtitle">Introduce tus credenciales para iniciar sesión.</p>
