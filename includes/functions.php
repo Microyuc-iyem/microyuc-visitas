@@ -11,7 +11,7 @@ function check_login(): void
 }
 
 //Set date format to replace in the docx
-function set_date_format(): IntlDateFormatter
+function set_date_format_letter(): IntlDateFormatter
 {
     return datefmt_create(
         'es-MX',
@@ -23,15 +23,29 @@ function set_date_format(): IntlDateFormatter
     );
 }
 
+function set_date_format_logbook(): IntlDateFormatter
+{
+    return datefmt_create(
+        'es-MX',
+        IntlDateFormatter::FULL,
+        IntlDateFormatter::FULL,
+        'America/Mexico_City',
+        IntlDateFormatter::GREGORIAN,
+        "EEEE d 'de' MMMM 'de' yyyy"
+    );
+}
+
 function create_filename($filename, $upload_path)              // Function to make filename
 {
-    $basename   = pathinfo($filename, PATHINFO_FILENAME);      // Get basename
-    $extension  = pathinfo($filename, PATHINFO_EXTENSION);     // Get extension
-    $basename   = preg_replace('/[^A-zÀ-ÿ\d]/', '-', $basename); // Clean basename
-    $i          = 0;                                           // Counter
-    while (file_exists($upload_path . $filename)) {            // If file exists
-        $i        = $i + 1;                                    // Update counter
-        $filename = $basename . $i . '.' . $extension;         // New filepath
+    $basename = pathinfo($filename, PATHINFO_FILENAME);      // Get basename
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);     // Get extension
+    $basename = preg_replace('/[^A-zÀ-ÿ0-9]/', '-', $basename); // Clean basename
+    $new_filename = $basename;
+    $i = 0;                                           // Counter
+    while (file_exists($upload_path . $new_filename . '.' . $extension)) {            // If file exists
+        $i = $i + 1;                                    // Update counter
+        $new_filename = $basename . $i;         // New filepath
     }
-    return $filename;                                          // Return filename
+
+    return $new_filename . '.' . $extension;                                 // Return filename
 }
