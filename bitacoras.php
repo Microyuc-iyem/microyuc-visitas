@@ -7,7 +7,7 @@ if (!isset($_SESSION['login'])) {
 }
 
 // Write query for all acreditados
-$sql = 'SELECT id, acreditado_nombre, folio, acreditado_telefono, acreditado_email, gestion_fecha, gestion_via, fecha_creacion, nombre_archivo FROM bitacora ORDER BY fecha_creacion DESC;';
+$sql = 'SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, gestion_fecha1, gestion_via1, fecha_creacion, nombre_archivo FROM bitacora ORDER BY fecha_creacion DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);
@@ -140,13 +140,13 @@ if (isset($_GET['id'])) {
                 <?php foreach ($bitacoras as $bitacora): ?>
                     <tr class="table__row--body">
                         <td class="table__data table__data--bold"><?= $bitacora['acreditado_nombre'] ?></td>
-                        <td class="table__data table__data--left"><?= $bitacora['folio'] ?></td>
+                        <td class="table__data table__data--left"><?= $bitacora['acreditado_folio'] ?></td>
                         <td class="table__data table__data--left"><?= $bitacora['acreditado_telefono'] ?></td>
                         <td class="table__data"><a
                                     href="mailto:<?= $bitacora['acreditado_email']; ?>"><?= $bitacora['acreditado_email']; ?></a>
                         </td>
-                        <td class="table__data table__data--left"><?= date("d-m-Y", strtotime($bitacora['gestion_fecha'])); ?></td>
-                        <td class="table__data"><?= $bitacora['gestion_via']; ?></td>
+                        <td class="table__data table__data--left"><?= date("d-m-Y", strtotime($bitacora['gestion_fecha1'])); ?></td>
+                        <td class="table__data"><?= $bitacora['gestion_via1']; ?></td>
                         <td class="table__data"><?= date("d-m-Y", strtotime($bitacora['fecha_creacion'])); ?></td>
                         <td class="table__data"><a class="table__data--link"
                                                    href="./files/bitacoras/<?= $bitacora['nombre_archivo'] ?>">Descargar</a>
