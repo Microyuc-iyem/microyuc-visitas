@@ -8,32 +8,108 @@ check_login();
 
 $fmt = set_date_format();
 
-$bitacora = [];
-$errores = [];
+$bitacora = [
+    'acreditado_nombre' => '',
+    'acreditado_folio' => '',
+    'acreditado_municipio' => '',
+    'acreditado_garantia' => '',
+    'acreditado_telefono' => '',
+    'acreditado_email' => '',
+    'acreditado_direccion_negocio' => '',
+    'acreditado_direccion_particular' => '',
+    'aval_nombre' => '',
+    'aval_telefono' => '',
+    'aval_email' => '',
+    'aval_direccion' => '',
+    'gestion_fecha1' => '',
+    'gestion_via1' => '',
+    'gestion_comentarios1' => '',
+    'gestion_contador' => '',
+    'evidencia_fecha1' => '',
+    'evidencia_fotografia1' => '',
+];
+$errores = [
+    'acreditado_nombre' => '',
+    'acreditado_folio' => '',
+    'acreditado_municipio' => '',
+    'acreditado_garantia' => '',
+    'acreditado_telefono' => '',
+    'acreditado_email' => '',
+    'acreditado_direccion_negocio' => '',
+    'acreditado_direccion_particular' => '',
+    'aval_nombre' => '',
+    'aval_telefono' => '',
+    'aval_email' => '',
+    'aval_direccion' => '',
+    'gestion_fecha1' => '',
+    'gestion_via1' => '',
+    'gestion_comentarios1' => '',
+    'evidencia_fecha1' => '',
+    'evidencia_fotografia1' => '',
+];
+
+$tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita'];
+
+$filtros = [];
 
 $movido = false;
 $ruta_subido = './uploads/';
 $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'];
 $exts_permitidas = ['jpeg', 'jpg', 'jpe', 'jif', 'jfif', 'png', 'gif', 'bmp', 'tif', 'tiff', 'webp'];
-$filtros = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Escribir filtros
+    // Setting filter settings
+    $filtros['acreditado_nombre']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_nombre']['options']['regexp'] = '/^[A-zÀ-ÿ ]+$/';
+    $filtros['acreditado_folio']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_folio']['options']['regexp'] = '/(^IYE{1,1})([\d\-]+$)/';
+    $filtros['acreditado_municipio']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_municipio']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_garantia']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_garantia']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_telefono']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_telefono']['options']['regexp'] = '/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/';
+    $filtros['acreditado_email']['filter'] = FILTER_VALIDATE_EMAIL;
+    $filtros['acreditado_direccion_negocio']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_direccion_negocio']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_direccion_particular']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['aval_nombre']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['aval_nombre']['options']['regexp'] = '/^[A-zÀ-ÿ ]+$/';
+    $filtros['aval_telefono']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['aval_telefono']['options']['regexp'] = '/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/';
+    $filtros['aval_email']['filter'] = FILTER_VALIDATE_EMAIL;
+    $filtros['aval_direccion']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['aval_direccion']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['aval_direccion']['options']['default'] = '';
+    $filtros['gestion_fecha1']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['gestion_fecha1']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['gestion_via1']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['gestion_via1']['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita)+$/';
+    $filtros['gestion_comentarios1']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['gestion_comentarios1']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['gestion_comentarios1']['options']['default'] = '';
+    $filtros['evidencia_fecha1']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['evidencia_fecha1']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['evidencia_fecha1']['options']['default'] = '';
 
     $bitacoras = filter_input_array(INPUT_POST, $filtros);
 
-    if ($_FILES['evidencia_fotografia']['error'] === 0) {
+    if ($_FILES['evidencia_fotografia1']['error'] === 0) {
         $tipo = mime_content_type($_FILES['evidencia_fotografia']['type']);
-        $errores['evidencia_fotografia'] .= in_array($tipo, $tipos_permitidos) ? '' : 'Formato de archivo incorrecto. ';
+        $errores['evidencia_fotografia1'] .= in_array($tipo, $tipos_permitidos) ? '' : 'Formato de archivo incorrecto. ';
         $ext = strtolower(pathinfo($_FILES['evidencia_fotografia']['name'], PATHINFO_EXTENSION));
-        $errores['evidencia_fotografia'] .= in_array($ext, $exts_permitidas);
+        $errores['evidencia_fotografia1'] .= in_array($ext, $exts_permitidas);
 
         if (!$errores) {
-            $fotografia_nombre_archivo = create_filename($_FILES['evidencia_fotografia']['name'], $ruta_subido);
+            $fotografia_nombre_archivo = create_filename($_FILES['evidencia_fotografia1']['name'], $ruta_subido);
             $destino = $ruta_subido . $fotografia_nombre_archivo;
-            $movido = move_uploaded_file($_FILES['evidencia_fotografia']['tmp_name'], $destino);
+            $movido = move_uploaded_file($_FILES['evidencia_fotografia1']['tmp_name'], $destino);
         }
+    }
+
+    if ($movido === true) {
+        $bitacora['evidencia_fotografia1'] = $_FILES['evidencia_fotografia1']['name'] ?? '';
     }
 
     // Escribir mensajes de error
@@ -55,8 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gestion_comentarios = $_POST['gestion_comentarios'];
     $evidencia_fecha = $_POST['evidencia_fecha'];
     $evidencia_fotografia = $_FILES['evidencia_fotografia']['name'];
-
-    move_uploaded_file($_FILES['evidencia_fotografia']['tmp_name'], './uploads/' . $_FILES['evidencia_fotografia']['name']);
 
     $generacion_invalida = implode($errores);
 
