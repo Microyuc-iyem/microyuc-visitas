@@ -5,7 +5,7 @@ require './includes/functions.php';
 
 check_login();
 
-$fmt = set_date_format();
+$fmt = set_date_format_letter();
 
 $carta = [
     'numero_expediente' => '',
