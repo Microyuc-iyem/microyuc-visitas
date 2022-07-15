@@ -152,41 +152,37 @@ if (!isset($_SESSION['login'])) {
                     <fieldset class="form__fieldset form__fieldset--process">
                         <legend class="form__legend">Gestión</legend>
                         <div class="form__division">
-                            <label class="form__label" for="gestion_fecha">Fecha<span
+                            <label class="form__label" for="gestion_fecha1">Fecha<span
                                         class="asterisk">*</span>:
                             </label>
-                            <input class="form__input" type="date" id="gestion_fecha" name="gestion_fecha"
+                            <input class="form__input" type="date" id="gestion_fecha1" name="gestion_fecha1"
                                    required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="gestion_via">Vía<span
+                            <label class="form__label" for="gestion_via1">Vía<span
                                         class="asterisk">*</span>:
                             </label>
-                            <input class="form__input" type="text" id="gestion_via" name="gestion_via"
+                            <input class="form__input" type="text" id="gestion_via1" name="gestion_via1"
                                    required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="gestion_comentarios">Comentarios/Resultados:
+                            <label class="form__label" for="gestion_comentarios1">Comentarios/Resultados:
                             </label>
-                            <input class="form__input" type="text" id="gestion_comentarios" name="gestion_comentarios">
+                            <input class="form__input" type="text" id="gestion_comentarios1" name="gestion_comentarios1">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--evidence">
                         <legend class="form__legend">Evidencias</legend>
                         <div class="form__division">
-                            <label class="form__label" for="evidencia_fecha">Fecha<span
-                                        class="asterisk">*</span>:
+                            <label class="form__label" for="evidencia_fecha1">Fecha:
                             </label>
-                            <input class="form__input" type="date" id="evidencia_fecha" name="evidencia_fecha"
-                                   required>
+                            <input class="form__input" type="date" id="evidencia_fecha1" name="evidencia_fecha1">
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="evidencia_fotografia">Fotografía<span
-                                        class="asterisk">*</span>:
+                            <label class="form__label" for="evidencia_fotografia1">Fotografía:
                             </label>
-                            <input class="form__input form__input--file" type="file" id="evidencia_fotografia"
-                                   name="evidencia_fotografia"
-                                   required>
+                            <input class="form__input form__input--file" type="file" id="evidencia_fotografia1"
+                                   name="evidencia_fotografia1">
                         </div>
                     </fieldset>
                     <div class="form__container--btn">
