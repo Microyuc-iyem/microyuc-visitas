@@ -61,21 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['acreditado_folio']['options']['regexp'] = '/(^IYE{1,1})([\d\-]+$)/';
     $filtros['acreditado_municipio']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_municipio']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['acreditado_municipio']['options']['default'] = '';
     $filtros['acreditado_garantia']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_garantia']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['acreditado_garantia']['options']['default'] = '';
     $filtros['acreditado_telefono']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_telefono']['options']['regexp'] = '/^[\+\d\-\s\.\(\)]+$/';
-    $filtros['acreditado_telefono']['options']['default'] = '';
     $filtros['acreditado_email']['filter'] = FILTER_VALIDATE_EMAIL;
-    $filtros['acreditado_email']['options']['default'] = '';
     $filtros['acreditado_direccion_negocio']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_direccion_negocio']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['acreditado_direccion_negocio']['options']['default'] = '';
     $filtros['acreditado_direccion_particular']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_direccion_particular']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['acreditado_direccion_particular']['options']['default'] = '';
     $filtros['aval_nombre']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['aval_nombre']['options']['regexp'] = '/[\s\S]+/';
     $filtros['aval_nombre']['options']['default'] = '';
@@ -103,30 +97,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $bitacora['evidencia_fotografia1'] = $_FILES['evidencia_fotografia1']['name'] ?? '';
     $bitacora['evidencia_fecha_texto1'] = '';
+    $bitacora['evidencia_fecha1'] = $bitacora['evidencia_fecha1'] ? new DateTime($bitacora['evidencia_fecha1']) : '';
+    if (($bitacora['evidencia_fecha1'] && $bitacora['evidencia_fotografia1']) || (!$bitacora['evidencia_fecha1'] && !$bitacora['evidencia_fotografia1'])) {
+        if ($_FILES['evidencia_fotografia1']['error'] === 0) {
+            $tipo = mime_content_type($_FILES['evidencia_fotografia1']['tmp_name']);
+            $errores['evidencia_fotografia1'] = in_array($tipo, $tipos_permitidos) ? '' : 'Formato de archivo incorrecto. ';
+            $ext = strtolower(pathinfo($_FILES['evidencia_fotografia1']['name'], PATHINFO_EXTENSION));
+            $errores['evidencia_fotografia1'] .= in_array($ext, $exts_permitidas) ? '' : 'Extensión de archivo incorrecta.';
 
-    if ($_FILES['evidencia_fotografia1']['error'] === 0) {
-        $tipo = mime_content_type($_FILES['evidencia_fotografia1']['tmp_name']);
-        $errores['evidencia_fotografia1'] = in_array($tipo, $tipos_permitidos) ? '' : 'Formato de archivo incorrecto. ';
-        $ext = strtolower(pathinfo($_FILES['evidencia_fotografia1']['name'], PATHINFO_EXTENSION));
-        $errores['evidencia_fotografia1'] .= in_array($ext, $exts_permitidas) ? '' : 'Extensión de archivo incorrecta.';
-
-        if (!$errores['evidencia_fotografia1']) {
-            $fotografia_nombre_archivo = create_filename($_FILES['evidencia_fotografia1']['name'], $ruta_subido);
-            if (!file_exists('./uploads/')) {
-                mkdir('./uploads/');
-            }
-            if (file_exists('./uploads/')) {
-                $destino = $ruta_subido . $fotografia_nombre_archivo;
-                $movido = move_uploaded_file($_FILES['evidencia_fotografia1']['tmp_name'], $destino);
+            if (!$errores['evidencia_fotografia1']) {
+                $fotografia_nombre_archivo = create_filename($_FILES['evidencia_fotografia1']['name'], $ruta_subido);
+                if (!file_exists('./uploads/')) {
+                    mkdir('./uploads/');
+                }
+                if (file_exists('./uploads/')) {
+                    $destino = $ruta_subido . $fotografia_nombre_archivo;
+                    $movido = move_uploaded_file($_FILES['evidencia_fotografia1']['tmp_name'], $destino);
+                }
             }
         }
-    }
 
-    if ($movido) {
-        $bitacora['evidencia_fotografia1'] = $fotografia_nombre_archivo;
-        $bitacora['evidencia_fecha1'] = new DateTime($bitacora['evidencia_fecha1']);
-        $bitacora['evidencia_fecha_texto1'] = "Se visitó el negocio el " . datefmt_format($fmt, $bitacora['evidencia_fecha1']) . ".</w:t><w:br/><w:t>Fachada del negocio.";
-        $evidences_counter = 1;
+        if ($movido) {
+            $bitacora['evidencia_fotografia1'] = $fotografia_nombre_archivo;
+            $bitacora['evidencia_fecha_texto1'] = "Se visitó el negocio el " . datefmt_format($fmt, $bitacora['evidencia_fecha1']) . ".</w:t><w:br/><w:t>Fachada del negocio.";
+            $evidences_counter = 1;
+        }
+    } else {
+        $errores['evidencia_fotografia1'] = 'Se deben llenar ambos campos para registrar la evidencia.';
     }
 
     // Error messages
@@ -314,48 +311,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="acreditado_nombre">Nombre<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="acreditado_nombre"
-                                   name="acreditado_nombre" value="<?= $bitacora['acreditado_nombre'] ?>" required>
+                                   name="acreditado_nombre"
+                                   value="<?= htmlspecialchars($bitacora['acreditado_nombre']) ?>" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_folio">Folio<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="text" id="acreditado_folio"
-                                   name="acreditado_folio" value="<?= $bitacora['acreditado_folio'] ?>"
+                                   name="acreditado_folio"
+                                   value="<?= htmlspecialchars($bitacora['acreditado_folio']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_municipio">Municipio:</label>
                             <input class="form__input" type="text" id="acreditado_municipio"
-                                   name="acreditado_municipio" value="<?= $bitacora['acreditado_municipio'] ?>">
+                                   name="acreditado_municipio"
+                                   value="<?= htmlspecialchars($bitacora['acreditado_municipio']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_garantia">Garantía:</label>
                             <input class="form__input" type="text" id="acreditado_garantia" name="acreditado_garantia"
-                                   value="<?= $bitacora['acreditado_garantia'] ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_garantia']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_telefono">Teléfono:</label>
                             <input class="form__input" type="text" id="acreditado_telefono"
-                                   name="acreditado_telefono" value="<?= $bitacora['acreditado_telefono'] ?>">
+                                   name="acreditado_telefono"
+                                   value="<?= htmlspecialchars($bitacora['acreditado_telefono']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_email">Correo electrónico:</label>
                             <input class="form__input" type="email" id="acreditado_email"
-                                   name="acreditado_email" value="<?= $bitacora['acreditado_email'] ?>">
+                                   name="acreditado_email"
+                                   value="<?= htmlspecialchars($bitacora['acreditado_email']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_direccion_negocio">Dirección del negocio:
                             </label>
                             <input class="form__input" type="text" id="acreditado_direccion_negocio"
                                    name="acreditado_direccion_negocio"
-                                   value="<?= $bitacora['acreditado_direccion_negocio'] ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_direccion_negocio']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_direccion_particular">Dirección
                                 particular:</label>
                             <input class="form__input" type="text" id="acreditado_direccion_particular"
                                    name="acreditado_direccion_particular"
-                                   value="<?= $bitacora['acreditado_direccion_particular'] ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_direccion_particular']) ?>">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--aval">
@@ -364,25 +366,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="aval_nombre">Nombre:
                             </label>
                             <input class="form__input" type="text" id="aval_nombre"
-                                   name="aval_nombre" value="<?= $bitacora['aval_nombre'] ?>">
+                                   name="aval_nombre" value="<?= htmlspecialchars($bitacora['aval_nombre']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="aval_telefono">Teléfono:
                             </label>
                             <input class="form__input" type="text" id="aval_telefono"
-                                   name="aval_telefono" value="<?= $bitacora['aval_telefono'] ?>">
+                                   name="aval_telefono" value="<?= htmlspecialchars($bitacora['aval_telefono']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="aval_email">Email:
                             </label>
                             <input class="form__input" type="email" id="aval_email"
-                                   name="aval_email" value="<?= $bitacora['aval_email'] ?>">
+                                   name="aval_email" value="<?= htmlspecialchars($bitacora['aval_email']) ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="aval_direccion">Dirección:
                             </label>
                             <input class="form__input" type="text" id="aval_direccion"
-                                   name="aval_direccion" value="<?= $bitacora['aval_direccion'] ?>">
+                                   name="aval_direccion" value="<?= htmlspecialchars($bitacora['aval_direccion']) ?>">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--process">
@@ -392,7 +394,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="date" id="gestion_fecha1" name="gestion_fecha1"
-                                   value="<?= $bitacora['gestion_fecha1'] ?>"
+                                   value="<?= htmlspecialchars($bitacora['gestion_fecha1']) ?>"
                                    required>
                         </div>
                         <div class="form__division">
@@ -409,7 +411,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="gestion_comentarios1">Comentarios/Resultados:
                             </label>
                             <input class="form__input" type="text" id="gestion_comentarios1"
-                                   name="gestion_comentarios1" value="<?= $bitacora['gestion_comentarios1'] ?>">
+                                   name="gestion_comentarios1"
+                                   value="<?= htmlspecialchars($bitacora['gestion_comentarios1']) ?>">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--evidence">
@@ -418,7 +421,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="evidencia_fecha1">Fecha:
                             </label>
                             <input class="form__input" type="date" id="evidencia_fecha1" name="evidencia_fecha1"
-                                   value="<?= $bitacora['evidencia_fecha1'] ? $bitacora['evidencia_fecha1']->format('Y-m-d') : '' ?>">
+                                <?= $bitacora['evidencia_fecha1'] ? 'value=' . htmlspecialchars($bitacora["evidencia_fecha1"]->format('Y-m-d')) : '' ?>>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="evidencia_fotografia1">Fotografía:
