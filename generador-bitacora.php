@@ -141,6 +141,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
 // Set values in template with post received input variables
+        $values = [
+            ['gestion_fecha' => date("d-m-Y", strtotime($bitacora['gestion_fecha1'])), 'gestion_via' => $bitacora['gestion_via1'], 'gestion_comentarios' => $bitacora['gestion_comentarios1']],
+        ];
+
+        $replacements = array(
+            array('evidencia_fecha' => $bitacora['evidencia_fecha1_texto'], 'evidencia_fotografia' => $movido ? $ruta_subido . $bitacora['evidencia_fotografia1'] : ''),
+            array('evidencia_fecha' => 'testing', 'evidencia_fotografia' => $movido ? $ruta_subido . $bitacora['evidencia_fotografia1'] : ''),
+        );
+
         $templateProcessor->setValue('acreditado_nombre', $bitacora['acreditado_nombre']);
         $templateProcessor->setValue('acreditado_folio', $bitacora['acreditado_folio']);
         $templateProcessor->setValue('acreditado_municipio', $bitacora['acreditado_municipio']);
@@ -153,20 +162,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('aval_telefono', $bitacora['aval_telefono']);
         $templateProcessor->setValue('aval_email', $bitacora['aval_email']);
         $templateProcessor->setValue('aval_direccion', $bitacora['aval_direccion']);
-        $templateProcessor->setValue('gestion_fecha1', date("d-m-Y", strtotime($bitacora['gestion_fecha1'])));
-        $templateProcessor->setValue('gestion_via1', $bitacora['gestion_via1']);
-        $templateProcessor->setValue('gestion_comentarios1', $bitacora['gestion_comentarios1']);
-        for ($i = 2; $i <= 12; $i++) {
-            $templateProcessor->setValue('gestion_fecha' . $i, '');
-            $templateProcessor->setValue('gestion_via' . $i, '');
-            $templateProcessor->setValue('gestion_comentarios' . $i, '');
-        }
-        $templateProcessor->setValue('evidencia_fecha', $bitacora['evidencia_fecha1_texto']);
-        if ($movido) {
-            $templateProcessor->setImageValue('evidencia_fotografia', array('path' => './uploads/' . $bitacora['evidencia_fotografia1'], 'width' => 720, 'height' => 480));
-        } else {
-            $templateProcessor->setValue('evidencia_fotografia', '');
-        }
+        $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
+        $templateProcessor->cloneBlock('evidencia', 0, true, false, $replacements);
+
 // Escape strings to insert into the database table
         $acreditado_nombre = mysqli_real_escape_string($conn, $_POST['acreditado_nombre']);
         $folio = mysqli_real_escape_string($conn, $_POST['folio']);
@@ -184,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $gestion_via = mysqli_real_escape_string($conn, $_POST['gestion_via1']);
         $gestion_comentarios = mysqli_real_escape_string($conn, $_POST['gestion_comentarios1']);
         $evidencia_fecha = mysqli_real_escape_string($conn, $_POST['evidencia_fecha1']);
-        $evidencia_fotografia = mysqli_real_escape_string($conn, $_FILES['evidencia_fotografia1']['name']);
+        $evidencia_fotografia = mysqli_real_escape_string($conn, $fotografia_nombre_archivo);
 
 // Query
         $sql = "INSERT INTO bitacora(acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
@@ -197,20 +195,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Validation of query
         if (mysqli_query($conn, $sql)) {
 
-            // Path where generated file is saved
-            $ruta_guardado = './files/bitacoras/' . $nombre_archivo;
-            $templateProcessor->saveAs($ruta_guardado);
+            if (!is_dir('./files/')) {
+                mkdir('./files/');
+            }
 
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-            header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
-            header('Content-Transfer-Encoding: binary');
+            if (!is_dir('./files/bitacoras/')) {
+                mkdir('./files/bitacoras/');
+            }
 
-            ob_clean();
-            flush();
-            // Send generated file stored in the server to the browser
-            readfile($ruta_guardado);
-            exit;
+            if (file_exists('./files/bitacoras/')) {
+                // Path where generated file is saved
+                $ruta_guardado = './files/bitacoras/' . $nombre_archivo;
+                $templateProcessor->saveAs($ruta_guardado);
+
+                if (file_exists($ruta_guardado)) {
+                    header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                    header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
+                    header('Content-Length: ' . filesize($ruta_guardado));
+                    ob_clean();
+                    flush();
+                    // Send generated file stored in the server to the browser
+                    readfile($ruta_guardado);
+                    exit;
+                }
+            }
         } else {
             echo 'Error de consulta: ' . mysqli_error($conn);
         }
