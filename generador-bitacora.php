@@ -319,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="text" id="acreditado_folio"
                                    name="acreditado_folio"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_folio']) ?>"
+                                   value="<?= $bitacora['acreditado_folio'] ? htmlspecialchars($bitacora['acreditado_folio']) : 'IYE' ?>"
                                    required>
                         </div>
                         <div class="form__division">
