@@ -220,19 +220,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir('./files/cartas/');
             }
 
-            // Path where generated file is saved
-            $ruta_guardado = './files/cartas/' . $nombre_archivo;
-            $templateProcessor->saveAs($ruta_guardado);
+            if (file_exists('./files/cartas/')) {
+                // Path where generated file is saved
+                $ruta_guardado = './files/cartas/' . $nombre_archivo;
+                $templateProcessor->saveAs($ruta_guardado);
 
-            if (file_exists($ruta_guardado)) {
-                header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
-                header('Content-Length: ' . filesize($ruta_guardado));
-                ob_clean();
-                flush();
-                // Send generated file stored in the server to the browser
-                readfile($ruta_guardado);
-                exit;
+                if (file_exists($ruta_guardado)) {
+                    header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                    header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
+                    header('Content-Length: ' . filesize($ruta_guardado));
+                    ob_clean();
+                    flush();
+                    // Send generated file stored in the server to the browser
+                    readfile($ruta_guardado);
+                    exit;
+                }
             }
         } else {
             echo 'Error de consulta: ' . mysqli_error($conn);
