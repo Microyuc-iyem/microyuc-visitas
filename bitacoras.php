@@ -1,10 +1,8 @@
 <?php
 require_once './config/db_connect.php';
+require './includes/functions.php';
 
-session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: index.php");
-}
+check_login();
 
 // Write query for all acreditados
 $sql = 'SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, gestion_fecha1, gestion_via1, fecha_creacion, nombre_archivo FROM bitacora ORDER BY fecha_creacion DESC;';
@@ -17,8 +15,8 @@ $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $resultado_imagen = mysqli_query($conn, "SELECT evidencia_fotografia FROM bitacora WHERE id = '$id';");
-    $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia'] ?? '';
+    $resultado_imagen = mysqli_query($conn, "SELECT evidencia_fotografia1 FROM bitacora WHERE id = '$id';");
+    $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia1'] ?? '';
     $resultado_archivo = mysqli_query($conn, "SELECT nombre_archivo FROM bitacora WHERE id = '$id';");
     $filename = $resultado_archivo->fetch_array()['nombre_archivo'] ?? '';
     $delete = mysqli_query($conn, "DELETE FROM bitacora WHERE id = '$id';");
