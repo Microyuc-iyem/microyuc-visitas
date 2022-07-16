@@ -50,6 +50,8 @@ $ruta_subido = './uploads/';
 $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'];
 $exts_permitidas = ['jpeg', 'jpg', 'jpe', 'jif', 'jfif', 'png', 'gif', 'bmp', 'tif', 'tiff', 'webp'];
 
+$evidences_counter = 0;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Setting filter settings
@@ -59,15 +61,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['acreditado_folio']['options']['regexp'] = '/(^IYE{1,1})([\d\-]+$)/';
     $filtros['acreditado_municipio']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_municipio']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_municipio']['options']['default'] = '';
     $filtros['acreditado_garantia']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_garantia']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_garantia']['options']['default'] = '';
     $filtros['acreditado_telefono']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_telefono']['options']['regexp'] = '/^[\+\d\-\s\.\(\)]+$/';
+    $filtros['acreditado_telefono']['options']['default'] = '';
     $filtros['acreditado_email']['filter'] = FILTER_VALIDATE_EMAIL;
+    $filtros['acreditado_email']['options']['default'] = '';
     $filtros['acreditado_direccion_negocio']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_direccion_negocio']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_direccion_negocio']['options']['default'] = '';
     $filtros['acreditado_direccion_particular']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_direccion_particular']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_direccion_particular']['options']['default'] = '';
     $filtros['aval_nombre']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['aval_nombre']['options']['regexp'] = '/[\s\S]+/';
     $filtros['aval_nombre']['options']['default'] = '';
@@ -94,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bitacora = filter_input_array(INPUT_POST, $filtros);
 
     $bitacora['evidencia_fotografia1'] = $_FILES['evidencia_fotografia1']['name'] ?? '';
-    $bitacora['evidencia_fecha1_texto'] = '';
+    $bitacora['evidencia_fecha_texto1'] = '';
 
     if ($_FILES['evidencia_fotografia1']['error'] === 0) {
         $tipo = mime_content_type($_FILES['evidencia_fotografia1']['tmp_name']);
@@ -104,16 +112,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!$errores['evidencia_fotografia1']) {
             $fotografia_nombre_archivo = create_filename($_FILES['evidencia_fotografia1']['name'], $ruta_subido);
-            $destino = $ruta_subido . $fotografia_nombre_archivo;
-            $movido = move_uploaded_file($_FILES['evidencia_fotografia1']['tmp_name'], $destino);
+            if (!file_exists('./uploads/')) {
+                mkdir('./uploads/');
+            }
+            if (file_exists('./uploads/')) {
+                $destino = $ruta_subido . $fotografia_nombre_archivo;
+                $movido = move_uploaded_file($_FILES['evidencia_fotografia1']['tmp_name'], $destino);
+            }
         }
     }
 
     if ($movido) {
         $bitacora['evidencia_fotografia1'] = $fotografia_nombre_archivo;
         $bitacora['evidencia_fecha1'] = new DateTime($bitacora['evidencia_fecha1']);
-        $interval = new DateInterval('P1D');
-        $bitacora['evidencia_fecha1_texto'] = "Se visitó el negocio el " . datefmt_format($fmt, $bitacora['evidencia_fecha1']->add($interval)) . ".</w:t><w:br/><w:t>Fachada del negocio.";
+        $bitacora['evidencia_fecha_texto1'] = "Se visitó el negocio el " . datefmt_format($fmt, $bitacora['evidencia_fecha1']) . ".</w:t><w:br/><w:t>Fachada del negocio.";
+        $evidences_counter = 1;
     }
 
     // Error messages
@@ -145,11 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ['gestion_fecha' => date("d-m-Y", strtotime($bitacora['gestion_fecha1'])), 'gestion_via' => $bitacora['gestion_via1'], 'gestion_comentarios' => $bitacora['gestion_comentarios1']],
         ];
 
-        $replacements = array(
-            array('evidencia_fecha' => $bitacora['evidencia_fecha1_texto'], 'evidencia_fotografia' => $movido ? $ruta_subido . $bitacora['evidencia_fotografia1'] : ''),
-            array('evidencia_fecha' => 'testing', 'evidencia_fotografia' => $movido ? $ruta_subido . $bitacora['evidencia_fotografia1'] : ''),
-        );
-
         $templateProcessor->setValue('acreditado_nombre', $bitacora['acreditado_nombre']);
         $templateProcessor->setValue('acreditado_folio', $bitacora['acreditado_folio']);
         $templateProcessor->setValue('acreditado_municipio', $bitacora['acreditado_municipio']);
@@ -163,34 +171,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('aval_email', $bitacora['aval_email']);
         $templateProcessor->setValue('aval_direccion', $bitacora['aval_direccion']);
         $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
-        $templateProcessor->cloneBlock('evidencia', 0, true, false, $replacements);
+        if ($evidences_counter > 0) {
+            $templateProcessor->cloneBlock('evidencia', $evidences_counter, true, true);
+            for ($i = 1; $i <= $evidences_counter; $i++) {
+                $templateProcessor->setValue('evidencia_fecha#' . $i, $bitacora['evidencia_fecha_texto1']);
+                $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => $ruta_subido . $bitacora['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
+            }
+        } else {
+            $templateProcessor->cloneBlock('evidencia', 1, true, false);
+            $templateProcessor->setValue('evidencia_fecha', '');
+            $templateProcessor->setValue('evidencia_fotografia', '');
+        }
 
 // Escape strings to insert into the database table
-        $acreditado_nombre = mysqli_real_escape_string($conn, $_POST['acreditado_nombre']);
-        $folio = mysqli_real_escape_string($conn, $_POST['folio']);
-        $municipio = mysqli_real_escape_string($conn, $_POST['municipio']);
-        $garantia = mysqli_real_escape_string($conn, $_POST['garantia']);
-        $acreditado_telefono = mysqli_real_escape_string($conn, $_POST['acreditado_telefono']);
-        $acreditado_email = mysqli_real_escape_string($conn, $_POST['acreditado_email']);
-        $direccion_negocio = mysqli_real_escape_string($conn, $_POST['direccion_negocio']);
-        $direccion_particular = mysqli_real_escape_string($conn, $_POST['direccion_particular']);
-        $aval_nombre = mysqli_real_escape_string($conn, $_POST['aval_nombre']);
-        $aval_telefono = mysqli_real_escape_string($conn, $_POST['aval_telefono']);
-        $aval_email = mysqli_real_escape_string($conn, $_POST['aval_email']);
-        $aval_direccion = mysqli_real_escape_string($conn, $_POST['aval_direccion']);
-        $gestion_fecha = mysqli_real_escape_string($conn, $_POST['gestion_fecha1']);
-        $gestion_via = mysqli_real_escape_string($conn, $_POST['gestion_via1']);
-        $gestion_comentarios = mysqli_real_escape_string($conn, $_POST['gestion_comentarios1']);
-        $evidencia_fecha = mysqli_real_escape_string($conn, $_POST['evidencia_fecha1']);
-        $evidencia_fotografia = mysqli_real_escape_string($conn, $fotografia_nombre_archivo);
+        $acreditado_nombre = mysqli_real_escape_string($conn, $bitacora['acreditado_nombre']);
+        $folio = mysqli_real_escape_string($conn, $bitacora['acreditado_folio']);
+        $municipio = mysqli_real_escape_string($conn, $bitacora['acreditado_municipio']);
+        $garantia = mysqli_real_escape_string($conn, $bitacora['acreditado_garantia']);
+        $acreditado_telefono = mysqli_real_escape_string($conn, $bitacora['acreditado_telefono']);
+        $acreditado_email = mysqli_real_escape_string($conn, $bitacora['acreditado_email']);
+        $direccion_negocio = mysqli_real_escape_string($conn, $bitacora['acreditado_direccion_negocio']);
+        $direccion_particular = mysqli_real_escape_string($conn, $bitacora['acreditado_direccion_particular']);
+        $aval_nombre = mysqli_real_escape_string($conn, $bitacora['aval_nombre']);
+        $aval_telefono = mysqli_real_escape_string($conn, $bitacora['aval_telefono']);
+        $aval_email = mysqli_real_escape_string($conn, $bitacora['aval_email']);
+        $aval_direccion = mysqli_real_escape_string($conn, $bitacora['aval_direccion']);
+        $gestion_fecha = mysqli_real_escape_string($conn, $bitacora['gestion_fecha1']);
+        $gestion_via = mysqli_real_escape_string($conn, $bitacora['gestion_via1']);
+        $gestion_comentarios = mysqli_real_escape_string($conn, $bitacora['gestion_comentarios1']);
+        $evidencia_fecha = mysqli_real_escape_string($conn, $bitacora['evidencia_fecha1'] ? $bitacora['evidencia_fecha1']->format('Y-m-d') : '');
+        $evidencia_fotografia = mysqli_real_escape_string($conn, $bitacora['evidencia_fotografia1'] ?? '');
 
 // Query
         $sql = "INSERT INTO bitacora(acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
                      acreditado_direccion_negocio, acreditado_direccion_particular, aval_nombre, aval_telefono, aval_email, aval_direccion,
                      gestion_fecha1, gestion_via1, gestion_comentarios1, evidencia_fecha1, evidencia_fotografia1,
-                     nombre_archivo, gestion_contador) VALUES('$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
+                     nombre_archivo, gestion_contador, evidencia_contador) VALUES('$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
                                             '$direccion_negocio', '$direccion_particular', '$aval_nombre', '$aval_telefono', '$aval_email', '$aval_direccion', '$gestion_fecha',
-                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1);";
+                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1, '$evidences_counter');";
 
 // Validation of query
         if (mysqli_query($conn, $sql)) {
@@ -296,53 +314,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="acreditado_nombre">Nombre<span
                                         class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="acreditado_nombre"
-                                   name="acreditado_nombre" required>
+                                   name="acreditado_nombre" value="<?= $bitacora['acreditado_nombre'] ?>" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_folio">Folio<span
                                         class="asterisk">*</span>: </label>
                             <input class="form__input" type="text" id="acreditado_folio"
-                                   name="acreditado_folio"
+                                   name="acreditado_folio" value="<?= $bitacora['acreditado_folio'] ?>"
                                    required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_municipio">Municipio<span
-                                        class="asterisk">*</span>:</label>
+                            <label class="form__label" for="acreditado_municipio">Municipio:</label>
                             <input class="form__input" type="text" id="acreditado_municipio"
-                                   name="acreditado_municipio">
+                                   name="acreditado_municipio" value="<?= $bitacora['acreditado_municipio'] ?>">
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_garantia">Garantía<span
-                                        class="asterisk">*</span>:</label>
-                            <input class="form__input" type="text" id="acreditado_garantia" name="acreditado_garantia">
+                            <label class="form__label" for="acreditado_garantia">Garantía:</label>
+                            <input class="form__input" type="text" id="acreditado_garantia" name="acreditado_garantia"
+                                   value="<?= $bitacora['acreditado_garantia'] ?>">
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_telefono">Teléfono<span
-                                        class="asterisk">*</span>:</label>
+                            <label class="form__label" for="acreditado_telefono">Teléfono:</label>
                             <input class="form__input" type="text" id="acreditado_telefono"
-                                   name="acreditado_telefono">
+                                   name="acreditado_telefono" value="<?= $bitacora['acreditado_telefono'] ?>">
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_email">Email<span
-                                        class="asterisk">*</span>:</label>
+                            <label class="form__label" for="acreditado_email">Correo electrónico:</label>
                             <input class="form__input" type="email" id="acreditado_email"
-                                   name="acreditado_email">
+                                   name="acreditado_email" value="<?= $bitacora['acreditado_email'] ?>">
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_direccion_negocio">Dirección del negocio<span
-                                        class="asterisk">*</span>:
+                            <label class="form__label" for="acreditado_direccion_negocio">Dirección del negocio:
                             </label>
                             <input class="form__input" type="text" id="acreditado_direccion_negocio"
                                    name="acreditado_direccion_negocio"
-                                   required>
+                                   value="<?= $bitacora['acreditado_direccion_negocio'] ?>">
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_direccion_particular">Dirección particular<span
-                                        class="asterisk">*</span>:
-                            </label>
+                            <label class="form__label" for="acreditado_direccion_particular">Dirección
+                                particular:</label>
                             <input class="form__input" type="text" id="acreditado_direccion_particular"
                                    name="acreditado_direccion_particular"
-                                   required>
+                                   value="<?= $bitacora['acreditado_direccion_particular'] ?>">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--aval">
@@ -351,25 +364,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="aval_nombre">Nombre:
                             </label>
                             <input class="form__input" type="text" id="aval_nombre"
-                                   name="aval_nombre">
+                                   name="aval_nombre" value="<?= $bitacora['aval_nombre'] ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="aval_telefono">Teléfono:
                             </label>
                             <input class="form__input" type="text" id="aval_telefono"
-                                   name="aval_telefono">
+                                   name="aval_telefono" value="<?= $bitacora['aval_telefono'] ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="aval_email">Email:
                             </label>
                             <input class="form__input" type="email" id="aval_email"
-                                   name="aval_email">
+                                   name="aval_email" value="<?= $bitacora['aval_email'] ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="aval_direccion">Dirección:
                             </label>
                             <input class="form__input" type="text" id="aval_direccion"
-                                   name="aval_direccion">
+                                   name="aval_direccion" value="<?= $bitacora['aval_direccion'] ?>">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--process">
@@ -379,6 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="date" id="gestion_fecha1" name="gestion_fecha1"
+                                   value="<?= $bitacora['gestion_fecha1'] ?>"
                                    required>
                         </div>
                         <div class="form__division">
@@ -395,7 +409,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="form__label" for="gestion_comentarios1">Comentarios/Resultados:
                             </label>
                             <input class="form__input" type="text" id="gestion_comentarios1"
-                                   name="gestion_comentarios1">
+                                   name="gestion_comentarios1" value="<?= $bitacora['gestion_comentarios1'] ?>">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--evidence">
@@ -403,7 +417,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form__division">
                             <label class="form__label" for="evidencia_fecha1">Fecha:
                             </label>
-                            <input class="form__input" type="date" id="evidencia_fecha1" name="evidencia_fecha1">
+                            <input class="form__input" type="date" id="evidencia_fecha1" name="evidencia_fecha1"
+                                   value="<?= $bitacora['evidencia_fecha1'] ? $bitacora['evidencia_fecha1']->format('Y-m-d') : '' ?>">
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="evidencia_fotografia1">Fotografía:
