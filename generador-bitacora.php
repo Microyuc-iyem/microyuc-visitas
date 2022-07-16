@@ -323,41 +323,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_municipio">Municipio:</label>
+                            <label class="form__label" for="acreditado_municipio">Municipio<span
+                                        class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="acreditado_municipio"
                                    name="acreditado_municipio"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_municipio']) ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_municipio']) ?>" required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_garantia">Garantía:</label>
+                            <label class="form__label" for="acreditado_garantia">Garantía<span
+                                        class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="acreditado_garantia" name="acreditado_garantia"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_garantia']) ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_garantia']) ?>" required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_telefono">Teléfono:</label>
+                            <label class="form__label" for="acreditado_telefono">Teléfono<span
+                                        class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="acreditado_telefono"
                                    name="acreditado_telefono"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_telefono']) ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_telefono']) ?>" required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_email">Correo electrónico:</label>
+                            <label class="form__label" for="acreditado_email">Correo electrónico<span
+                                        class="asterisk">*</span>:</label>
                             <input class="form__input" type="email" id="acreditado_email"
                                    name="acreditado_email"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_email']) ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_email']) ?>" required>
                         </div>
                         <div class="form__division">
-                            <label class="form__label" for="acreditado_direccion_negocio">Dirección del negocio:
+                            <label class="form__label" for="acreditado_direccion_negocio">Dirección del negocio<span
+                                        class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="text" id="acreditado_direccion_negocio"
                                    name="acreditado_direccion_negocio"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_direccion_negocio']) ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_direccion_negocio']) ?>" required>
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="acreditado_direccion_particular">Dirección
-                                particular:</label>
+                                particular<span
+                                        class="asterisk">*</span>:</label>
                             <input class="form__input" type="text" id="acreditado_direccion_particular"
                                    name="acreditado_direccion_particular"
-                                   value="<?= htmlspecialchars($bitacora['acreditado_direccion_particular']) ?>">
+                                   value="<?= htmlspecialchars($bitacora['acreditado_direccion_particular']) ?>"
+                                   required>
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--aval">
