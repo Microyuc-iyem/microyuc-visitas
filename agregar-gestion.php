@@ -62,8 +62,8 @@ if ($_GET['id']) {
                 $gestion = filter_input_array(INPUT_POST, $filtros);
 
                 // Error messages
-                $errores['gestion_fecha' . $new_evidence_counter] = $gestion['gestion_fecha' . $new_evidence_counter] ? '' : 'Introduzca un formato de fecha válido.';
-                $errores['gestion_via' . $new_evidence_counter] = $gestion['gestion_via' . $new_evidence_counter] ? '' : 'Seleccione una opción válida.';
+                $errores['gestion_fecha' . $new_management_counter] = $gestion['gestion_fecha' . $new_management_counter] ? '' : 'Introduzca un formato de fecha válido.';
+                $errores['gestion_via' . $new_management_counter] = $gestion['gestion_via' . $new_management_counter] ? '' : 'Seleccione una opción válida.';
 
                 $gestion['evidencia_fotografia' . $new_evidence_counter] = $_FILES['evidencia_fotografia' . $new_evidence_counter]['name'] ?? '';
                 $gestion['evidencia_fecha_texto' . $new_evidence_counter] = '';
@@ -112,14 +112,11 @@ if ($_GET['id']) {
 // Set values in template with post received input variables
                     $values = [];
                     for ($i = 1; $i < $new_management_counter; $i++) {
-                        $values[] = [
-                            ['gestion_fecha' => date("d-m-Y", strtotime($bitacora[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacora[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacora[0]['gestion_comentarios' . $i]],
-                        ];
+                        $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacora[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacora[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacora[0]['gestion_comentarios' . $i]];
+
                     }
 
-                    $values[] = [
-                        ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_management_counter])), 'gestion_via' => $gestion['gestion_via' . $new_management_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_management_counter]],
-                    ];
+                    $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_management_counter])), 'gestion_via' => $gestion['gestion_via' . $new_management_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_management_counter]];
 
                     if ($bitacora[0]['evidencia_contador'] == $new_evidence_counter) {
                         $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
@@ -142,7 +139,7 @@ if ($_GET['id']) {
                         } else {
                             $templateProcessor->cloneBlock('evidencia', $new_evidence_counter, true, true);
                             for ($i = 1; $i <= $new_evidence_counter; $i++) {
-                                $templateProcessor->setValue('evidencia_fecha#' . $i, "Se visitó el negocio el " . datefmt_format($fmt, $bitacora[0]['evidencia_fecha' . $i]) . ".</w:t><w:br/><w:t>Fachada del negocio.");
+                                $templateProcessor->setValue('evidencia_fecha#' . $i, "Se visitó el negocio el " . datefmt_format($fmt, new DateTime($bitacora[0]['evidencia_fecha' . $i])) . ".</w:t><w:br/><w:t>Fachada del negocio.");
                                 $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => $ruta_subido . $bitacora[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
                             }
                         }
@@ -173,7 +170,7 @@ if ($_GET['id']) {
                      gestion_fecha1, gestion_via1, gestion_comentarios1, evidencia_fecha1, evidencia_fotografia1,
                      nombre_archivo, gestion_contador, evidencia_contador) VALUES('$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
                                             '$direccion_negocio', '$direccion_particular', '$aval_nombre', '$aval_telefono', '$aval_email', '$aval_direccion', '$gestion_fecha',
-                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1, '$evidences_counter');";
+                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', '$new_management_counter', '$new_evidence_counter');";
 
 // Validation of query
                     if (mysqli_query($conn, $sql)) {
