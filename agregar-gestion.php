@@ -143,6 +143,27 @@ if ($_GET['id']) {
                                 $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => $ruta_subido . $bitacora[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
                             }
                         }
+                    } else {
+                        $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
+                        $templateProcessor->setValue('acreditado_folio', $bitacora[0]['acreditado_folio']);
+                        $templateProcessor->setValue('acreditado_municipio', $bitacora[0]['acreditado_municipio']);
+                        $templateProcessor->setValue('acreditado_garantia', $bitacora[0]['acreditado_garantia']);
+                        $templateProcessor->setValue('acreditado_telefono', $bitacora[0]['acreditado_telefono']);
+                        $templateProcessor->setValue('acreditado_email', $bitacora[0]['acreditado_email']);
+                        $templateProcessor->setValue('acreditado_direccion_negocio', $bitacora[0]['acreditado_direccion_negocio']);
+                        $templateProcessor->setValue('acreditado_direccion_particular', $bitacora[0]['acreditado_direccion_particular']);
+                        $templateProcessor->setValue('aval_nombre', $bitacora[0]['aval_nombre']);
+                        $templateProcessor->setValue('aval_telefono', $bitacora[0]['aval_telefono']);
+                        $templateProcessor->setValue('aval_email', $bitacora[0]['aval_email']);
+                        $templateProcessor->setValue('aval_direccion', $bitacora[0]['aval_direccion']);
+                        $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
+                        $templateProcessor->cloneBlock('evidencia', $new_evidence_counter, true, true);
+                        for ($i = 1; $i < $new_evidence_counter; $i++) {
+                            $templateProcessor->setValue('evidencia_fecha#' . $i, "Se visitó el negocio el " . datefmt_format($fmt, new DateTime($bitacora[0]['evidencia_fecha' . $i])) . ".</w:t><w:br/><w:t>Fachada del negocio.");
+                            $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => $ruta_subido . $bitacora[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
+                        }
+                        $templateProcessor->setValue('evidencia_fecha#' . $new_evidence_counter, "Se visitó el negocio el " . datefmt_format($fmt, $gestion['evidencia_fecha' . $new_evidence_counter]) . ".</w:t><w:br/><w:t>Fachada del negocio.");
+                        $templateProcessor->setImageValue('evidencia_fotografia#' . $new_evidence_counter, array('path' => $ruta_subido . $gestion['evidencia_fotografia' . $new_evidence_counter], 'width' => 720, 'height' => 480));
                     }
 
 // Escape strings to insert into the database table
