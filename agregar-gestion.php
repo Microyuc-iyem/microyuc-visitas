@@ -118,20 +118,30 @@ if ($_GET['id']) {
 
                     $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_management_counter])), 'gestion_via' => $gestion['gestion_via' . $new_management_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_management_counter]];
 
+                    $AT_gestion_fecha = 'gestion_fecha' . $new_management_counter;
+                    $AT_gestion_via = 'gestion_via' . $new_management_counter;
+                    $AT_gestion_comentarios = 'gestion_comentarios' . $new_management_counter;
+
+                    $AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255), ADD " . $AT_gestion_via . " VARCHAR(255), ADD " . $AT_gestion_comentarios . " VARCHAR(255)";
+
+                    $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
+                    $templateProcessor->setValue('acreditado_folio', $bitacora[0]['acreditado_folio']);
+                    $templateProcessor->setValue('acreditado_municipio', $bitacora[0]['acreditado_municipio']);
+                    $templateProcessor->setValue('acreditado_garantia', $bitacora[0]['acreditado_garantia']);
+                    $templateProcessor->setValue('acreditado_telefono', $bitacora[0]['acreditado_telefono']);
+                    $templateProcessor->setValue('acreditado_email', $bitacora[0]['acreditado_email']);
+                    $templateProcessor->setValue('acreditado_direccion_negocio', $bitacora[0]['acreditado_direccion_negocio']);
+                    $templateProcessor->setValue('acreditado_direccion_particular', $bitacora[0]['acreditado_direccion_particular']);
+                    $templateProcessor->setValue('aval_nombre', $bitacora[0]['aval_nombre']);
+                    $templateProcessor->setValue('aval_telefono', $bitacora[0]['aval_telefono']);
+                    $templateProcessor->setValue('aval_email', $bitacora[0]['aval_email']);
+                    $templateProcessor->setValue('aval_direccion', $bitacora[0]['aval_direccion']);
+                    $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
                     if ($bitacora[0]['evidencia_contador'] == $new_evidence_counter) {
-                        $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
-                        $templateProcessor->setValue('acreditado_folio', $bitacora[0]['acreditado_folio']);
-                        $templateProcessor->setValue('acreditado_municipio', $bitacora[0]['acreditado_municipio']);
-                        $templateProcessor->setValue('acreditado_garantia', $bitacora[0]['acreditado_garantia']);
-                        $templateProcessor->setValue('acreditado_telefono', $bitacora[0]['acreditado_telefono']);
-                        $templateProcessor->setValue('acreditado_email', $bitacora[0]['acreditado_email']);
-                        $templateProcessor->setValue('acreditado_direccion_negocio', $bitacora[0]['acreditado_direccion_negocio']);
-                        $templateProcessor->setValue('acreditado_direccion_particular', $bitacora[0]['acreditado_direccion_particular']);
-                        $templateProcessor->setValue('aval_nombre', $bitacora[0]['aval_nombre']);
-                        $templateProcessor->setValue('aval_telefono', $bitacora[0]['aval_telefono']);
-                        $templateProcessor->setValue('aval_email', $bitacora[0]['aval_email']);
-                        $templateProcessor->setValue('aval_direccion', $bitacora[0]['aval_direccion']);
-                        $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
+                        $AT_query .= ";";
+                        if (!isset($bitacora[0]['gestion_fecha' . $new_management_counter])) {
+                            mysqli_query($conn, $AT_query);
+                        }
                         if ($new_evidence_counter === 0) {
                             $templateProcessor->cloneBlock('evidencia', 1, true, false);
                             $templateProcessor->setValue('evidencia_fecha', '');
@@ -144,19 +154,22 @@ if ($_GET['id']) {
                             }
                         }
                     } else {
-                        $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
-                        $templateProcessor->setValue('acreditado_folio', $bitacora[0]['acreditado_folio']);
-                        $templateProcessor->setValue('acreditado_municipio', $bitacora[0]['acreditado_municipio']);
-                        $templateProcessor->setValue('acreditado_garantia', $bitacora[0]['acreditado_garantia']);
-                        $templateProcessor->setValue('acreditado_telefono', $bitacora[0]['acreditado_telefono']);
-                        $templateProcessor->setValue('acreditado_email', $bitacora[0]['acreditado_email']);
-                        $templateProcessor->setValue('acreditado_direccion_negocio', $bitacora[0]['acreditado_direccion_negocio']);
-                        $templateProcessor->setValue('acreditado_direccion_particular', $bitacora[0]['acreditado_direccion_particular']);
-                        $templateProcessor->setValue('aval_nombre', $bitacora[0]['aval_nombre']);
-                        $templateProcessor->setValue('aval_telefono', $bitacora[0]['aval_telefono']);
-                        $templateProcessor->setValue('aval_email', $bitacora[0]['aval_email']);
-                        $templateProcessor->setValue('aval_direccion', $bitacora[0]['aval_direccion']);
-                        $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
+                        $AT_evidencia_fecha = 'evidencia_fecha' . $new_evidence_counter;
+                        $AT_evidencia_fotografia = 'evidencia_fotografia' . $new_evidence_counter;
+
+                        if (!isset($bitacora[0]['gestion_fecha' . $new_management_counter]) && !isset($bitacora[0]['evidencia_fecha' . $new_evidence_counter])) {
+                            $AT_query .= ", ADD " . $AT_evidencia_fecha . " VARCHAR(255), ADD " . $AT_evidencia_fotografia . " VARCHAR(255);";
+                            var_dump($AT_query);
+                            mysqli_query($conn, $AT_query);
+                        } elseif (isset($bitacora[0]['gestion_fecha' . $new_management_counter]) && !isset($bitacora[0]['evidencia_fecha' . $new_evidence_counter])) {
+                            $AT_query = "ALTER TABLE bitacora ADD " . $AT_evidencia_fecha . " VARCHAR(255), ADD " . $AT_evidencia_fotografia . " VARCHAR(255);";
+                            var_dump($AT_query);
+                            mysqli_query($conn, $AT_query);
+                        } elseif ((!isset($bitacora[0]['gestion_fecha' . $new_management_counter])) and (isset($bitacora[0]['evidencia_fecha' . $new_evidence_counter]))) {
+                            $AT_query .= ";";
+                            mysqli_query($conn, $AT_query);
+                        }
+
                         $templateProcessor->cloneBlock('evidencia', $new_evidence_counter, true, true);
                         for ($i = 1; $i < $new_evidence_counter; $i++) {
                             $templateProcessor->setValue('evidencia_fecha#' . $i, "Se visitó el negocio el " . datefmt_format($fmt, new DateTime($bitacora[0]['evidencia_fecha' . $i])) . ".</w:t><w:br/><w:t>Fachada del negocio.");
@@ -167,34 +180,22 @@ if ($_GET['id']) {
                     }
 
 // Escape strings to insert into the database table
-                    $acreditado_nombre = mysqli_real_escape_string($conn, $bitacora['acreditado_nombre']);
-                    $folio = mysqli_real_escape_string($conn, $bitacora['acreditado_folio']);
-                    $municipio = mysqli_real_escape_string($conn, $bitacora['acreditado_municipio']);
-                    $garantia = mysqli_real_escape_string($conn, $bitacora['acreditado_garantia']);
-                    $acreditado_telefono = mysqli_real_escape_string($conn, $bitacora['acreditado_telefono']);
-                    $acreditado_email = mysqli_real_escape_string($conn, $bitacora['acreditado_email']);
-                    $direccion_negocio = mysqli_real_escape_string($conn, $bitacora['acreditado_direccion_negocio']);
-                    $direccion_particular = mysqli_real_escape_string($conn, $bitacora['acreditado_direccion_particular']);
-                    $aval_nombre = mysqli_real_escape_string($conn, $bitacora['aval_nombre']);
-                    $aval_telefono = mysqli_real_escape_string($conn, $bitacora['aval_telefono']);
-                    $aval_email = mysqli_real_escape_string($conn, $bitacora['aval_email']);
-                    $aval_direccion = mysqli_real_escape_string($conn, $bitacora['aval_direccion']);
-                    $gestion_fecha = mysqli_real_escape_string($conn, $bitacora['gestion_fecha1']);
-                    $gestion_via = mysqli_real_escape_string($conn, $bitacora['gestion_via1']);
-                    $gestion_comentarios = mysqli_real_escape_string($conn, $bitacora['gestion_comentarios1']);
-                    $evidencia_fecha = mysqli_real_escape_string($conn, $bitacora['evidencia_fecha1'] ? $bitacora['evidencia_fecha1']->format('Y-m-d') : '');
-                    $evidencia_fotografia = mysqli_real_escape_string($conn, $bitacora['evidencia_fotografia1'] ?? '');
+                    $gestion_fecha = mysqli_real_escape_string($conn, $gestion['gestion_fecha' . $new_management_counter]);
+                    $gestion_via = mysqli_real_escape_string($conn, $gestion['gestion_via' . $new_management_counter]);
+                    $gestion_comentarios = mysqli_real_escape_string($conn, $gestion['gestion_comentarios' . $new_management_counter]);
+                    $evidencia_fecha = mysqli_real_escape_string($conn, $gestion['evidencia_fecha' . $new_evidence_counter] ? $gestion['evidencia_fecha' . $new_evidence_counter]->format('Y-m-d') : '');
+                    $evidencia_fotografia = mysqli_real_escape_string($conn, $gestion['evidencia_fotografia' . $new_evidence_counter] ?? '');
 
-// Query
-                    $sql = "INSERT INTO bitacora(acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
-                     acreditado_direccion_negocio, acreditado_direccion_particular, aval_nombre, aval_telefono, aval_email, aval_direccion,
-                     gestion_fecha1, gestion_via1, gestion_comentarios1, evidencia_fecha1, evidencia_fotografia1,
-                     nombre_archivo, gestion_contador, evidencia_contador) VALUES('$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
-                                            '$direccion_negocio', '$direccion_particular', '$aval_nombre', '$aval_telefono', '$aval_email', '$aval_direccion', '$gestion_fecha',
-                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', '$new_management_counter', '$new_evidence_counter');";
+                    $II_id = $bitacora[0]['id'];
+
+                    if ($bitacora[0]['evidencia_contador'] == $new_evidence_counter) {
+                        $II_query = "UPDATE bitacora SET gestion_contador = " . $new_management_counter . ", " . $AT_gestion_fecha . " = '" . $gestion_fecha . "', " . $AT_gestion_via . " = '" . $gestion_via . "', " . $AT_gestion_comentarios . " = '" . $gestion_comentarios . "' WHERE id = " . $II_id . ";";
+                    } else {
+                        $II_query = "UPDATE bitacora SET gestion_contador = " . $new_management_counter . ", evidencia_contador = " . $new_evidence_counter . ", " . $AT_gestion_fecha . " = '" . $gestion_fecha . "', " . $AT_gestion_via . " = '" . $gestion_via . "', " . $AT_gestion_comentarios . " = '" . $gestion_comentarios . "', " . $AT_evidencia_fecha . " = '" . $evidencia_fecha . "', " . $AT_evidencia_fotografia . " = '" . $evidencia_fotografia . "' WHERE id = " . $II_id . ";";
+                    }
 
 // Validation of query
-                    if (mysqli_query($conn, $sql)) {
+                    if (mysqli_query($conn, $II_query)) {
 
                         if (!is_dir('./files/')) {
                             mkdir('./files/');
@@ -223,6 +224,7 @@ if ($_GET['id']) {
                     } else {
                         echo 'Error de consulta: ' . mysqli_error($conn);
                     }
+
                 }
 
             }
