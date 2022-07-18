@@ -179,8 +179,14 @@ body {
 
 .table__data--red:link, .table__data--red:visited {
   text-decoration: none;
-  color: #ff3333;
   font-weight: 500;
+  color: #ff3333;
+}
+
+.table__data--green:link, .table__data--green:visited {
+  text-decoration: none;
+  font-weight: 500;
+  color: #00b300;
 }
 
 .hidden {
