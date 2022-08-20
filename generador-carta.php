@@ -51,6 +51,7 @@ $errores = [
 ];
 
 $tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
+$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
 
 $filtros = [];
 
@@ -84,8 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['documentacion']['options']['default'] = '';
     $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
     $filtros['comprobacion_monto']['options']['min_range'] = 1;
-    $filtros['comprobacion_tipo']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['comprobacion_tipo']['options']['regexp'] = '/^(Capital de trabajo|Activo fijo|Adecuaciones|Insumos|Certificaciones)+$/';
+    $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['activo_fijo']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['adecuaciones']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['adecuaciones']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['insumos']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['insumos']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['certificaciones']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['certificaciones']['options']['regexp'] = '/[\s\S]+/';
     $filtros['pagos_fecha_inicial']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -101,14 +110,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $carta = filter_input_array(INPUT_POST, $filtros);
 
-    // Create error messages
+    $carta['comprobacion_tipo'] = [];
+    if (!is_null($carta['capital_de_trabajo'])) $carta['comprobacion_tipo'][] = 'capital de trabajo';
+    if (!is_null($carta['activo_fijo'])) $carta['comprobacion_tipo'][] = 'activo fijo';
+    if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
+    if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
+    if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
+
     $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
     $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor a 0.';
-    $errores['comprobacion_tipo'] = in_array($carta['comprobacion_tipo'], $tipos_comprobacion) ? '' : 'Por favor, seleccione una opción correcta.';
+    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
+        $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
+    } else {
+        $errores['comprobacion_tipo'] = '';
+    }
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
     $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Este campo es requerido.';
@@ -149,6 +168,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $generacion_invalida = implode($errores);
 
+    if (count($carta['comprobacion_tipo']) > 1) {
+        $carta['comprobacion_tipo'] = implode(", ", $carta['comprobacion_tipo']);
+        $carta['comprobacion_tipo'] = str_lreplace(',', ' y', $carta['comprobacion_tipo']);
+    } else {
+        $carta['comprobacion_tipo'] = implode($carta['comprobacion_tipo']);
+    }
+
     if (!$generacion_invalida) {
 
         // Create variable with filename
@@ -156,7 +182,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Encode filename so that UTF-8 characters work
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
-
 
 // Create new instance of PHPWord template processor using the required template file
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
@@ -173,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
         $templateProcessor->setValue('documentacion', $carta['documentacion']);
         $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
-        $templateProcessor->setValue('comprobacion_tipo', strtolower($carta['comprobacion_tipo']));
+        $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
         $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
         $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($carta['fecha_otorgamiento'])));
@@ -400,13 +425,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form__division">
                             <p class="form__error"><?= $errores['comprobacion_tipo'] ?></p>
-                            <label class="form__label" for="comprobacion_tipo">Tipo de comprobación<span
-                                        class="asterisk">*</span>: </label>
-                            <select class="form__input" id="comprobacion_tipo" name="comprobacion_tipo" required>
-                                <?php foreach ($tipos_comprobacion as $tipos) : ?>
-                                    <option value="<?= htmlspecialchars($tipos) ?>" <?= $carta['comprobacion_tipo'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <p class="form__label">Tipo de comprobación<span
+                                        class="asterisk">*</span>: </p>
+                            <?php $i = 0 ?>
+                            <?php foreach ($tipos_comprobacion as $tipos) : ?>
+                                <div>
+                                    <input type="checkbox"
+                                           id="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"
+                                           name="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"
+                                           value="<?= htmlspecialchars($tipos) ?>" <?= str_contains($carta['comprobacion_tipo'], strtolower($tipos)) ? 'checked' : '' ?>>
+                                    <label for="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"><?= htmlspecialchars($tipos) ?></label>
+                                </div>
+                                <?php $i++ ?>
+                            <?php endforeach; ?>
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--payment">
