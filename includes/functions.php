@@ -49,3 +49,15 @@ function create_filename($filename, $upload_path)              // Function to ma
 
     return $new_filename . '.' . $extension;                                 // Return filename
 }
+
+function str_lreplace($search, $replace, $subject)
+{
+    $pos = strrpos($subject, $search);
+
+    if($pos !== false)
+    {
+        $subject = substr_replace($subject, $replace, $pos, strlen($search));
+    }
+
+    return $subject;
+}
