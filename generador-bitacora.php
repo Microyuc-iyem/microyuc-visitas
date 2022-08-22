@@ -41,7 +41,7 @@ $errores = [
     'evidencia_fotografia1' => '',
 ];
 
-$tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita'];
+$tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Otro',];
 
 $filtros = [];
 
@@ -49,8 +49,6 @@ $movido = false;
 $ruta_subido = './uploads/';
 $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'];
 $exts_permitidas = ['jpeg', 'jpg', 'jpe', 'jif', 'jfif', 'png', 'gif', 'bmp', 'tif', 'tiff', 'webp'];
-
-$evidences_counter = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -85,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['gestion_fecha1']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['gestion_fecha1']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['gestion_via1']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['gestion_via1']['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita)+$/';
+    $filtros['gestion_via1']['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita|Otro)+$/';
     $filtros['gestion_comentarios1']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['gestion_comentarios1']['options']['regexp'] = '/[\s\S]+/';
     $filtros['gestion_comentarios1']['options']['default'] = '';
@@ -120,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($movido) {
             $bitacora['evidencia_fotografia1'] = $fotografia_nombre_archivo;
             $bitacora['evidencia_fecha_texto1'] = "Se visitó el negocio el " . datefmt_format($fmt, $bitacora['evidencia_fecha1']) . ".</w:t><w:br/><w:t>Fachada del negocio.";
-            $evidences_counter = 1;
         }
     } else {
         $errores['evidencia_fotografia1'] = 'Se deben llenar ambos campos para registrar la evidencia.';
@@ -168,12 +165,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('aval_email', $bitacora['aval_email']);
         $templateProcessor->setValue('aval_direccion', $bitacora['aval_direccion']);
         $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
-        if ($evidences_counter > 0) {
-            $templateProcessor->cloneBlock('evidencia', $evidences_counter, true, true);
-            for ($i = 1; $i <= $evidences_counter; $i++) {
-                $templateProcessor->setValue('evidencia_fecha#' . $i, $bitacora['evidencia_fecha_texto1']);
-                $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => $ruta_subido . $bitacora['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
-            }
+        if ($movido) {
+            $templateProcessor->cloneBlock('evidencia', 1, true, true);
+            $templateProcessor->setValue('evidencia_fecha#1', $bitacora['evidencia_fecha_texto1']);
+            $templateProcessor->setImageValue('evidencia_fotografia#1', array('path' => $ruta_subido . $bitacora['evidencia_fotografia1'], 'width' => 720, 'height' => 480));
         } else {
             $templateProcessor->cloneBlock('evidencia', 1, true, false);
             $templateProcessor->setValue('evidencia_fecha', '');
@@ -205,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      gestion_fecha1, gestion_via1, gestion_comentarios1, evidencia_fecha1, evidencia_fotografia1,
                      nombre_archivo, gestion_contador, evidencia_contador) VALUES('$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
                                             '$direccion_negocio', '$direccion_particular', '$aval_nombre', '$aval_telefono', '$aval_email', '$aval_direccion', '$gestion_fecha',
-                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1, '$evidences_counter');";
+                                            '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1, 1);";
 
 // Validation of query
         if (mysqli_query($conn, $sql)) {
