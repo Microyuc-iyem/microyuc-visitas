@@ -42,10 +42,10 @@ CREATE TABLE bitacora
     aval_direccion                  VARCHAR(255),
     gestion_fecha1                  DATE         NOT NULL,
     gestion_via1                    VARCHAR(255) NOT NULL,
-    gestion_comentarios1            VARCHAR(255),
+    gestion_comentarios1            VARCHAR(255) DEFAULT '',
     gestion_contador                INT          NOT NULL,
-    evidencia_fecha1                DATE,
-    evidencia_fotografia1           VARCHAR(255),
+    evidencia_fecha1                VARCHAR(255) DEFAULT '',
+    evidencia_fotografia1           VARCHAR(255) DEFAULT '',
     evidencia_contador              INT          NOT NULL,
     nombre_archivo                  VARCHAR(255) NOT NULL
 );
