@@ -129,7 +129,7 @@ if (isset($_GET['id'])) {
                     <th scope="col" class="table__head">
                         Fecha de creación
                     </th>
-                    <th scope="col" colspan="3" class="table__head">
+                    <th scope="col" colspan="4" class="table__head">
                         Acciones
                     </th>
                 </tr>
@@ -154,6 +154,9 @@ if (isset($_GET['id'])) {
                         </td>
                         <td class="table__data"><a class="table__data--red"
                                                    href="bitacoras.php?id=<?= $bitacora['id'] ?>">Eliminar</a>
+                        </td>
+                        <td class="table__data"><a class="table__data--gold"
+                                                   href="administrar-gestion.php?id=<?= $bitacora['id'] ?>">Gestionar</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
