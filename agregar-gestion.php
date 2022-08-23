@@ -53,7 +53,7 @@ if ($_GET['id']) {
                 $filtros['gestion_fecha' . $new_counter]['filter'] = FILTER_VALIDATE_REGEXP;
                 $filtros['gestion_fecha' . $new_counter]['options']['regexp'] = '/^[\d\-]+$/';
                 $filtros['gestion_via' . $new_counter]['filter'] = FILTER_VALIDATE_REGEXP;
-                $filtros['gestion_via' . $new_counter]['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita)+$/';
+                $filtros['gestion_via' . $new_counter]['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita|Otro)+$/';
                 $filtros['gestion_comentarios' . $new_counter]['filter'] = FILTER_VALIDATE_REGEXP;
                 $filtros['gestion_comentarios' . $new_counter]['options']['regexp'] = '/[\s\S]+/';
                 $filtros['gestion_comentarios' . $new_counter]['options']['default'] = '';
