@@ -10,6 +10,7 @@ $fmt = set_date_format_logbook();
 
 // Check if there is an ID query
 if ($_GET['id']) {
+    $id = $_GET['id'];
 // Write query to get a bitacora according to the ID
     $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
     $sql_count = "SELECT COUNT(*) AS num FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'bitacora' AND TABLE_SCHEMA = 'microyuc_project' AND COLUMN_NAME LIKE 'gestion_via%';";
@@ -24,9 +25,74 @@ if ($_GET['id']) {
         $column_number = mysqli_fetch_all($result_count, MYSQLI_ASSOC);
         if ($bitacoras && $column_number) {
             if (isset($_GET['num'])) {
+                $num = $_GET['num'];
+                $sql_delete_image_query = "SELECT evidencia_fotografia$num FROM bitacora WHERE id = '$id';";
+                $sql_delete_columns_query = "UPDATE bitacora SET gestion_fecha$num = '', gestion_via$num = '', gestion_comentarios$num = '', evidencia_fecha$num = '', evidencia_fotografia$num = '' WHERE id = '$id';";
+                $resultado_imagen = mysqli_query($conn, $sql_delete_image_query);
+                $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia1'] ?? '';
+                $delete = mysqli_query($conn, $sql_delete_columns_query);
+                unlink('./uploads/' . $imagename);
+
+                // Create variable with filename
+                $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
+// Encode filename so that UTF-8 characters work
+                $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
+
+// Create new instance of PHPWord template processor using the required template file
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
+
+                $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
+                $result = mysqli_query($conn, $sql);
+                // Fetch the resulting rows as an associative array
+                $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
+// Set values in template with post received input variables
+                $values = [];
+                for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
+                    if ($bitacoras[0]['gestion_fecha' . $i]) {
+                        $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacoras[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacoras[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacoras[0]['gestion_comentarios' . $i]];
+                    }
+                }
+
+                $templateProcessor->setValue('acreditado_nombre', $bitacoras[0]['acreditado_nombre']);
+                $templateProcessor->setValue('acreditado_folio', $bitacoras[0]['acreditado_folio']);
+                $templateProcessor->setValue('acreditado_municipio', $bitacoras[0]['acreditado_municipio']);
+                $templateProcessor->setValue('acreditado_garantia', $bitacoras[0]['acreditado_garantia']);
+                $templateProcessor->setValue('acreditado_telefono', $bitacoras[0]['acreditado_telefono']);
+                $templateProcessor->setValue('acreditado_email', $bitacoras[0]['acreditado_email']);
+                $templateProcessor->setValue('acreditado_direccion_negocio', $bitacoras[0]['acreditado_direccion_negocio']);
+                $templateProcessor->setValue('acreditado_direccion_particular', $bitacoras[0]['acreditado_direccion_particular']);
+                $templateProcessor->setValue('aval_nombre', $bitacoras[0]['aval_nombre']);
+                $templateProcessor->setValue('aval_telefono', $bitacoras[0]['aval_telefono']);
+                $templateProcessor->setValue('aval_email', $bitacoras[0]['aval_email']);
+                $templateProcessor->setValue('aval_direccion', $bitacoras[0]['aval_direccion']);
+                $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
+                $templateProcessor->cloneBlock('evidencia', $bitacoras[0]['evidencia_contador'], true, true);
+                for ($i = 1; $i <= $bitacoras[0]['evidencia_contador']; $i++) {
+                    $templateProcessor->setValue('evidencia_fecha#' . $i, $bitacoras[0]['evidencia_fecha' . $i] ? "Se visitó el negocio el " . datefmt_format($fmt, new DateTime($bitacoras[0]['evidencia_fecha' . $i])) . ".</w:t><w:br/><w:t>Fachada del negocio." : '');
+                    if ($bitacoras[0]['evidencia_fotografia' . $i]) {
+                        $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => './uploads/' . $bitacoras[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
+                    } else {
+                        $templateProcessor->setValue('evidencia_fotografia#' . $i, '');
+                    }
+                }
+
+                if (!is_dir('./files/')) {
+                    mkdir('./files/');
+                }
+
+                if (!is_dir('./files/bitacoras/')) {
+                    mkdir('./files/bitacoras/');
+                }
+
+                if (file_exists('./files/bitacoras/')) {
+                    // Path where generated file is saved
+                    $ruta_guardado = './files/bitacoras/' . $nombre_archivo;
+                    $templateProcessor->saveAs($ruta_guardado);
+                }
+
+                header('Location: administrar-gestion.php?id=' . "$id");
 
             }
-
         } else {
             header('Location: ./bitacoras.php');
         }
