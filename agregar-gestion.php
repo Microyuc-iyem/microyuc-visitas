@@ -339,7 +339,9 @@ if ($_GET['id']) {
                         </div>
                     </fieldset>
                     <div class="form__container--btn">
-                        <button class="container__btn--reset" type="reset">Limpiar</button>
+                        <button class="container__btn--reset"><a class="container__btn--link"
+                                                                 href="./agregar-gestion.php?id=<?= $bitacora[0]['id'] ?>">
+                                Limpiar</a></button>
                         <input class="container__btn--submit" type="submit" value="Generar archivo">
                     </div>
                 </form>
