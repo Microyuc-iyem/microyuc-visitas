@@ -442,6 +442,7 @@ body {
 }
 .form__container--btn .container__btn--link:link, .form__container--btn .container__btn--link:visited {
   text-decoration: none;
+  color: #343a40;
 }
 
 /*# sourceMappingURL=styles.css.map */
