@@ -40,7 +40,7 @@ CREATE TABLE bitacora
     aval_telefono                   VARCHAR(255),
     aval_email                      VARCHAR(255),
     aval_direccion                  VARCHAR(255),
-    gestion_fecha1                  DATE         DEFAULT '',
+    gestion_fecha1                  VARCHAR(255) DEFAULT '',
     gestion_via1                    VARCHAR(255) DEFAULT '',
     gestion_comentarios1            VARCHAR(255) DEFAULT '',
     gestion_contador                INT          NOT NULL,
