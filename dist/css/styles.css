@@ -440,5 +440,8 @@ body {
 .form__container--btn .container__btn--reset:hover {
   background-color: #e3e4e8;
 }
+.form__container--btn .container__btn--link:link, .form__container--btn .container__btn--link:visited {
+  text-decoration: none;
+}
 
 /*# sourceMappingURL=styles.css.map */
