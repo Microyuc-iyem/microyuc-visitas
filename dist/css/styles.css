@@ -120,7 +120,6 @@ body {
   color: #fff;
   padding: 0.625rem 0.75rem;
   border: none;
-  background-color: #242c5c;
   border-radius: 0.5rem;
   cursor: pointer;
   display: flex;
@@ -129,6 +128,15 @@ body {
 }
 .main__btn:hover {
   background-color: #0494c4;
+}
+.main__btn--main {
+  background-color: #242c5c;
+}
+.main__btn--excel {
+  background-color: #185C37;
+}
+.main__btn--excel:hover {
+  background-color: #10793F;
 }
 
 .table {

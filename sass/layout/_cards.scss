@@ -34,7 +34,6 @@
   color: #fff;
   padding: a.rem(10) a.rem(12);
   border: none;
-  background-color: a.$secondary-dark;
   border-radius: a.rem(8);
   cursor: pointer;
   display: flex;
@@ -43,5 +42,17 @@
 
   &:hover {
     background-color: a.$secondary;
+  }
+
+  &--main {
+    background-color: a.$secondary-dark;
+  }
+
+  &--excel {
+    background-color: #185C37;
+
+    &:hover {
+      background-color: #10793F;
+    }
   }
 }
