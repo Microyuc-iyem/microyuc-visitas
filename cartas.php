@@ -113,7 +113,6 @@ if (isset($_GET['id'])) {
                     </a>
                 </div>
             </div>
-            <input type="text" placeholder="Busca por nombre, folio..." style="margin-bottom: 24px">
             <table class="table">
                 <!--                <thead class="table__superhead">-->
                 <!--                <tr>-->

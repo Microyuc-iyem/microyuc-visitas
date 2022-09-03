@@ -323,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="main__app">
             <div class="main__header">
                 <h1 class="main__title">Generador de cartas</h1>
-                <a href="cartas.php" class="main__btn">
+                <a href="cartas.php" class="main__btn main__btn--main">
                     <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
