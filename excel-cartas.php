@@ -7,7 +7,6 @@ $cartas = [
     ['ID', 'Fecha de creación', 'Folio', 'Nombre', 'Calle', 'Cruzamientos', 'Número', 'Colonia/Fraccionamiento', 'Localidad', 'Municipio', 'Fecha de firma de anexos', 'Documentación', 'Monto de comprobación', 'Tipo de comprobación', 'Fecha de pago inicial', 'Fecha de pago final', 'Tipo de crédito', 'Fecha de otorgamiento', 'Monto inicial', 'Mensualidades vencidas', 'Adeudo total',],
 ];
 
-$id = 0;
 $sql = 'SELECT * FROM carta';
 $res = mysqli_query($conn, $sql);
 if (mysqli_num_rows($res) > 0) {
