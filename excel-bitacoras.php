@@ -10,11 +10,18 @@ $bitacoras = [
 $sql = 'SELECT * FROM bitacora';
 $res = mysqli_query($conn, $sql);
 $bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
-$sql_count = "SELECT COUNT(*) AS num FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'bitacora' AND TABLE_SCHEMA = 'microyuc_project' AND COLUMN_NAME LIKE 'gestion_via%';";
-$res_count = mysqli_query($conn, $sql_count);
-$column_number = mysqli_fetch_all($res_count, MYSQLI_ASSOC);
 
-for ($i = 1; $i <= $column_number[0]['num']; $i++) {
+$column_number = 0;
+
+if (!empty($bitacora[0])) {
+    foreach (array_keys($bitacora[0]) as $key) {
+        if (str_contains($key, 'gestion_via')) {
+            $column_number++;
+        }
+    }
+}
+
+for ($i = 1; $i <= $column_number; $i++) {
     $bitacoras[0][] = 'Fecha de gestión ' . $i;
     $bitacoras[0][] = 'Vía de gestión ' . $i;
     $bitacoras[0][] = 'Comentarios de gestión ' . $i;

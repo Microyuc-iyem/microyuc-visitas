@@ -13,19 +13,26 @@ if ($_GET['id']) {
     $id = $_GET['id'];
 // Write query to get a bitacora according to the ID
     $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
-    $sql_count = "SELECT COUNT(*) AS num FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'bitacora' AND TABLE_SCHEMA = 'microyuc_project' AND COLUMN_NAME LIKE 'gestion_via%';";
+
 
 // make query and & get result
     $result = mysqli_query($conn, $sql);
-    $result_count = mysqli_query($conn, $sql_count);
-    if ($result && $result_count) {
+
+    if ($result) {
 
 // Fetch the resulting rows as an associative array
         $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $column_number = mysqli_fetch_all($result_count, MYSQLI_ASSOC);
-        var_dump($column_number);
-        exit;
-        if ($bitacoras && $column_number) {
+        $column_number = 0;
+
+        if (!empty($bitacoras[0])) {
+            foreach (array_keys($bitacoras[0]) as $key) {
+                if (str_contains($key, 'gestion_via')) {
+                    $column_number++;
+                }
+            }
+        }
+
+        if ($bitacoras) {
             if (isset($_GET['num'])) {
                 $num = $_GET['num'];
                 $sql_delete_image_query = "SELECT evidencia_fotografia$num FROM bitacora WHERE id = '$id';";
@@ -188,7 +195,7 @@ if ($_GET['id']) {
                     </thead>
                     <tbody class="table__body">
                     <?php foreach ($bitacoras as $bitacora): ?>
-                        <?php for ($i = 1; $i <= $column_number[0]['num']; $i++): ?>
+                        <?php for ($i = 1; $i <= $column_number; $i++): ?>
                             <?php if ($bitacora['gestion_fecha' . $i] !== ''): ?>
                                 <tr class="table__row--body">
                                     <td class="table__data table__data--left"><?= $bitacora['gestion_fecha' . $i] ?></td>
