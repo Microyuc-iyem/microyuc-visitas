@@ -38,9 +38,11 @@ if ($_GET['id']) {
                 $sql_delete_image_query = "SELECT evidencia_fotografia$num FROM bitacora WHERE id = '$id';";
                 $sql_delete_columns_query = "UPDATE bitacora SET gestion_fecha$num = '', gestion_via$num = '', gestion_comentarios$num = '', evidencia_fecha$num = '', evidencia_fotografia$num = '' WHERE id = '$id';";
                 $resultado_imagen = mysqli_query($conn, $sql_delete_image_query);
-                $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia1'] ?? '';
+                $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia' . $num] ?? '';
                 $delete = mysqli_query($conn, $sql_delete_columns_query);
-                unlink('./uploads/' . $imagename);
+                if (file_exists('./uploads/' . $imagename)) {
+                    unlink('./uploads/' . $imagename);
+                }
 
                 // Create variable with filename
                 $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
