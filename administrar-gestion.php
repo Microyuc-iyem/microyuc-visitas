@@ -23,6 +23,8 @@ if ($_GET['id']) {
 // Fetch the resulting rows as an associative array
         $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
         $column_number = mysqli_fetch_all($result_count, MYSQLI_ASSOC);
+        var_dump($column_number);
+        exit;
         if ($bitacoras && $column_number) {
             if (isset($_GET['num'])) {
                 $num = $_GET['num'];
