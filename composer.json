@@ -12,6 +12,8 @@
   "require": {
     "ext-mysqli": "*",
     "ext-intl": "*",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "ext-mbstring": "*",
+    "ext-zlib": "*"
   }
 }
