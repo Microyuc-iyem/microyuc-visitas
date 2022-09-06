@@ -43,6 +43,9 @@ if ($_GET['id']) {
 
             $filtros = [];
 
+            $tz_CMX = new DateTimeZone('America/Mexico_City');
+            $CMX = new DateTime('now', $tz_CMX);
+
             $movido = false;
             $ruta_subido = './uploads/';
             $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'];
@@ -71,7 +74,7 @@ if ($_GET['id']) {
                 // Move uploaded files if they are sent via HTTP Post
                 $gestion['evidencia_fotografia' . $new_counter] = $_FILES['evidencia_fotografia' . $new_counter]['name'] ?? '';
                 $gestion['evidencia_fecha_texto' . $new_counter] = '';
-                $gestion['evidencia_fecha' . $new_counter] = $gestion['evidencia_fecha' . $new_counter] ? new DateTime($gestion['evidencia_fecha' . $new_counter]) : '';
+                $gestion['evidencia_fecha' . $new_counter] = $gestion['evidencia_fecha' . $new_counter] ? new DateTime($gestion['evidencia_fecha' . $new_counter], $tz_CMX) : '';
                 if (($gestion['evidencia_fecha' . $new_counter] && $gestion['evidencia_fotografia' . $new_counter]) || (!$gestion['evidencia_fecha' . $new_counter] && !$gestion['evidencia_fotografia' . $new_counter])) {
                     if ($_FILES['evidencia_fotografia' . $new_counter]['error'] === 0) {
                         $tipo = mime_content_type($_FILES['evidencia_fotografia' . $new_counter]['tmp_name']);
