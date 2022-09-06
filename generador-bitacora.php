@@ -100,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bitacora['evidencia_fotografia1'] = $_FILES['evidencia_fotografia1']['name'] ?? '';
     $bitacora['evidencia_fecha_texto1'] = '';
     $bitacora['evidencia_fecha1'] = $bitacora['evidencia_fecha1'] ? new DateTime($bitacora['evidencia_fecha1']) : '';
+    var_dump($bitacora['evidencia_fecha1']);
     if (($bitacora['evidencia_fecha1'] && $bitacora['evidencia_fotografia1']) || (!$bitacora['evidencia_fecha1'] && !$bitacora['evidencia_fotografia1'])) {
         if ($_FILES['evidencia_fotografia1']['error'] === 0) {
             $tipo = mime_content_type($_FILES['evidencia_fotografia1']['tmp_name']);
@@ -126,6 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $errores['evidencia_fotografia1'] = 'Se deben llenar ambos campos para registrar la evidencia.';
     }
+
+    var_dump($bitacora['evidencia_fecha_texto1']);
 
     // Error messages
     $errores['acreditado_nombre'] = $bitacora['acreditado_nombre'] ? '' : 'El nombre solo debe contener letras y espacios.';
@@ -180,6 +183,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $templateProcessor->setValue('evidencia_fotografia', '');
         }
 
+        var_dump($bitacora['evidencia_fecha_texto1']);
+
 // Escape strings to insert into the database table
         $acreditado_nombre = mysqli_real_escape_string($conn, $bitacora['acreditado_nombre']);
         $folio = mysqli_real_escape_string($conn, $bitacora['acreditado_folio']);
@@ -198,6 +203,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $gestion_comentarios = mysqli_real_escape_string($conn, $bitacora['gestion_comentarios1']);
         $evidencia_fecha = mysqli_real_escape_string($conn, $bitacora['evidencia_fecha1'] ? $bitacora['evidencia_fecha1']->format('Y-m-d') : '');
         $evidencia_fotografia = mysqli_real_escape_string($conn, $bitacora['evidencia_fotografia1'] ?? '');
+
+        var_dump($evidencia_fecha);
+        exit;
 
 // Query
         $sql = "INSERT INTO bitacora(fecha_creacion, acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
