@@ -81,7 +81,11 @@ if ($_GET['id']) {
                 for ($i = 1; $i <= $bitacoras[0]['evidencia_contador']; $i++) {
                     $templateProcessor->setValue('evidencia_fecha#' . $i, $bitacoras[0]['evidencia_fecha' . $i] ? "Se visitó el negocio el " . datefmt_format($fmt, new DateTime($bitacoras[0]['evidencia_fecha' . $i])) . ".</w:t><w:br/><w:t>Fachada del negocio." : '');
                     if ($bitacoras[0]['evidencia_fotografia' . $i]) {
-                        $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => './uploads/' . $bitacoras[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
+                        if (file_exists('./uploads/' . $bitacoras[0]['evidencia_fotografia' . $i])) {
+                            $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => './uploads/' . $bitacoras[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
+                        } else {
+                            $templateProcessor->setValue('evidencia_fotografia#' . $i, '');
+                        }
                     } else {
                         $templateProcessor->setValue('evidencia_fotografia#' . $i, '');
                     }
