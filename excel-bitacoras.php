@@ -37,6 +37,7 @@ if (mysqli_num_rows($res) > 0) {
 }
 
 for ($i = 1; $i < count($bitacoras); $i++) {
+    $bitacoras[$i][0] = $i;
     $bitacoras[$i][1] = date('d-m-Y H:i:s', strtotime($bitacoras[$i][1]));
     for ($j = 14; $j < count($bitacoras[$i]); $j++) {
         if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
@@ -50,5 +51,7 @@ for ($i = 1; $i < count($bitacoras); $i++) {
     unset($bitacoras[$i][21]);
 }
 
+$filename = 'Registro de bitácoras ' . date('d-m-Y') . '.xlsx';
+
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
-$xlsx->downloadAs('Registro de bitácoras.xlsx');
+$xlsx->downloadAs($filename);

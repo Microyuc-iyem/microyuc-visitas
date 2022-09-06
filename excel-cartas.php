@@ -7,7 +7,7 @@ $cartas = [
     ['ID', 'Fecha de creación', 'Folio', 'Nombre', 'Calle', 'Cruzamientos', 'Número', 'Colonia/Fraccionamiento', 'Localidad', 'Municipio', 'Fecha de firma de anexos', 'Documentación', 'Monto de comprobación', 'Tipo de comprobación', 'Fecha de pago inicial', 'Fecha de pago final', 'Tipo de crédito', 'Fecha de otorgamiento', 'Monto inicial', 'Mensualidades vencidas', 'Adeudo total',],
 ];
 
-$sql = 'SELECT * FROM carta';
+$sql = 'SELECT * FROM carta;';
 $res = mysqli_query($conn, $sql);
 if (mysqli_num_rows($res) > 0) {
     foreach ($res as $row) {
@@ -16,6 +16,7 @@ if (mysqli_num_rows($res) > 0) {
 }
 
 for ($i = 1; $i < count($cartas); $i++) {
+    $cartas[$i][0] = $i;
     $cartas[$i][1] = date('d-m-Y H:i:s', strtotime($cartas[$i][1]));
     $cartas[$i][10] = date('d-m-Y', strtotime($cartas[$i][10]));
     $cartas[$i][12] = number_format($cartas[$i][12], 2);
@@ -28,5 +29,7 @@ for ($i = 1; $i < count($cartas); $i++) {
     unset($cartas[$i][21]);
 }
 
+$filename = 'Registro de cartas ' . date('d-m-Y') . '.xlsx';
+
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($cartas);
-$xlsx->downloadAs('Registro de cartas.xlsx');
+$xlsx->downloadAs($filename);
