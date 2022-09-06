@@ -498,9 +498,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </fieldset>
                     <div class="form__container--btn">
-                        <button class="container__btn--reset"><a class="container__btn--link"
-                                                                 href="./generador-carta.php">
-                                Limpiar</a></button>
+                        <button class="container__btn--reset" type="reset">Limpiar</button>
                         <input class="container__btn--submit" type="submit" value="Generar archivo">
                     </div>
                 </form>
