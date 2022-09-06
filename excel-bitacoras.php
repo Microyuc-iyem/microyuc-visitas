@@ -55,7 +55,7 @@ for ($i = 1; $i < count($bitacoras); $i++) {
     unset($bitacoras[$i][21]);
 }
 
-$filename = 'Registro de bitácoras ' . $current_timestamp . '.xlsx';
+$filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
 
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
 $xlsx->downloadAs($filename);

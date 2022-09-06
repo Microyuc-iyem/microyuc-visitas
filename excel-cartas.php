@@ -33,7 +33,7 @@ for ($i = 1; $i < count($cartas); $i++) {
     unset($cartas[$i][21]);
 }
 
-$filename = 'Registro de cartas ' . $current_timestamp . '.xlsx';
+$filename = 'Reporte de cartas ' . $current_timestamp . '.xlsx';
 
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($cartas);
 $xlsx->downloadAs($filename);
