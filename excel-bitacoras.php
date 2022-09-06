@@ -3,6 +3,10 @@
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
 
+$tz_CMX = new DateTimeZone('America/Mexico_City');
+$CMX = new DateTime('now', $tz_CMX);
+$current_timestamp = $CMX->format('d-m-Y');
+
 $bitacoras = [];
 $bitacoras = [
     ['ID', 'Fecha de creación', 'Nombre', 'Folio', 'Municipio', 'Garantía', 'Número de teléfono', 'Correo electrónico', 'Dirección de negocio', 'Dirección particular', 'Nombre del aval', 'Número de teléfono del aval', 'Correo electrónico del aval', 'Dirección del aval',],
@@ -51,7 +55,7 @@ for ($i = 1; $i < count($bitacoras); $i++) {
     unset($bitacoras[$i][21]);
 }
 
-$filename = 'Registro de bitácoras ' . date('d-m-Y') . '.xlsx';
+$filename = 'Registro de bitácoras ' . $current_timestamp . '.xlsx';
 
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
 $xlsx->downloadAs($filename);

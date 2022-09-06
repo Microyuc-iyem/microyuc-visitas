@@ -55,6 +55,10 @@ $tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones'
 
 $filtros = [];
 
+$tz_CMX = new DateTimeZone('America/Mexico_City');
+$CMX = new DateTime('now', $tz_CMX);
+$current_timestamp = $CMX->format('d-m-Y H:i:s');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Setting filter settings
@@ -228,9 +232,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $adeudo_total = floatval(mysqli_real_escape_string($conn, $carta['adeudo_total']));
 
 // Query
-        $sql = "INSERT INTO carta(numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
+        $sql = "INSERT INTO carta(fecha_creacion, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                   documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, tipo_credito, fecha_otorgamiento, monto_inicial,
-                  mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
+                  mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                                '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 

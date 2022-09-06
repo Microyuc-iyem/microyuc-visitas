@@ -45,6 +45,10 @@ $tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Otro'
 
 $filtros = [];
 
+$tz_CMX = new DateTimeZone('America/Mexico_City');
+$CMX = new DateTime('now', $tz_CMX);
+$current_timestamp = $CMX->format('d-m-Y H:i:s');
+
 $movido = false;
 $ruta_subido = './uploads/';
 $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp'];
@@ -152,6 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ['gestion_fecha' => date("d-m-Y", strtotime($bitacora['gestion_fecha1'])), 'gestion_via' => $bitacora['gestion_via1'], 'gestion_comentarios' => $bitacora['gestion_comentarios1']],
         ];
 
+        // TODO: tratar de arreglar la generación de bitácoras en el heroku, la fecha evidencia da un número malo en el word generado.
         $templateProcessor->setValue('acreditado_nombre', $bitacora['acreditado_nombre']);
         $templateProcessor->setValue('acreditado_folio', $bitacora['acreditado_folio']);
         $templateProcessor->setValue('acreditado_municipio', $bitacora['acreditado_municipio']);
@@ -195,10 +200,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $evidencia_fotografia = mysqli_real_escape_string($conn, $bitacora['evidencia_fotografia1'] ?? '');
 
 // Query
-        $sql = "INSERT INTO bitacora(acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
+        $sql = "INSERT INTO bitacora(fecha_creacion, acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
                      acreditado_direccion_negocio, acreditado_direccion_particular, aval_nombre, aval_telefono, aval_email, aval_direccion,
                      gestion_fecha1, gestion_via1, gestion_comentarios1, evidencia_fecha1, evidencia_fotografia1,
-                     nombre_archivo, gestion_contador, evidencia_contador) VALUES('$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
+                     nombre_archivo, gestion_contador, evidencia_contador) VALUES('$current_timestamp', '$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
                                             '$direccion_negocio', '$direccion_particular', '$aval_nombre', '$aval_telefono', '$aval_email', '$aval_direccion', '$gestion_fecha',
                                             '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1, 1);";
 
