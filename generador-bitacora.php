@@ -47,7 +47,7 @@ $filtros = [];
 
 $tz_CMX = new DateTimeZone('America/Mexico_City');
 $CMX = new DateTime('now', $tz_CMX);
-$current_timestamp = $CMX->format('d-m-Y H:i:s');
+$current_timestamp = $CMX->format('Y-m-d H:i:s');
 
 $movido = false;
 $ruta_subido = './uploads/';
