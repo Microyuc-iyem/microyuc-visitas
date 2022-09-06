@@ -126,12 +126,6 @@ if (isset($_GET['id'])) {
                     <th scope="col" class="table__head">
                         E-mail
                     </th>
-                    <th scope="col" class="table__head table__data--left">
-                        Fecha de gestión
-                    </th>
-                    <th scope="col" class="table__head table__data--left">
-                        Vía de gestión
-                    </th>
                     <th scope="col" class="table__head">
                         Fecha de creación
                     </th>
@@ -149,8 +143,6 @@ if (isset($_GET['id'])) {
                         <td class="table__data"><a
                                     href="mailto:<?= $bitacora['acreditado_email']; ?>"><?= $bitacora['acreditado_email']; ?></a>
                         </td>
-                        <td class="table__data table__data--left"><?= date("d-m-Y", strtotime($bitacora['gestion_fecha1'])); ?></td>
-                        <td class="table__data"><?= $bitacora['gestion_via1']; ?></td>
                         <td class="table__data"><?= date("d-m-Y", strtotime($bitacora['fecha_creacion'])); ?></td>
                         <td class="table__data"><a class="table__data--link"
                                                    href="./files/bitacoras/<?= $bitacora['nombre_archivo'] ?>">Descargar</a>
