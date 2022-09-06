@@ -1,7 +1,7 @@
 CREATE TABLE carta
 (
     id                      INT           NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    fecha_creacion          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_creacion          TIMESTAMP     NOT NULL,
     numero_expediente       VARCHAR(255)  NOT NULL,
     nombre_cliente          VARCHAR(255)  NOT NULL,
     calle                   VARCHAR(255)  NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE carta
 CREATE TABLE bitacora
 (
     id                              INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    fecha_creacion                  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_creacion                  TIMESTAMP    NOT NULL,
     acreditado_nombre               VARCHAR(255) NOT NULL,
     acreditado_folio                VARCHAR(255) NOT NULL,
     acreditado_municipio            VARCHAR(255) NOT NULL,
