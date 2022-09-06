@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $bitacora['evidencia_fotografia1'] = $_FILES['evidencia_fotografia1']['name'] ?? '';
     $bitacora['evidencia_fecha_texto1'] = '';
-    $bitacora['evidencia_fecha1'] = $bitacora['evidencia_fecha1'] ? new DateTime($bitacora['evidencia_fecha1']) : '';
+    $bitacora['evidencia_fecha1'] = $bitacora['evidencia_fecha1'] ? new DateTime($bitacora['evidencia_fecha1'], $tz_CMX) : '';
     var_dump($bitacora['evidencia_fecha1']);
     if (($bitacora['evidencia_fecha1'] && $bitacora['evidencia_fotografia1']) || (!$bitacora['evidencia_fecha1'] && !$bitacora['evidencia_fotografia1'])) {
         if ($_FILES['evidencia_fotografia1']['error'] === 0) {
