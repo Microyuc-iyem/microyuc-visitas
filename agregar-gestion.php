@@ -5,6 +5,7 @@ require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
 $sidebar_active = 'bitácora';
+$header_title = 'Agregar gestión';
 
 require './includes/header.php';
 

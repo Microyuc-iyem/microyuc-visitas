@@ -1,11 +1,12 @@
 <?php
 require_once './config/db_connect.php';
+require_once './includes/functions.php';
 
 $sidebar_active = 'inicio';
-session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: index.php");
-}
+
+$header_title = 'Inicio';
+
+check_login();
 
 require_once './includes/header.php';
 ?>

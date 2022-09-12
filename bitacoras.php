@@ -3,6 +3,7 @@ require_once './config/db_connect.php';
 require './includes/functions.php';
 
 $sidebar_active = 'bitácora';
+$header_title = 'Panel de bitácoras';
 
 require './includes/header.php';
 

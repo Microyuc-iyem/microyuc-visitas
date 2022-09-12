@@ -3,6 +3,7 @@ require './config/db_connect.php';
 require './includes/functions.php';
 
 $sidebar_active = 'carta';
+$header_title = 'Panel de cartas';
 
 require './includes/header.php';
 
