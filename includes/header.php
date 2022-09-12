@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./dist/css/styles.css">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <title>Microyuc | Inicio</title>
+    <title>Microyuc | <?= $header_title ?? ''?></title>
 </head>
 <body>
 <div class="dashboard">
