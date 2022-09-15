@@ -185,6 +185,12 @@ body {
   color: #045c94;
 }
 
+.table__data--nolink:link, .table__data--nolink:visited {
+  text-decoration: none;
+  font-weight: 500;
+  color: #135985;
+}
+
 .table__data--red:link, .table__data--red:visited {
   text-decoration: none;
   font-weight: 500;

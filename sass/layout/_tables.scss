@@ -47,6 +47,12 @@
   color: a.$primary-dark;
 }
 
+.table__data--nolink:link, .table__data--nolink:visited {
+  text-decoration: none;
+  font-weight: 500;
+  color: desaturate(a.$primary-dark, 20%);
+}
+
 .table__data--red:link, .table__data--red:visited {
   text-decoration: none;
   font-weight: 500;

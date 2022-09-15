@@ -65,19 +65,6 @@ if (isset($_GET['id'])) {
         </div>
     </div>
     <table class="table">
-        <!--                <thead class="table__superhead">-->
-        <!--                <tr>-->
-        <!--                    <th scope="col" colspan="2" class="table__superhead--column">-->
-        <!--                        Cliente-->
-        <!--                    </th>-->
-        <!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
-        <!--                        Pagos-->
-        <!--                    </th>-->
-        <!--                    <th scope="col" colspan="3" class="table__superhead--column">-->
-        <!--                        Acciones-->
-        <!--                    </th>-->
-        <!--                </tr>-->
-        <!--                </thead>-->
         <thead class="table__head">
         <tr class="table__row--head">
             <th scope="col" class="table__head">
@@ -112,9 +99,14 @@ if (isset($_GET['id'])) {
                 <td class="table__data"><?= $carta['mensualidades_vencidas']; ?></td>
                 <td class="table__data table__data--left"><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
                 <td class="table__data"><?= date("d-m-Y", strtotime($carta['fecha_creacion'])); ?></td>
-                <td class="table__data"><a class="table__data--link"
-                                           href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a>
-                </td>
+                <?php if (file_exists('./files/cartas/' . $carta['nombre_archivo'])): ?>
+                    <td class="table__data"><a class="table__data--link"
+                                               href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a>
+                    </td>
+                <?php else: ?>
+                    <td class="table__data"><a class="table__data--nolink">Descargar</a>
+                    </td>
+                <?php endif; ?>
                 <td class="table__data"><a class="table__data--red"
                                            href="cartas.php?id=<?= $carta['id'] ?>">Eliminar</a>
                 </td>

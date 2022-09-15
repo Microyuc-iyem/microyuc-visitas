@@ -97,9 +97,14 @@ if (isset($_GET['id'])) {
                             href="mailto:<?= $bitacora['acreditado_email']; ?>"><?= $bitacora['acreditado_email']; ?></a>
                 </td>
                 <td class="table__data"><?= date("d-m-Y", strtotime($bitacora['fecha_creacion'])); ?></td>
-                <td class="table__data"><a class="table__data--link"
-                                           href="./files/bitacoras/<?= $bitacora['nombre_archivo'] ?>">Descargar</a>
-                </td>
+                <?php if (file_exists('./files/bitacoras/' . $bitacora['nombre_archivo'])): ?>
+                    <td class="table__data"><a class="table__data--link"
+                                               href="./files/bitacoras/<?= $bitacora['nombre_archivo'] ?>">Descargar</a>
+                    </td>
+                <?php else: ?>
+                    <td class="table__data"><a class="table__data--nolink">Descargar</a>
+                    </td>
+                <?php endif; ?>
                 <td class="table__data"><a class="table__data--green"
                                            href="agregar-gestion.php?id=<?= $bitacora['id'] ?>">Agregar</a>
                 </td>
