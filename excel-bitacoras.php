@@ -9,8 +9,7 @@ $current_timestamp = $CMX->format('d-m-Y');
 
 $bitacoras = [];
 $bitacoras = [
-    ['ID', 'Fecha de creación', 'Nombre', 'Folio', 'Municipio', 'Garantía', 'Número de teléfono', 'Correo electrónico', 'Dirección de negocio', 'Dirección particular', 'Nombre del aval', 'Número de teléfono del aval', 'Correo electrónico del aval', 'Dirección del aval',],
-];
+    ['N.º', 'Fecha de creación', 'Nombre', 'Folio', 'Municipio', 'Localidad', 'Tipo de garantía', 'Garantía', 'Número de teléfono', 'Correo electrónico', 'Nombre del aval',],];
 $sql = 'SELECT * FROM bitacora';
 $res = mysqli_query($conn, $sql);
 $bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
@@ -43,16 +42,19 @@ if (mysqli_num_rows($res) > 0) {
 for ($i = 1; $i < count($bitacoras); $i++) {
     $bitacoras[$i][0] = $i;
     $bitacoras[$i][1] = date('d-m-Y H:i:s', strtotime($bitacoras[$i][1]));
-    for ($j = 14; $j < count($bitacoras[$i]); $j++) {
+    for ($j = 12; $j < count($bitacoras[$i]); $j++) {
         if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
-            echo $bitacoras[$i][$j];
-            echo '<br>';
             $bitacoras[$i][$j] = date('d-m-Y', strtotime($bitacoras[$i][$j]));
         }
     }
-    unset($bitacoras[$i][17]);
-    unset($bitacoras[$i][20]);
-    unset($bitacoras[$i][21]);
+    unset($bitacoras[$i][10]);
+    unset($bitacoras[$i][11]);
+    unset($bitacoras[$i][13]);
+    unset($bitacoras[$i][14]);
+    unset($bitacoras[$i][15]);
+    unset($bitacoras[$i][19]);
+    unset($bitacoras[$i][22]);
+    unset($bitacoras[$i][23]);
 }
 
 $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
