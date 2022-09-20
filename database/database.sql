@@ -31,6 +31,8 @@ CREATE TABLE bitacora
     acreditado_nombre               VARCHAR(255) NOT NULL,
     acreditado_folio                VARCHAR(255) NOT NULL,
     acreditado_municipio            VARCHAR(255) NOT NULL,
+    acreditado_localidad            VARCHAR(255) NOT NULL,
+    tipo_garantia                   VARCHAR(255) NOT NULL,
     acreditado_garantia             VARCHAR(255) NOT NULL,
     acreditado_telefono             VARCHAR(255) NOT NULL,
     acreditado_email                VARCHAR(255) NOT NULL,
