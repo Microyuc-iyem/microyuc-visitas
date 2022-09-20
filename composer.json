@@ -14,6 +14,7 @@
     "ext-intl": "*",
     "ext-fileinfo": "*",
     "ext-mbstring": "*",
-    "ext-zlib": "*"
+    "ext-zlib": "*",
+    "ext-pdo": "*"
   }
 }
