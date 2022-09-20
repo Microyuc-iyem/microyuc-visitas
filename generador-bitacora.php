@@ -17,6 +17,8 @@ $bitacora = [
     'acreditado_nombre' => '',
     'acreditado_folio' => '',
     'acreditado_municipio' => '',
+    'acreditado_localidad' => '',
+    'tipo_garantia' => '',
     'acreditado_garantia' => '',
     'acreditado_telefono' => '',
     'acreditado_email' => '',
@@ -36,6 +38,8 @@ $errores = [
     'acreditado_nombre' => '',
     'acreditado_folio' => '',
     'acreditado_municipio' => '',
+    'acreditado_localidad' => '',
+    'tipo_garantia' => '',
     'acreditado_garantia' => '',
     'acreditado_telefono' => '',
     'acreditado_email' => '',
@@ -46,7 +50,8 @@ $errores = [
     'evidencia_fotografia1' => '',
 ];
 
-$tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Otro',];
+$tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Pago', 'Reestructura', 'Otro',];
+$tipos_garantia = ['GP', 'Aval', 'Hipotecaria',];
 
 $filtros = [];
 
@@ -68,6 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['acreditado_folio']['options']['regexp'] = '/(^IYE{1,1})([\d\-]+$)/';
     $filtros['acreditado_municipio']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_municipio']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['acreditado_localidad']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['acreditado_localidad']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['tipo_garantia']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['tipo_garantia']['options']['regexp'] = '/^(GP|Aval|Hipotecaria)+$/';
     $filtros['acreditado_garantia']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['acreditado_garantia']['options']['regexp'] = '/[\s\S]+/';
     $filtros['acreditado_telefono']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -92,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['gestion_fecha1']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['gestion_fecha1']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['gestion_via1']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['gestion_via1']['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita|Otro)+$/';
+    $filtros['gestion_via1']['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita|Pago|Reestructura|Otro)+$/';
     $filtros['gestion_comentarios1']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['gestion_comentarios1']['options']['regexp'] = '/[\s\S]+/';
     $filtros['gestion_comentarios1']['options']['default'] = '';
@@ -136,6 +145,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['acreditado_nombre'] = $bitacora['acreditado_nombre'] ? '' : 'El nombre solo debe contener letras y espacios.';
     $errores['acreditado_folio'] = $bitacora['acreditado_folio'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     $errores['acreditado_municipio'] = $bitacora['acreditado_municipio'] ? '' : 'Este campo es requerido';
+    $errores['acreditado_localidad'] = $bitacora['acreditado_localidad'] ? '' : 'Este campo es requerido';
+    $errores['tipo_garantia'] = $bitacora['tipo_garantia'] ? '' : 'Este campo es requerido';
     $errores['acreditado_garantia'] = $bitacora['acreditado_garantia'] ? '' : 'Este campo es requerido.';
     $errores['acreditado_telefono'] = $bitacora['acreditado_telefono'] ? '' : 'El número de teléfono debe tener un formato correcto';
     $errores['acreditado_email'] = $bitacora['acreditado_email'] ? '' : 'Introduzca un correo electrónico con formato válido.';
@@ -164,6 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('acreditado_nombre', $bitacora['acreditado_nombre']);
         $templateProcessor->setValue('acreditado_folio', $bitacora['acreditado_folio']);
         $templateProcessor->setValue('acreditado_municipio', $bitacora['acreditado_municipio']);
+        $templateProcessor->setValue('acreditado_localidad', $bitacora['acreditado_localidad']);
+        $templateProcessor->setValue('tipo_garantia', $bitacora['tipo_garantia']);
         $templateProcessor->setValue('acreditado_garantia', $bitacora['acreditado_garantia']);
         $templateProcessor->setValue('acreditado_telefono', $bitacora['acreditado_telefono']);
         $templateProcessor->setValue('acreditado_email', $bitacora['acreditado_email']);
@@ -188,6 +201,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $acreditado_nombre = mysqli_real_escape_string($conn, $bitacora['acreditado_nombre']);
         $folio = mysqli_real_escape_string($conn, $bitacora['acreditado_folio']);
         $municipio = mysqli_real_escape_string($conn, $bitacora['acreditado_municipio']);
+        $localidad = mysqli_real_escape_string($conn, $bitacora['acreditado_localidad']);
+        $tipo_garantia = mysqli_real_escape_string($conn, $bitacora['tipo_garantia']);
         $garantia = mysqli_real_escape_string($conn, $bitacora['acreditado_garantia']);
         $acreditado_telefono = mysqli_real_escape_string($conn, $bitacora['acreditado_telefono']);
         $acreditado_email = mysqli_real_escape_string($conn, $bitacora['acreditado_email']);
@@ -204,10 +219,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $evidencia_fotografia = mysqli_real_escape_string($conn, $bitacora['evidencia_fotografia1'] ?? '');
 
 // Query
-        $sql = "INSERT INTO bitacora(fecha_creacion, acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_garantia, acreditado_telefono, acreditado_email,
+        $sql = "INSERT INTO bitacora(fecha_creacion, acreditado_nombre, acreditado_folio, acreditado_municipio, acreditado_localidad, tipo_garantia, acreditado_garantia, acreditado_telefono, acreditado_email,
                      acreditado_direccion_negocio, acreditado_direccion_particular, aval_nombre, aval_telefono, aval_email, aval_direccion,
                      gestion_fecha1, gestion_via1, gestion_comentarios1, evidencia_fecha1, evidencia_fotografia1,
-                     nombre_archivo, gestion_contador, evidencia_contador) VALUES('$current_timestamp', '$acreditado_nombre', '$folio', '$municipio', '$garantia', '$acreditado_telefono', '$acreditado_email',
+                     nombre_archivo, gestion_contador, evidencia_contador) VALUES('$current_timestamp', '$acreditado_nombre', '$folio', '$municipio', '$localidad', '$tipo_garantia', '$garantia', '$acreditado_telefono', '$acreditado_email',
                                             '$direccion_negocio', '$direccion_particular', '$aval_nombre', '$aval_telefono', '$aval_email', '$aval_direccion', '$gestion_fecha',
                                             '$gestion_via', '$gestion_comentarios', '$evidencia_fecha', '$evidencia_fotografia', '$nombre_archivo', 1, 1);";
 
@@ -281,6 +296,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input class="form__input" type="text" id="acreditado_municipio"
                            name="acreditado_municipio"
                            value="<?= htmlspecialchars($bitacora['acreditado_municipio']) ?>" required>
+                </div>
+                <div class="form__division">
+                    <label class="form__label" for="acreditado_localidad">Localidad<span
+                                class="asterisk">*</span>:</label>
+                    <input class="form__input" type="text" id="acreditado_localidad"
+                           name="acreditado_localidad"
+                           value="<?= htmlspecialchars($bitacora['acreditado_localidad']) ?>" required>
+                </div>
+                <div class="form__division">
+                    <label class="form__label" for="tipo_garantia">Tipo de garantía<span
+                                class="asterisk">*</span>:
+                    </label>
+                    <select class="form__input" id="tipo_garantia" name="tipo_garantia" required>
+                        <?php foreach ($tipos_garantia as $tipos) : ?>
+                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $bitacora['tipo_garantia'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form__division">
                     <label class="form__label" for="acreditado_garantia">Garantía<span

@@ -4,6 +4,8 @@ require './config/db_connect.php';
 require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
+// TODO: Check warning errors when the form is cleared and another gestion wants to be added.
+
 $sidebar_active = 'bitácora';
 $header_title = 'Agregar gestión';
 
@@ -44,7 +46,7 @@ if ($_GET['id']) {
                 'evidencia_fotografia' . $new_counter => '',
             ];
 
-            $tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Otro',];
+            $tipos_gestion = ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Pago', 'Reestructura', 'Otro',];
 
             $filtros = [];
 
@@ -60,7 +62,7 @@ if ($_GET['id']) {
                 $filtros['gestion_fecha' . $new_counter]['filter'] = FILTER_VALIDATE_REGEXP;
                 $filtros['gestion_fecha' . $new_counter]['options']['regexp'] = '/^[\d\-]+$/';
                 $filtros['gestion_via' . $new_counter]['filter'] = FILTER_VALIDATE_REGEXP;
-                $filtros['gestion_via' . $new_counter]['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita|Otro)+$/';
+                $filtros['gestion_via' . $new_counter]['options']['regexp'] = '/^(Correo electrónico|Llamada telefónica|Visita|Pago|Reestructura|Otro)+$/';
                 $filtros['gestion_comentarios' . $new_counter]['filter'] = FILTER_VALIDATE_REGEXP;
                 $filtros['gestion_comentarios' . $new_counter]['options']['regexp'] = '/[\s\S]+/';
                 $filtros['gestion_comentarios' . $new_counter]['options']['default'] = '';
@@ -135,6 +137,8 @@ if ($_GET['id']) {
                     $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
                     $templateProcessor->setValue('acreditado_folio', $bitacora[0]['acreditado_folio']);
                     $templateProcessor->setValue('acreditado_municipio', $bitacora[0]['acreditado_municipio']);
+                    $templateProcessor->setValue('acreditado_localidad', $bitacora[0]['acreditado_localidad']);
+                    $templateProcessor->setValue('tipo_garantia', $bitacora[0]['tipo_garantia']);
                     $templateProcessor->setValue('acreditado_garantia', $bitacora[0]['acreditado_garantia']);
                     $templateProcessor->setValue('acreditado_telefono', $bitacora[0]['acreditado_telefono']);
                     $templateProcessor->setValue('acreditado_email', $bitacora[0]['acreditado_email']);

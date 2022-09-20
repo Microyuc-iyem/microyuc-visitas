@@ -72,6 +72,8 @@ if ($_GET['id']) {
                 $templateProcessor->setValue('acreditado_nombre', $bitacoras[0]['acreditado_nombre']);
                 $templateProcessor->setValue('acreditado_folio', $bitacoras[0]['acreditado_folio']);
                 $templateProcessor->setValue('acreditado_municipio', $bitacoras[0]['acreditado_municipio']);
+                $templateProcessor->setValue('acreditado_localidad', $bitacoras[0]['acreditado_localidad']);
+                $templateProcessor->setValue('tipo_garantia', $bitacoras[0]['tipo_garantia']);
                 $templateProcessor->setValue('acreditado_garantia', $bitacoras[0]['acreditado_garantia']);
                 $templateProcessor->setValue('acreditado_telefono', $bitacoras[0]['acreditado_telefono']);
                 $templateProcessor->setValue('acreditado_email', $bitacoras[0]['acreditado_email']);
