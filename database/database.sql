@@ -16,6 +16,7 @@ CREATE TABLE carta
     comprobacion_tipo       VARCHAR(255)  NOT NULL,
     pagos_fecha_inicial     VARCHAR(255)  NOT NULL,
     pagos_fecha_final       VARCHAR(255)  NOT NULL,
+    modalidad               VARCHAR(255)  NOT NULL,
     tipo_credito            VARCHAR(255)  NOT NULL,
     fecha_otorgamiento      DATE          NOT NULL,
     monto_inicial           FLOAT(200, 2) NOT NULL,
