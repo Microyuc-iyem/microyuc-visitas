@@ -27,6 +27,7 @@ $carta = [
     'comprobacion_tipo' => '',
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
+    'modalidad' => '',
     'tipo_credito' => '',
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
@@ -49,6 +50,7 @@ $errores = [
     'comprobacion_tipo' => '',
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
+    'modalidad' => '',
     'tipo_credito' => '',
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
@@ -57,6 +59,8 @@ $errores = [
 
 $tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
 $tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
+$modalidades = ['MYE', 'MYV',];
+$tipos_credito = ['GP', 'Aval', 'Hipotecario'];
 
 $filtros = [];
 
@@ -108,8 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['pagos_fecha_final']['options']['regexp'] = '/^[\d\-]+$/';
+    $filtros['modalidad']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['modalidad']['options']['regexp'] = '/^(MYE|MYV)+$/';
     $filtros['tipo_credito']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['tipo_credito']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['tipo_credito']['options']['regexp'] = '/^(GP|Aval|Hipotecario)+$/';
     $filtros['fecha_otorgamiento']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['fecha_otorgamiento']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['monto_inicial']['filter'] = FILTER_VALIDATE_FLOAT;
@@ -139,7 +145,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
-    $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Este campo es requerido.';
+    $errores['modalidad'] = $carta['modalidad']  ? '' : 'Seleccione una opción válida.';
+    $errores['tipo_credito'] = $carta['tipo_credito']  ? '' : 'Seleccione una opción válida.';
     $errores['fecha_otorgamiento'] = $carta['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['monto_inicial'] = $carta['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
     $errores['adeudo_total'] = $carta['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
@@ -209,6 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
         $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
+        $templateProcessor->setValue('modalidad', $carta['modalidad']);
         $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
         $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($carta['fecha_otorgamiento'])));
         $templateProcessor->setValue('monto_inicial', number_format($carta['monto_inicial'], 2));
@@ -230,6 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $comprobacion_tipo = mysqli_real_escape_string($conn, $carta['comprobacion_tipo']);
         $pagos_fecha_inicial = mysqli_real_escape_string($conn, $carta['pagos_fecha_inicial']);
         $pagos_fecha_final = mysqli_real_escape_string($conn, $carta['pagos_fecha_final']);
+        $modalidad = mysqli_real_escape_string($conn, $carta['modalidad']);
         $tipo_credito = mysqli_real_escape_string($conn, $carta['tipo_credito']);
         $fecha_otorgamiento = mysqli_real_escape_string($conn, $carta['fecha_otorgamiento']);
         $monto_inicial = floatval(mysqli_real_escape_string($conn, $carta['monto_inicial']));
@@ -238,9 +247,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Query
         $sql = "INSERT INTO carta(fecha_creacion, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
-                  documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, tipo_credito, fecha_otorgamiento, monto_inicial,
+                  documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
                   mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
-                                                               '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
+                                                               '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 
 // Validation of query
@@ -417,12 +426,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            required>
                 </div>
                 <div class="form__division">
-                    <p class="form__error"><?= $errores['tipo_credito'] ?></p>
-                    <label class="form__label" for="tipo_credito">Tipo de crédito<span class="asterisk">*</span>:
+                    <label class="form__label" for="modalidad">Modalidad<span
+                                class="asterisk">*</span>:
                     </label>
-                    <input class="form__input" type="text" id="tipo_credito" name="tipo_credito"
-                           value="<?= htmlspecialchars($carta['tipo_credito']) ?>"
-                           required>
+                    <select class="form__input" id="modalidad" name="modalidad" required>
+                        <?php foreach ($modalidades as $modalidad) : ?>
+                            <option value="<?= htmlspecialchars($modalidad) ?>" <?= $carta['modalidad'] === $modalidad ? 'selected' : '' ?>><?= htmlspecialchars($modalidad) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form__division">
+                    <label class="form__label" for="tipo_credito">Tipo de crédito<span
+                                class="asterisk">*</span>:
+                    </label>
+                    <select class="form__input" id="tipo_credito" name="tipo_credito" required>
+                        <?php foreach ($tipos_credito as $tipos) : ?>
+                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $carta['tipo_credito'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['fecha_otorgamiento'] ?></p>

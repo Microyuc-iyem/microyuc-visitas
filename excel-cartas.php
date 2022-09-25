@@ -8,7 +8,7 @@ $current_timestamp = $CMX->format('d-m-Y');
 
 $cartas = [];
 $cartas = [
-    ['ID', 'Fecha de creación', 'Folio', 'Nombre', 'Calle', 'Cruzamientos', 'Número', 'Colonia/Fraccionamiento', 'Localidad', 'Municipio', 'Fecha de firma de anexos', 'Documentación', 'Monto de comprobación', 'Tipo de comprobación', 'Fecha de pago inicial', 'Fecha de pago final', 'Tipo de crédito', 'Fecha de otorgamiento', 'Monto inicial', 'Mensualidades vencidas', 'Adeudo total',],
+    ['N.°', 'Fecha de creación', 'Folio', 'Nombre', 'Colonia/Fraccionamiento', 'Localidad', 'Municipio', 'Fecha de firma de anexos', 'Documentación', 'Monto de comprobación', 'Tipo de comprobación', 'Fecha de pago inicial', 'Fecha de pago final', 'Modalidad', 'Tipo de crédito', 'Fecha de otorgamiento', 'Monto inicial', 'Mensualidades vencidas', 'Adeudo total',],
 ];
 
 $sql = 'SELECT * FROM carta;';
@@ -27,10 +27,13 @@ for ($i = 1; $i < count($cartas); $i++) {
     $cartas[$i][13] = ucfirst($cartas[$i][13]);
     $cartas[$i][14] = date('m-Y', strtotime($cartas[$i][14]));
     $cartas[$i][15] = date('m-Y', strtotime($cartas[$i][15]));
-    $cartas[$i][17] = date('d-m-Y', strtotime($cartas[$i][17]));
-    $cartas[$i][18] = number_format($cartas[$i][18], 2);
-    $cartas[$i][20] = number_format($cartas[$i][20], 2);
-    unset($cartas[$i][21]);
+    $cartas[$i][18] = date('d-m-Y', strtotime($cartas[$i][18]));
+    $cartas[$i][19] = number_format($cartas[$i][19], 2);
+    $cartas[$i][21] = number_format($cartas[$i][21], 2);
+    unset($cartas[$i][4]);
+    unset($cartas[$i][5]);
+    unset($cartas[$i][6]);
+    unset($cartas[$i][22]);
 }
 
 $filename = 'Reporte de cartas ' . $current_timestamp . '.xlsx';
