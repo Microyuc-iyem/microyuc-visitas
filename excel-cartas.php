@@ -8,7 +8,7 @@ $current_timestamp = $CMX->format('d-m-Y');
 
 $cartas = [];
 $cartas = [
-    ['N.°', 'Fecha de creación', 'Folio', 'Nombre', 'Colonia/Fraccionamiento', 'Localidad', 'Municipio', 'Fecha de firma de anexos', 'Documentación', 'Monto de comprobación', 'Tipo de comprobación', 'Fecha de pago inicial', 'Fecha de pago final', 'Modalidad', 'Tipo de crédito', 'Fecha de otorgamiento', 'Monto inicial', 'Mensualidades vencidas', 'Adeudo total',],
+    ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Folio</b>', '<b>Nombre</b>', '<b>Colonia/Fraccionamiento', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>', '<b>Documentación</b>', '<b>Monto de comprobación</b>', '<b>Tipo de comprobación</b>', '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Tipo de crédito</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>',],
 ];
 
 $sql = 'SELECT * FROM carta;';
