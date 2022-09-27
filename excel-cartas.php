@@ -20,7 +20,7 @@ if (mysqli_num_rows($res) > 0) {
 }
 
 for ($i = 1; $i < count($cartas); $i++) {
-    $cartas[$i][0] = $i;
+    $cartas[$i][0] = '<b>' . $i . '</b>';
     $cartas[$i][1] = date('d-m-Y H:i:s', strtotime($cartas[$i][1]));
     $cartas[$i][10] = date('d-m-Y', strtotime($cartas[$i][10]));
     $cartas[$i][12] = number_format($cartas[$i][12], 2);
