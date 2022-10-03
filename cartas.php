@@ -10,7 +10,7 @@ require './includes/header.php';
 check_login();
 
 // Write query for all acreditados
-$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
+$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);
@@ -85,7 +85,10 @@ if (isset($_GET['id'])) {
             <th scope="col" class="table__head">
                 Fecha de creación
             </th>
-            <th scope="col" colspan="2" class="table__head">
+            <th scope="col" class="table__head">
+                Fecha de visita
+            </th>
+            <th scope="col" colspan="3" class="table__head">
                 Acciones
             </th>
         </tr>
@@ -99,6 +102,7 @@ if (isset($_GET['id'])) {
                 <td class="table__data"><?= $carta['mensualidades_vencidas']; ?></td>
                 <td class="table__data table__data--left"><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
                 <td class="table__data"><?= date("d-m-Y", strtotime($carta['fecha_creacion'])); ?></td>
+                <td class="table__data"><?= $carta['fecha_visita'] ? date("d-m-Y", strtotime($carta['fecha_visita'])) : ''; ?></td>
                 <?php if (file_exists('./files/cartas/' . $carta['nombre_archivo'])): ?>
                     <td class="table__data"><a class="table__data--link"
                                                href="./files/cartas/<?= $carta['nombre_archivo'] ?>">Descargar</a>
@@ -107,6 +111,9 @@ if (isset($_GET['id'])) {
                     <td class="table__data"><a class="table__data--nolink">Descargar</a>
                     </td>
                 <?php endif; ?>
+                <td class="table__data"><a class="table__data--green"
+                                           href="agregar-fecha-carta.php?id=<?= $carta['id'] ?>">Agregar fecha</a>
+                </td>
                 <td class="table__data"><a class="table__data--red"
                                            href="cartas.php?id=<?= $carta['id'] ?>">Eliminar</a>
                 </td>

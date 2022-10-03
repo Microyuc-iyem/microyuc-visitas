@@ -33,6 +33,7 @@ $carta = [
     'monto_inicial' => '',
     'mensualidades_vencidas' => '',
     'adeudo_total' => '',
+    'fecha_visita' => '',
 ];
 
 $errores = [
@@ -55,6 +56,7 @@ $errores = [
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
     'adeudo_total' => '',
+    'fecha_visita' => '',
 ];
 
 $tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
@@ -122,6 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['monto_inicial']['options']['min_range'] = 1;
     $filtros['adeudo_total']['filter'] = FILTER_VALIDATE_FLOAT;
     $filtros['adeudo_total']['options']['min_range'] = 1;
+    $filtros['fecha_visita']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['fecha_visita']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['fecha_visita']['options']['default'] = '';
 
     $carta = filter_input_array(INPUT_POST, $filtros);
 
@@ -145,8 +150,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
-    $errores['modalidad'] = $carta['modalidad']  ? '' : 'Seleccione una opción válida.';
-    $errores['tipo_credito'] = $carta['tipo_credito']  ? '' : 'Seleccione una opción válida.';
+    $errores['modalidad'] = $carta['modalidad'] ? '' : 'Seleccione una opción válida.';
+    $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Seleccione una opción válida.';
     $errores['fecha_otorgamiento'] = $carta['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['monto_inicial'] = $carta['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
     $errores['adeudo_total'] = $carta['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
@@ -244,11 +249,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $monto_inicial = floatval(mysqli_real_escape_string($conn, $carta['monto_inicial']));
         $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $carta['mensualidades_vencidas']));
         $adeudo_total = floatval(mysqli_real_escape_string($conn, $carta['adeudo_total']));
+        $fecha_visita = mysqli_real_escape_string($conn, $carta['fecha_visita']);
 
 // Query
-        $sql = "INSERT INTO carta(fecha_creacion, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
+        $sql = "INSERT INTO carta(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                   documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
-                  mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
+                  mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                                '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 
@@ -469,6 +475,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input class="form__input" type="number" id="adeudo_total" name="adeudo_total" step="0.01"
                            min="0" value="<?= htmlspecialchars($carta['adeudo_total']) ?>"
                            required>
+                </div>
+            </fieldset>
+            <fieldset class="form__fieldset form__fieldset--verification">
+                <legend class="form__legend">Fecha de visita</legend>
+                <div class="form__division">
+                    <p class="form__error"><?= $errores['fecha_visita'] ?></p>
+                    <label class="form__label" for="fecha_visita"></label>
+                    <input class="form__input" type="date" id="fecha_otorgamiento"
+                           name="fecha_visita"
+                           value="<?= htmlspecialchars($carta['fecha_visita']) ?>">
                 </div>
             </fieldset>
             <div class="form__container--btn">
