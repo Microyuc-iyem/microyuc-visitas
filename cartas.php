@@ -10,7 +10,7 @@ require './includes/header.php';
 check_login();
 
 // Write query for all acreditados
-$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY fecha_creacion DESC;';
+$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY id DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);

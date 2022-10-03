@@ -482,7 +482,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form__division">
                     <p class="form__error"><?= $errores['fecha_visita'] ?></p>
                     <label class="form__label" for="fecha_visita"></label>
-                    <input class="form__input" type="date" id="fecha_otorgamiento"
+                    <input class="form__input" type="date" id="fecha_visita"
                            name="fecha_visita"
                            value="<?= htmlspecialchars($carta['fecha_visita']) ?>">
                 </div>

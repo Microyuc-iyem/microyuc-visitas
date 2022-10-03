@@ -2,7 +2,7 @@ CREATE TABLE carta
 (
     id                      INT           NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fecha_creacion          TIMESTAMP     NOT NULL,
-    fecha_visita            VARCHAR(255),
+    fecha_visita            VARCHAR(255) DEFAULT '',
     numero_expediente       VARCHAR(255)  NOT NULL,
     nombre_cliente          VARCHAR(255)  NOT NULL,
     calle                   VARCHAR(255)  NOT NULL,
