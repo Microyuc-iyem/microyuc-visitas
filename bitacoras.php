@@ -10,7 +10,7 @@ require './includes/header.php';
 check_login();
 
 // Write query for all acreditados
-$sql = 'SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, gestion_fecha1, gestion_via1, fecha_creacion, nombre_archivo FROM bitacora ORDER BY fecha_creacion DESC;';
+$sql = 'SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, gestion_fecha1, gestion_via1, fecha_creacion, nombre_archivo FROM bitacora ORDER BY id DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);

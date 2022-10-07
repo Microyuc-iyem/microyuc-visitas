@@ -160,7 +160,7 @@ if ($_GET['id']) {
                 <?php for ($i = 1; $i <= $column_number; $i++): ?>
                     <?php if ($bitacora['gestion_fecha' . $i] !== ''): ?>
                         <tr class="table__row--body">
-                            <td class="table__data table__data--left"><?= $bitacora['gestion_fecha' . $i] ?></td>
+                            <td class="table__data table__data--left"><?= date("d-m-Y", strtotime($bitacora['gestion_fecha' . $i])) ?></td>
                             <td class="table__data table__data--left"><?= $bitacora['gestion_via' . $i] ?></td>
                             <td class="table__data table__data--left"><?= $bitacora['gestion_comentarios' . $i] ?></td>
                             <td class="table__data"><a class="table__data--red"
