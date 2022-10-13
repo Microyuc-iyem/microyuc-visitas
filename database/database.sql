@@ -62,4 +62,4 @@ CREATE TABLE usuario
 );
 
 INSERT INTO usuario
-VALUES (null, 'Admin', '123456789@MY');
+VALUES (null, 'microyuc.iyem@yucatan.gob.mx', 'Microyuc.19');
