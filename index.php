@@ -32,7 +32,7 @@ if ($_POST) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="dist/css/styles.css">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <title>Microyuc | Inicio de sesión</title>
+    <title>PTM kike | Inicio de sesión</title>
 </head>
 <body>
 <div class="login">
