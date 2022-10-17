@@ -12,10 +12,10 @@ $result = mysqli_query($conn, $sql);
 $usuarios = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 if ($_POST) {
-    if ($_POST['user'] == "microyuc.iyem@yucatan.gob.mx" && $_POST['password'] == "Microyuc.19") {
+    if ($_POST['user'] == "Admin" && $_POST['password'] == "123456789@MY") {
         $_SESSION['login'] = true;
         header("Location: inicio.php");
-   } else {
+    } else {
         echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
     }
 
@@ -32,7 +32,7 @@ if ($_POST) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="dist/css/styles.css">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <title> Microyuc Visitas | Inicio de sesión</title>
+    <title>Microyuc | Inicio de sesión</title>
 </head>
 <body>
 <div class="login">
