@@ -1,6 +1,6 @@
 <?php
-require_once './config/db_connect.php';
-require_once './includes/functions.php';
+//require_once './config/db_connect.php';
+//require_once './includes/functions.php';
 
 $sidebar_active = 'inicio';
 
