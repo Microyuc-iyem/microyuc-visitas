@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once './config/db_connect.php';
+//require_once './config/db_connect.php';
 if (isset($_SESSION['login'])) {
     header("Location: inicio.php");
 }
