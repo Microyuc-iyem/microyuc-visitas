@@ -1,25 +1,25 @@
 <?php
-//session_start();
+session_start();
 require_once './config/db_connect.php';
-//if (isset($_SESSION['login'])) {
-  //  header("Location: inicio.php");
-//}
+if (isset($_SESSION['login'])) {
+    header("Location: inicio.php");
+}
 
-//$sql = 'SELECT nombre, password FROM usuario';
+$sql = 'SELECT nombre, password FROM usuario';
 
-//$result = mysqli_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
-//$usuarios = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$usuarios = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-//if ($_POST) {
-  //  if ($_POST['user'] == "microyuc.iyem@yucatan.gob.mx" && $_POST['password'] == "Microyuc.19") {
-    //    $_SESSION['login'] = true;
-      //  header("Location: inicio.php");
-   // } else {
-     //   echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
-    //}
+if ($_POST) {
+    if ($_POST['user'] == "microyuc.iyem@yucatan.gob.mx" && $_POST['password'] == "Microyuc.19") {
+        $_SESSION['login'] = true;
+        header("Location: inicio.php");
+   } else {
+        echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
+    }
 
-//}
+}
 
 ?>
 
