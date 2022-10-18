@@ -12,7 +12,7 @@ $result = mysqli_query($conn, $sql);
 $usuarios = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 if ($_POST) {
-    if ($_POST['user'] == "Admin" && $_POST['password'] == "123456789@MY") {
+    if ($_POST['user'] == "microyuc.iyem@yucatan.gob.mx" && $_POST['password'] == "MicroYuc.19") {
         $_SESSION['login'] = true;
         header("Location: inicio.php");
     } else {
