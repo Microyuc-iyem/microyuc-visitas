@@ -59,7 +59,7 @@ $errores = [
     'fecha_visita' => '',
 ];
 
-$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones'];
+$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones', 'N/A'];
 $tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
 $modalidades = ['MYE', 'MYV',];
 $tipos_credito = ['GP', 'Aval', 'Hipotecario'];
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
     $filtros['documentacion']['options']['default'] = '';
     $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
-    $filtros['comprobacion_monto']['options']['max_range'] = 5000000;
+    $filtros['comprobacion_monto']['options']['min_range'] = 0.0f;
     $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
     $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
     if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
     if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
-    //if (!is_null($carta['n/a'])) $carta['comprobacion_tipo'][] = 'n/a'
+    if (!is_null($carta['n/a'])) $carta['comprobacion_tipo'][] = 'n/a';
 
     $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0.';
-    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos'])  && is_null($carta['certificaciones'])) {
+    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos'])  && is_null($carta['n/a']) && is_null($carta['certificaciones'])) {
         $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
     } else {
         $errores['comprobacion_tipo'] = '';
@@ -219,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('municipio', $carta['municipio']);
         $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
         $templateProcessor->setValue('documentacion', $carta['documentacion']);
-        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 1));
+        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
         $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
         $templateProcessor->setValue('modalidad', $carta['modalidad']);
