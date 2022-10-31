@@ -59,7 +59,7 @@ $errores = [
     'fecha_visita' => '',
 ];
 
-$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones', 'N/A'];
+$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones'];
 $tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
 $modalidades = ['MYE', 'MYV',];
 $tipos_credito = ['GP', 'Aval', 'Hipotecario'];
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
     $filtros['documentacion']['options']['default'] = '';
     $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
-    //$filtros['comprobacion_monto']['options']['min_range'] = 0;
+    $filtros['comprobacion_monto']['options']['max_range'] = 5000000;
     $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
     $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -219,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('municipio', $carta['municipio']);
         $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
         $templateProcessor->setValue('documentacion', $carta['documentacion']);
-        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
+        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 1));
         $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
         $templateProcessor->setValue('modalidad', $carta['modalidad']);
