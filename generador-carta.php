@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0.';
+    $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0';
     if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
         $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
     } else {
@@ -393,7 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="number" id="comprobacion_monto"
-                           name="comprobacion_monto" step="0.01" min="1"
+                           name="comprobacion_monto" step="0.01" min="0"
                            value="<?= htmlspecialchars($carta['comprobacion_monto']) ?>" required>
                 </div>
                 <div class="form__division">
