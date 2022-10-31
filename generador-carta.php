@@ -98,8 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['documentacion']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
     $filtros['documentacion']['options']['default'] = '';
-    $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
-    $filtros['comprobacion_monto']['options']['min_range'] = 0.0;
+    //$filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
+    //$filtros['comprobacion_monto']['options']['min_range'] = 0.0;
     $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
     $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
