@@ -13,7 +13,7 @@ CREATE TABLE carta
     municipio               VARCHAR(255)  NOT NULL,
     fecha_firma             DATE          NOT NULL,
     documentacion           TEXT,
-    comprobacion_monto      FLOAT(200, 2) NOT NULL,
+    comprobacion_monto      FLOAT(200, 2),
     comprobacion_tipo       VARCHAR(255)  NOT NULL,
     pagos_fecha_inicial     VARCHAR(255)  NOT NULL,
     pagos_fecha_final       VARCHAR(255)  NOT NULL,
