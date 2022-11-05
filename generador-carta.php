@@ -59,8 +59,8 @@ $errores = [
     'fecha_visita' => '',
 ];
 
-$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones'];
-$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
+$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones', 'Sin Comprobación'];
+$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones', 'sin_comprobación'];
 $modalidades = ['MYE', 'MYV',];
 $tipos_credito = ['GP', 'Aval', 'Hipotecario'];
 
@@ -110,6 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['insumos']['options']['regexp'] = '/[\s\S]+/';
     $filtros['certificaciones']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['certificaciones']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['sin_comprobacion']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['sin_comprobacion']['options']['regexp'] = '/[\s\S]+/';
     $filtros['pagos_fecha_inicial']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -136,6 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
     if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
     if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
+    if (!is_null($carta['sin_comprobacion'])) $carta['comprobacion_tipo'][] = 'N/A' ;
   
 
     $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
@@ -144,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0';
-    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
+    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones']) && is_null($carta['sin_comprobacion']) ) {
         $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
     } else {
         $errores['comprobacion_tipo'] = '';
