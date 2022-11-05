@@ -395,7 +395,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="number" id="comprobacion_monto"
-                           name="comprobacion_monto" step="0.01" min="1"
+                           name="comprobacion_monto" step="0.01" min="0"
                            value="<?= htmlspecialchars($carta['comprobacion_monto']) ?>" required>
                 </div>
                 <div class="form__division">
