@@ -59,8 +59,8 @@ $errores = [
     'fecha_visita' => '',
 ];
 
-$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones'];
-$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones'];
+$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
+$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
 $modalidades = ['MYE', 'MYV',];
 $tipos_credito = ['GP', 'Aval', 'Hipotecario'];
 
