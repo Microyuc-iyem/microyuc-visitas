@@ -40,7 +40,7 @@ pg_close($conn);
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="dist/css/styles.css">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <title>Microyuc Emprendedores | Inicio de sesión</title>
+    <title>Microyuc Emprendedores | Alexuc</title>
 </head>
 <body>
 <div class="login">
