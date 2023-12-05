@@ -5,11 +5,11 @@ if (isset($_SESSION['login'])) {
     header("Location: inicio.php");
 }
 
-$sql = 'SELECT nombre, password FROM usuario';
+$psql = 'SELECT nombre, password FROM usuario';
 
-$result = mysqli_query($conn, $sql);
+$result = psqli_query($conn, $psql);
 
-$usuarios = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$usuarios = psqli_fetch_all($result, PSQLI_ASSOC);
 
 if ($_POST) {
     if ($_POST['user'] == "microyuc.iyem@yucatan.gob.mx" && $_POST['password'] == "MicroYuc.19") {
