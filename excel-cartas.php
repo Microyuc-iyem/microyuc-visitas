@@ -13,6 +13,7 @@ $cartas = [
 
 $sql = 'SELECT * FROM carta;';
 $res = pg_query($conn, $sql);
+
 if (pg_num_rows($res) > 0) {
     foreach ($res as $row) {
         $cartas[] = array_values($row);
@@ -42,3 +43,4 @@ $filename = 'Reporte de cartas ' . $current_timestamp . '.xlsx';
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($cartas);
 $xlsx->downloadAs($filename);
 ?>
+
