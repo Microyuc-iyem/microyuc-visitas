@@ -1,4 +1,3 @@
-
 <?php
 // Archivo de conexión a la base de datos
 require_once 'conexion.php';
@@ -14,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Consulta SQL para verificar las credenciales
     $query = "SELECT * FROM usuarios WHERE nombre = $1 AND password = $2";
-    $result = pg_query_params($conn, $query, array($nombreUsuario, $password));
+    $result = pg_query_params($conn, $query, array($nombre, $password));
 
     // Verifica si se encontraron coincidencias
     if (pg_num_rows($result) == 1) {
@@ -30,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Cierra la conexión
 pg_close($conn);
 ?>
-
 
 
 <!doctype html>
@@ -51,8 +49,8 @@ pg_close($conn);
         <h1 class="login__title">Iniciar sesión</h1>
         <p class="login__subtitle">Introduce tus credenciales para iniciar sesión.</p>
         <form action="index.php" method="post" class="login__form">
-            <label for="user">
-                <input type="text" id="user" name="user" placeholder="Usuario" class="login__input" required>
+            <label for="nombre">
+                <input type="text" id="nombre" name="nombre" placeholder="Usuario" class="login__input" required>
             </label>
             <label for="password">
                 <input type="password" id="password" name="password" placeholder="Contraseña" class="login__input"
@@ -64,3 +62,6 @@ pg_close($conn);
 </div>
 </body>
 </html>
+
+
+
