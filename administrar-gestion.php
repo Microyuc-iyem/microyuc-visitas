@@ -1,6 +1,6 @@
 <?php
 // Require database connection and PHPWord library
-require './config/db_connect.php';
+require 'conexion.php';
 require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
@@ -16,17 +16,16 @@ $fmt = set_date_format_logbook();
 // Check if there is an ID query
 if ($_GET['id']) {
     $id = $_GET['id'];
-// Write query to get a bitacora according to the ID
-    $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
+    // Write query to get a bitacora according to the ID
+    $sql = "SELECT * FROM bitacora WHERE id = $id;";
 
-
-// make query and & get result
-    $result = mysqli_query($conn, $sql);
+    // make query and get result
+    $result = pg_query($conn, $sql);
 
     if ($result) {
 
-// Fetch the resulting rows as an associative array
-        $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        // Fetch the resulting rows as an associative array
+        $bitacoras = pg_fetch_all($result);
         $column_number = 0;
 
         if (!empty($bitacoras[0])) {
@@ -42,26 +41,26 @@ if ($_GET['id']) {
                 $num = $_GET['num'];
                 $sql_delete_image_query = "SELECT evidencia_fotografia$num FROM bitacora WHERE id = '$id';";
                 $sql_delete_columns_query = "UPDATE bitacora SET gestion_fecha$num = '', gestion_via$num = '', gestion_comentarios$num = '', evidencia_fecha$num = '', evidencia_fotografia$num = '' WHERE id = '$id';";
-                $resultado_imagen = mysqli_query($conn, $sql_delete_image_query);
-                $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia' . $num] ?? '';
-                $delete = mysqli_query($conn, $sql_delete_columns_query);
+                $resultado_imagen = pg_query($conn, $sql_delete_image_query);
+                $imagename = pg_fetch_assoc($resultado_imagen)['evidencia_fotografia' . $num] ?? '';
+                $delete = pg_query($conn, $sql_delete_columns_query);
                 if (file_exists('./uploads/' . $imagename)) {
                     unlink('./uploads/' . $imagename);
                 }
 
                 // Create variable with filename
                 $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
-// Encode filename so that UTF-8 characters work
+                // Encode filename so that UTF-8 characters work
                 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
-// Create new instance of PHPWord template processor using the required template file
+                // Create new instance of PHPWord template processor using the required template file
                 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
-                $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
-                $result = mysqli_query($conn, $sql);
+                $sql = "SELECT * FROM bitacora WHERE id = $id;";
+                $result = pg_query($conn, $sql);
                 // Fetch the resulting rows as an associative array
-                $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
-// Set values in template with post received input variables
+                $bitacoras = pg_fetch_all($result);
+                // Set values in template with post received input variables
                 $values = [];
                 for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
                     if ($bitacoras[0]['gestion_fecha' . $i]) {
@@ -113,7 +112,6 @@ if ($_GET['id']) {
                 }
 
                 header('Location: administrar-gestion.php?id=' . "$id");
-
             }
         } else {
             header('Location: ./bitacoras.php');
