@@ -9,17 +9,17 @@ session_start();
 // Verifica si el formulario de inicio de sesión fue enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recupera los datos del formulario
-    $nombreUsuario = $_POST['nombre_usuario'];
-    $contrasena = $_POST['contrasena'];
+    $nombre = $_POST['nombre'];
+    $password = $_POST['password'];
 
     // Consulta SQL para verificar las credenciales
-    $query = "SELECT * FROM usuarios WHERE nombre_usuario = $1 AND contrasena = $2";
-    $result = pg_query_params($conn, $query, array($nombreUsuario, $contrasena));
+    $query = "SELECT * FROM usuarios WHERE nombre = $1 AND password = $2";
+    $result = pg_query_params($conn, $query, array($nombreUsuario, $password));
 
     // Verifica si se encontraron coincidencias
     if (pg_num_rows($result) == 1) {
         // Inicia la sesión y redirige al usuario a la página de inicio
-        $_SESSION['nombre_usuario'] = $nombreUsuario;
+        $_SESSION['nombre'] = $nombre;
         header("location: inicio.php");
         exit(); // Asegura que el script se detenga después de redirigir
     } else {
