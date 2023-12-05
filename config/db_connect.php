@@ -18,7 +18,7 @@ $user = "djgymmheoobtax";
 $password = "7332bb6610847d90872b35e6ff411d5379628c314f848699b4aff90ac9029e76";
 
 // Establecer la conexión
-$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
+$conn = mysqli_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
 
 if (!$conn) {
     echo "Error de conexión: " . pg_last_error();
