@@ -1,5 +1,5 @@
 <?php
-require './config/db_connect.php';
+require 'conexion.php';
 require './includes/SimpleXLSXGen.php';
 
 $tz_CMX = new DateTimeZone('America/Mexico_City');
@@ -12,8 +12,8 @@ $cartas = [
 ];
 
 $sql = 'SELECT * FROM carta;';
-$res = mysqli_query($conn, $sql);
-if (mysqli_num_rows($res) > 0) {
+$res = pg_query($conn, $sql);
+if (pg_num_rows($res) > 0) {
     foreach ($res as $row) {
         $cartas[] = array_values($row);
     }
@@ -41,3 +41,4 @@ $filename = 'Reporte de cartas ' . $current_timestamp . '.xlsx';
 
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($cartas);
 $xlsx->downloadAs($filename);
+?>
