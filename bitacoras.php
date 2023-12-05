@@ -1,5 +1,6 @@
+
 <?php
-require_once './config/db_connect.php';
+require_once 'conexion.php';
 require './includes/functions.php';
 
 $sidebar_active = 'bitácora';
@@ -13,18 +14,18 @@ check_login();
 $sql = 'SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, gestion_fecha1, gestion_via1, fecha_creacion, nombre_archivo FROM bitacora ORDER BY id DESC;';
 
 // make query and & get result
-$result = mysqli_query($conn, $sql);
+$result = pg_query($conn, $sql);
 
 // Fetch the resulting rows as an array
-$bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$bitacoras = pg_fetch_all($result);
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $resultado_imagen = mysqli_query($conn, "SELECT evidencia_fotografia1 FROM bitacora WHERE id = '$id';");
-    $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia1'] ?? '';
-    $resultado_archivo = mysqli_query($conn, "SELECT nombre_archivo FROM bitacora WHERE id = '$id';");
-    $filename = $resultado_archivo->fetch_array()['nombre_archivo'] ?? '';
-    $delete = mysqli_query($conn, "DELETE FROM bitacora WHERE id = '$id';");
+    $resultado_imagen = pg_query_params($conn, "SELECT evidencia_fotografia1 FROM bitacora WHERE id = $1", array($id));
+    $imagename = pg_fetch_result($resultado_imagen, 0, 'evidencia_fotografia1') ?? '';
+    $resultado_archivo = pg_query_params($conn, "SELECT nombre_archivo FROM bitacora WHERE id = $1", array($id));
+    $filename = pg_fetch_result($resultado_archivo, 0, 'nombre_archivo') ?? '';
+    $delete = pg_query_params($conn, "DELETE FROM bitacora WHERE id = $1", array($id));
     unlink('./files/bitacoras/' . $filename);
     unlink('./uploads/' . $imagename);
     header('Location: bitacoras.php');
@@ -36,9 +37,9 @@ if (isset($_GET['id'])) {
             <h1 class="main__title">Bitácoras</h1>
             <span class="main__subtitle"><?php
                 $dash_logbook_query = "SELECT * FROM bitacora";
-                $dash_logbook_query_run = mysqli_query($conn, $dash_logbook_query);
+                $dash_logbook_query_run = pg_query($conn, $dash_logbook_query);
 
-                if ($bitacoras_total = mysqli_num_rows($dash_logbook_query_run)) {
+                if ($bitacoras_total = pg_num_rows($dash_logbook_query_run)) {
                     echo $bitacoras_total . ' bitácoras';
                 } else {
                     echo "Sin datos";
