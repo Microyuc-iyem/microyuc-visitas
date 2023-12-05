@@ -1,6 +1,4 @@
 
-
-
 <?php
 //$host = "ec2-52-1-92-133.compute-1.amazonaws.com";
 //$port = "5432";
