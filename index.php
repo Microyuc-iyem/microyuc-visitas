@@ -1,28 +1,37 @@
+
+
 <?php
-
+// Archivo de conexión a la base de datos
 require_once './config/db_connect.php';
+
+// Inicia la sesión (si no está iniciada)
 session_start();
-if (isset($_SESSION['login'])) {
-    header("Location: inicio.php");
-}
 
-$psql = 'SELECT nombre, password FROM usuario';
+// Verifica si el formulario de inicio de sesión fue enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Recupera los datos del formulario
+    $user = $_POST['microyuc.iyem@yucatan.gob.mx'];
+    $password = $_POST['MicroYuc.19'];
 
-$result = psqli_query($conn, $psql);
+    // Consulta SQL para verificar las credenciales
+    $query = "SELECT * FROM usuarios WHERE user = microyuc.iyem@yucatan.gob.mx AND password = MicroYuc.19 ";
+    $result = pg_query_params($conn, $query, array($nombreUsuario, $contrasena));
 
-$usuarios = psqli_fetch_all($result, PSQLI_ASSOC);
-
-if ($_POST) {
-    if ($_POST['user'] == "microyuc.iyem@yucatan.gob.mx" && $_POST['password'] == "MicroYuc.19") {
-        $_SESSION['login'] = true;
-        header("Location: inicio.php");
+    // Verifica si se encontraron coincidencias
+    if (pg_num_rows($result) == 1) {
+        // Inicia la sesión y redirige al usuario a la página de inicio
+        $_SESSION['user'] = $user;
+        header("location: inicio.php");
     } else {
-        echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
+        $error = "Credenciales incorrectas. Por favor, inténtalo de nuevo.";
     }
-
 }
 
+// Cierra la conexión
+pg_close($conn);
 ?>
+
+
 
 <!doctype html>
 <html lang="es">
