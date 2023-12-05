@@ -16,6 +16,4 @@ if (!$conn) {
     die("Error de conexión: " . pg_last_error());
 }
 
-echo "Conexión exitosa a la base de datos";
-}
 ?>
