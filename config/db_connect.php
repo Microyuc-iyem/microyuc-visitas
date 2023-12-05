@@ -26,6 +26,6 @@ if (!$conn) {
     echo "Conexión exitosa";
 }
 
-// Cierra la conexión cuando hayas terminado de usarla
-// pg_close($conn);
+Cierra la conexión cuando hayas terminado de usarla
+    pg_close($conn);
 ?>
