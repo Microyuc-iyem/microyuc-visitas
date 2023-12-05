@@ -1,5 +1,5 @@
 <?php
-require './config/db_connect.php';
+require 'conexion.php';
 require './includes/SimpleXLSXGen.php';
 
 // Añadiendo huso horario de México para generar la marca de fecha actual
@@ -10,29 +10,30 @@ $current_timestamp = $CMX->format('d-m-Y');
 // Número total de gestiones
 $column_number = 0;
 
-// Arreglo para generar la tabla de excel
+// Arreglo para generar la tabla de Excel
 $bitacoras = [];
 $bitacoras = [
-    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],];
+    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],
+];
 
 $sql = "SELECT * FROM bitacora;";
-$res = mysqli_query($conn, $sql);
-$columnas = mysqli_fetch_all($res, MYSQLI_ASSOC);
+$res = pg_query($conn, $sql);
+$columnas = pg_fetch_all($res);
 
 // Conseguir el número total de columnas de gestiones que hay en la base de datos
 if (!empty($columnas[0])) {
     foreach (array_keys($columnas[0]) as $key) {
-        if (str_contains($key, 'gestion_via')) {
+        if (strpos($key, 'gestion_via') !== false) {
             $column_number++;
         }
     }
 }
 
 // Crear nueva variable con la tabla de bitácoras de la base de datos
-$bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
+$bitacora = pg_fetch_all($res);
 
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
-if (mysqli_num_rows($res) > 0) {
+if (pg_num_rows($res) > 0) {
     foreach ($res as $row) {
         $bitacoras[] = array_values($row);
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
@@ -56,7 +57,7 @@ for ($i = 1; $i < count($bitacoras); $i++) {
         }
     }
     // Hacer solo si el índice 0 de los arreglos es numérico
-    // Esto para evitar los arreglos que solo continen las gestiones
+    // Esto para evitar los arreglos que solo contienen las gestiones
     if (is_numeric($bitacoras[$i][0])) {
         $bitacoras[$i][0] = '<b>' . $id_counter . '</b>';
         $bitacoras[$i][1] = date('d/m/Y H:i:s', strtotime($bitacoras[$i][1]));
@@ -82,3 +83,4 @@ $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
 // Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
 $xlsx->downloadAs($filename);
+?>
