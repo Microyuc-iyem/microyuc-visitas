@@ -15,6 +15,4 @@ $conn = pg_connect("host=ec2-52-1-92-133.compute-1.amazonaws.com dbname=d8klmol6
 if (!$conn) {
     die("Error de conexión: " . pg_last_error());
 }
-
-pg_close($conn);
 ?>
