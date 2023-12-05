@@ -1,5 +1,5 @@
 <?php
-require_once './config/db_connect.php';
+require_once 'conexion.php';
 require_once './includes/functions.php';
 
 $sidebar_active = 'inicio';
