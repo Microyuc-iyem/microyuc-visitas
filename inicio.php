@@ -24,9 +24,9 @@ require_once './includes/header.php';
         <a href="cartas.php" class="card__number">
             <?php
             $dash_carta_query = "SELECT * FROM carta";
-            $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
+            $dash_carta_query_run = pg_query($conn, $dash_carta_query);
 
-            if ($cartas_total = mysqli_num_rows($dash_carta_query_run)) {
+            if ($cartas_total = pg_num_rows($dash_carta_query_run)) {
                 echo $cartas_total;
             } else {
                 echo "Sin datos";
@@ -46,9 +46,9 @@ require_once './includes/header.php';
         <a href="bitacoras.php" class="card__number">
             <?php
             $dash_bitacora_query = "SELECT * FROM bitacora";
-            $dash_bitacora_query_run = mysqli_query($conn, $dash_bitacora_query);
+            $dash_bitacora_query_run = pg_query($conn, $dash_bitacora_query);
 
-            if ($bitacoras_total = mysqli_num_rows($dash_bitacora_query_run)) {
+            if ($bitacoras_total = pg_num_rows($dash_bitacora_query_run)) {
                 echo $bitacoras_total;
             } else {
                 echo "Sin datos";
