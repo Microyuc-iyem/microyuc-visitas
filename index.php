@@ -16,10 +16,11 @@ if ($_POST) {
     $password = pg_escape_string($conn, $_POST['password']);
 
     // Modifica la consulta para comparar con el usuario y la contraseña adecuados
-    $query = "SELECT * FROM usuario WHERE nombre = '$user'echo "<h1 style='text-align: center'>ESE ECHO 1121</h1>";  AND password = '$password'";
-    
+    $query = "SELECT * FROM usuario WHERE nombre = '$user'  AND password = '$password'";
     $result = pg_query($conn, $query);
 echo "<h1 style='text-align: center'>ESE ECHO 11</h1>";
+
+    
     if (pg_num_rows($result) == 1) {
         echo "<h1 style='text-align: center'>ESE ECHO 3</h1>";
         $_SESSION['login'] = true;
