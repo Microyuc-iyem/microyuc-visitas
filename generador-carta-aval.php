@@ -23,9 +23,6 @@ $carta = [
     'localidad' => '',
     'municipio' => '',
     'fecha_firma' => '',
-    'documentacion' => '',
-    'comprobacion_monto' => '',
-    'comprobacion_tipo' => '',
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
     'modalidad' => '',
@@ -48,9 +45,6 @@ $errores = [
     'localidad' => '',
     'municipio' => '',
     'fecha_firma' => '',
-    'documentacion' => '',
-    'comprobacion_monto' => '',
-    'comprobacion_tipo' => '',
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
     'modalidad' => '',
@@ -60,11 +54,6 @@ $errores = [
     'adeudo_total' => '',
     'fecha_visita' => '',
 ];
-
-$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
-$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
-$modalidades = ['MYE', 'MYV',];
-$tipos_credito = ['GP', 'Aval', 'Hipotecario'];
 
 $filtros = [];
 
@@ -99,23 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['municipio']['options']['regexp'] = '/[\s\S]+/';
     $filtros['fecha_firma']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['fecha_firma']['options']['regexp'] = '/^[\d\-]+$/';
-    $filtros['documentacion']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['documentacion']['options']['default'] = '';
-    $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
-   $filtros['comprobacion_monto']['options']['min_range'] = 0;
-    $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['activo_fijo']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['adecuaciones']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['adecuaciones']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['insumos']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['insumos']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['certificaciones']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['certificaciones']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['sin_comprobacion']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['sin_comprobacion']['options']['regexp'] = '/[\s\S]+/';
+
     $filtros['pagos_fecha_inicial']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -136,12 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $carta = filter_input_array(INPUT_POST, $filtros);
 
-    $carta['comprobacion_tipo'] = [];
-    if (!is_null($carta['capital_de_trabajo'])) $carta['comprobacion_tipo'][] = 'capital de trabajo';
-    if (!is_null($carta['activo_fijo'])) $carta['comprobacion_tipo'][] = 'activo fijo';
-    if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
-    if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
-    if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
+    
   
 
     $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
@@ -150,11 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    if($carta['comprobacion_monto'] >= 0){
-        $errores['comprobacion_monto'] = '';
-    }else{
-        $errores['comprobacion_monto'] = 'El monto debe ser mayor o igual a 0';
-    }
+    
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
     $errores['modalidad'] = $carta['modalidad'] ? '' : 'Seleccione una opción válida.';
@@ -195,12 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $generacion_invalida = implode($errores);
-if (count($carta['comprobacion_tipo']) >= 1) {
-        $carta['comprobacion_tipo'] = implode(", ", $carta['comprobacion_tipo']);
-        $carta['comprobacion_tipo'] = str_lreplace(',', ' y', $carta['comprobacion_tipo']);
-    } else{
-        $carta['comprobacion_tipo'] = 'N/A';
-    }
+
 
     
 
@@ -226,9 +185,7 @@ if (count($carta['comprobacion_tipo']) >= 1) {
         $templateProcessor->setValue('localidad', $carta['localidad']);
         $templateProcessor->setValue('municipio', $carta['municipio']);
         $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
-        $templateProcessor->setValue('documentacion', $carta['documentacion']);
-        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
-        $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
+       
         $templateProcessor->setValue('pagos', $pagos);
         $templateProcessor->setValue('modalidad', $carta['modalidad']);
         $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
@@ -248,9 +205,7 @@ if (count($carta['comprobacion_tipo']) >= 1) {
         $localidad = mysqli_real_escape_string($conn, $carta['localidad']);
         $municipio = mysqli_real_escape_string($conn, $carta['municipio']);
         $fecha_firma = mysqli_real_escape_string($conn, $carta['fecha_firma']);
-        $documentacion = mysqli_real_escape_string($conn, $carta['documentacion']);
-        $comprobacion_monto = floatval(mysqli_real_escape_string($conn, $carta['comprobacion_monto']));
-        $comprobacion_tipo = mysqli_real_escape_string($conn, $carta['comprobacion_tipo']);
+      
         $pagos_fecha_inicial = mysqli_real_escape_string($conn, $carta['pagos_fecha_inicial']);
         $pagos_fecha_final = mysqli_real_escape_string($conn, $carta['pagos_fecha_final']);
         $modalidad = mysqli_real_escape_string($conn, $carta['modalidad']);
@@ -263,9 +218,9 @@ if (count($carta['comprobacion_tipo']) >= 1) {
 
 // Query
         $sql = "INSERT INTO carta(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, nombre-aval, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
-                  documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
+                  pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
                   mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente','$nombre_aval' '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
-                                                               '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
+                                                                '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 
 // Validation of query
@@ -304,14 +259,14 @@ if (count($carta['comprobacion_tipo']) >= 1) {
 ?>
 <div class="main__app">
     <div class="main__header">
-        <h1 class="main__title">Generador de cartas</h1>
+        <h1 class="main__title">Generador de cartas de Avales</h1>
         <a href="cartas.php" class="main__btn main__btn--main">
             <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                       d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
-            Gestionar cartas
+            Gestionar Cartas Aval
         </a>
     </div>
     <div>
@@ -393,43 +348,8 @@ if (count($carta['comprobacion_tipo']) >= 1) {
                            required>
                 </div>
             </fieldset>
-            <fieldset class="form__fieldset">
-                <legend class="form__legend">Documentación</legend>
-                <div class="form__division">
-                    <p class="form__error"><?= $errores['documentacion'] ?></p>
-                    <label class="form__label" for="documentacion"></label>
-                    <textarea class="form__input" id="documentacion"
-                              name="documentacion"><?= htmlspecialchars($carta['documentacion']) ?></textarea>
-                </div>
-            </fieldset>
-            <fieldset class="form__fieldset form__fieldset--verification">
-                <legend class="form__legend">Comprobación</legend>
-                <div class="form__division">
-                    <p class="form__error"><?= $errores['comprobacion_monto'] ?></p>
-                    <label class="form__label" for="comprobacion_monto">Monto de comprobación<span
-                                class="asterisk">*</span>:
-                    </label>
-                    <input class="form__input" type="number" id="comprobacion_monto"
-                           name="comprobacion_monto" step="0.01" min="0"
-                           value="<?= htmlspecialchars($carta['comprobacion_monto']) ?>" required>
-                </div>
-                <div class="form__division">
-                    <p class="form__error"><?= $errores['comprobacion_tipo'] ?></p>
-                    <p class="form__label">Tipo de comprobación<span
-                                class="asterisk">*</span>: </p>
-                    <?php $i = 0 ?>
-                    <?php foreach ($tipos_comprobacion as $tipos) : ?>
-                        <div>
-                            <input type="checkbox"
-                                   id="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"
-                                   name="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"
-                                   value="<?= htmlspecialchars($tipos) ?>" <?= str_contains($carta['comprobacion_tipo'], strtolower($tipos)) ? 'checked' : '' ?>>
-                            <label for="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"><?= htmlspecialchars($tipos) ?></label>
-                        </div>
-                        <?php $i++ ?>
-                    <?php endforeach; ?>
-                </div>
-            </fieldset>
+
+            
             <fieldset class="form__fieldset form__fieldset--payment">
                 <legend class="form__legend">Pagos</legend>
                 <div class="form__division">
