@@ -3,6 +3,7 @@ session_start();
 require_once 'conexion.php';
 
 if (isset($_SESSION['login'])) {
+     echo "<h1 style='text-align: center'>ESE ECHO 1</h1>";
     header("Location: inicio.php");
 }
 
@@ -11,6 +12,7 @@ $result = pg_query($conn, $sql);
 $usuario = pg_fetch_all($result);
 
 if ($_POST) {
+    echo "<h1 style='text-align: center'>ESE ECHO 2</h1>";
     $nombre = pg_escape_string($conn, $_POST['nombre']);
     $password = pg_escape_string($conn, $_POST['password']);
 
@@ -19,10 +21,12 @@ if ($_POST) {
     $result = pg_query($conn, $query);
 
     if (pg_num_rows($result) == 1) {
+        echo "<h1 style='text-align: center'>ESE ECHO 3</h1>";
         $_SESSION['login'] = true;
 
         // Redirigir a inicio.php si el usuario es microyuc.iyem@yucatan.gob.mx y la contraseña es MicroYuc.19
         if ($nombre === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
+            echo "<h1 style='text-align: center'>ESE ECHO 4</h1>";
             header("Location: inicio.php");
         } else {
             // Otras redirecciones si es necesario
