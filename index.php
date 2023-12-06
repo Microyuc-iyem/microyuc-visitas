@@ -20,12 +20,14 @@ if ($_POST) {
     $query = "SELECT * FROM usuario WHERE nombre = '$user' AND password = '$password'";
     
     $result = pg_query($conn, $query);
-
+echo "<h1 style='text-align: center'>ESE ECHO 11</h1>";
     if (pg_num_rows($result) == 1) {
+        echo "<h1 style='text-align: center'>ESE ECHO 3</h1>";
         $_SESSION['login'] = true;
 
         // Redirigir a inicio.php si el usuario es "microyuc" y la contraseña es "admin"
         if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
+            echo "<h1 style='text-align: center'>ESE ECHO 1</h1>";
             header("Location: inicio.php");
         } else {
             // Otras redirecciones si es necesario
