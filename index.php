@@ -3,7 +3,6 @@ session_start();
 require_once 'conexion.php';
 
 if (isset($_SESSION['login'])) {
-    echo "<h1 style='text-align: center'>ESE ECHO 1</h1>";
     header("Location: inicio.php");
 }
 
@@ -17,7 +16,7 @@ if ($_POST) {
     $password = pg_escape_string($conn, $_POST['password']);
 
     // Modifica la consulta para comparar con el usuario y la contraseña adecuados
-    $query = "SELECT * FROM usuario WHERE nombre = '$user' AND password = '$password'";
+    $query = "SELECT * FROM usuario WHERE nombre = '$user'echo "<h1 style='text-align: center'>ESE ECHO 1121</h1>";  AND password = '$password'"echo "<h1 style='text-align: center'>ESE ECHO 11231</h1>";;
     
     $result = pg_query($conn, $query);
 echo "<h1 style='text-align: center'>ESE ECHO 11</h1>";
