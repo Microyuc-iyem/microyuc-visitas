@@ -12,7 +12,7 @@ check_login();
 
 $fmt = set_date_format_letter();
 
-$carta = [
+$aval = [
     'numero_expediente' => '',
     'nombre_cliente' => '',
     'nombre_aval'=>'',
@@ -107,30 +107,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['fecha_visita']['options']['regexp'] = '/[\s\S]+/';
     $filtros['fecha_visita']['options']['default'] = '';
 
-    $carta = filter_input_array(INPUT_POST, $filtros);
+    $aval = filter_input_array(INPUT_POST, $filtros);
 
     
   
 
-    $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
-    $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
-    $errores['nombre_aval'] = $carta['nombre_aval'] ? '' : 'El nombre solo debe contener letras y espacios.';
-    $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
-    $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
-    $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['numero_expediente'] = $aval['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
+    $errores['nombre_cliente'] = $aval['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
+    $errores['nombre_aval'] = $aval['nombre_aval'] ? '' : 'El nombre solo debe contener letras y espacios.';
+    $errores['localidad'] = $aval['localidad'] ? '' : 'Este campo es requerido.';
+    $errores['municipio'] = $aval['municipio'] ? '' : 'Este campo es requerido.';
+    $errores['fecha_firma'] = $aval['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     
-    $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
-    $errores['modalidad'] = $carta['modalidad'] ? '' : 'Seleccione una opción válida.';
-    $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Seleccione una opción válida.';
-    $errores['fecha_otorgamiento'] = $carta['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['monto_inicial'] = $carta['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
-    $errores['adeudo_total'] = $carta['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
+    $errores['pagos_fecha_inicial'] = $aval['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['pagos_fecha_final'] = $aval['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
+    $errores['modalidad'] = $aval['modalidad'] ? '' : 'Seleccione una opción válida.';
+    $errores['tipo_credito'] = $aval['tipo_credito'] ? '' : 'Seleccione una opción válida.';
+    $errores['fecha_otorgamiento'] = $aval['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['monto_inicial'] = $aval['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
+    $errores['adeudo_total'] = $aval['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
 
     if (!$errores['pagos_fecha_inicial'] && !$errores['pagos_fecha_final']) {
 // Create a DateTime object using the dates recieved by post
-        $pagos_fecha_inicial_conv = new DateTime($carta['pagos_fecha_inicial']);
-        $pagos_fecha_final_conv = new DateTime($carta['pagos_fecha_final']);
+        $pagos_fecha_inicial_conv = new DateTime($aval['pagos_fecha_inicial']);
+        $pagos_fecha_final_conv = new DateTime($aval['pagos_fecha_final']);
 
 // Add 1 day to the created days, so it's easier to calculate the difference between dates
         $interval = new DateInterval('P1D');
@@ -144,11 +144,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
 
 // Assign the total months to variable to set the value in the template
-            $carta['mensualidades_vencidas'] = $total_meses + 1;
+            $aval['mensualidades_vencidas'] = $total_meses + 1;
 
-            if ($carta['mensualidades_vencidas'] > 1) {
+            if ($aval['mensualidades_vencidas'] > 1) {
                 $pagos = 'Correspondientes a los meses de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv) . ' a ' . datefmt_format($fmt, $pagos_fecha_final_conv);
-            } elseif ($carta['mensualidades_vencidas'] === 1) {
+            } elseif ($aval['mensualidades_vencidas'] === 1) {
                 $pagos = 'Correspondientes al mes de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv);
             } else {
                 $errores['pagos_fecha_final'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
@@ -166,58 +166,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$generacion_invalida) {
 
         // Create variable with filename
-        $nombre_archivo = $carta['numero_expediente'] . ' ' . $carta['nombre_cliente'] . '.docx';
+        $nombre_archivo = $aval['numero_expediente'] . ' ' . $aval['nombre_cliente'] . '.docx';
 
         // Encode filename so that UTF-8 characters work
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta4.docx');
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-aval.docx');
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
-        $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
-        $templateProcessor->setValue('nombre_aval', $carta['nombre_aval']);
-        $templateProcessor->setValue('calle', $carta['calle']);
-        $templateProcessor->setValue('cruzamientos', $carta['cruzamientos']);
-        $templateProcessor->setValue('numero_direccion', $carta['numero_direccion']);
-        $templateProcessor->setValue('colonia_fraccionamiento', $carta['colonia_fraccionamiento']);
-        $templateProcessor->setValue('localidad', $carta['localidad']);
-        $templateProcessor->setValue('municipio', $carta['municipio']);
+        $templateProcessor->setValue('numero_expediente', $aval['numero_expediente']);
+        $templateProcessor->setValue('nombre_cliente', $aval['nombre_cliente']);
+        $templateProcessor->setValue('nombre_aval', $aval['nombre_aval']);
+        $templateProcessor->setValue('calle', $aval['calle']);
+        $templateProcessor->setValue('cruzamientos', $aval['cruzamientos']);
+        $templateProcessor->setValue('numero_direccion', $aval['numero_direccion']);
+        $templateProcessor->setValue('colonia_fraccionamiento', $aval['colonia_fraccionamiento']);
+        $templateProcessor->setValue('localidad', $aval['localidad']);
+        $templateProcessor->setValue('municipio', $aval['municipio']);
         $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
        
         $templateProcessor->setValue('pagos', $pagos);
-        $templateProcessor->setValue('modalidad', $carta['modalidad']);
-        $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
-        $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($carta['fecha_otorgamiento'])));
-        $templateProcessor->setValue('monto_inicial', number_format($carta['monto_inicial'], 2));
-        $templateProcessor->setValue('mensualidades_vencidas', $carta['mensualidades_vencidas']);
-        $templateProcessor->setValue('adeudo_total', number_format($carta['adeudo_total'], 2));
+        $templateProcessor->setValue('modalidad', $aval['modalidad']);
+        $templateProcessor->setValue('tipo_credito', $aval['tipo_credito']);
+        $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($aval['fecha_otorgamiento'])));
+        $templateProcessor->setValue('monto_inicial', number_format($aval['monto_inicial'], 2));
+        $templateProcessor->setValue('mensualidades_vencidas', $aval['mensualidades_vencidas']);
+        $templateProcessor->setValue('adeudo_total', number_format($aval['adeudo_total'], 2));
 
 // Escape strings to insert into the database table
-        $numero_expediente = mysqli_real_escape_string($conn, $carta['numero_expediente']);
-        $nombre_cliente = mysqli_real_escape_string($conn, $carta['nombre_cliente']);
-        $nombre_cliente = mysqli_real_escape_string($conn, $carta['nombre_aval']);
-        $calle = mysqli_real_escape_string($conn, $carta['calle']);
-        $cruzamientos = mysqli_real_escape_string($conn, $carta['cruzamientos']);
-        $numero_direccion = mysqli_real_escape_string($conn, $carta['numero_direccion']);
-        $colonia_fraccionamiento = mysqli_real_escape_string($conn, $carta['colonia_fraccionamiento']);
-        $localidad = mysqli_real_escape_string($conn, $carta['localidad']);
-        $municipio = mysqli_real_escape_string($conn, $carta['municipio']);
-        $fecha_firma = mysqli_real_escape_string($conn, $carta['fecha_firma']);
+        $numero_expediente = mysqli_real_escape_string($conn, $aval['numero_expediente']);
+        $nombre_cliente = mysqli_real_escape_string($conn, $aval['nombre_cliente']);
+        $nombre_aval = mysqli_real_escape_string($conn, $aval['nombre_aval']);
+        $calle = mysqli_real_escape_string($conn, $aval['calle']);
+        $cruzamientos = mysqli_real_escape_string($conn, $aval['cruzamientos']);
+        $numero_direccion = mysqli_real_escape_string($conn, $aval['numero_direccion']);
+        $colonia_fraccionamiento = mysqli_real_escape_string($conn, $aval['colonia_fraccionamiento']);
+        $localidad = mysqli_real_escape_string($conn, $aval['localidad']);
+        $municipio = mysqli_real_escape_string($conn, $aval['municipio']);
+        $fecha_firma = mysqli_real_escape_string($conn, $aval['fecha_firma']);
       
-        $pagos_fecha_inicial = mysqli_real_escape_string($conn, $carta['pagos_fecha_inicial']);
-        $pagos_fecha_final = mysqli_real_escape_string($conn, $carta['pagos_fecha_final']);
-        $modalidad = mysqli_real_escape_string($conn, $carta['modalidad']);
-        $tipo_credito = mysqli_real_escape_string($conn, $carta['tipo_credito']);
-        $fecha_otorgamiento = mysqli_real_escape_string($conn, $carta['fecha_otorgamiento']);
-        $monto_inicial = floatval(mysqli_real_escape_string($conn, $carta['monto_inicial']));
-        $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $carta['mensualidades_vencidas']));
-        $adeudo_total = floatval(mysqli_real_escape_string($conn, $carta['adeudo_total']));
-        $fecha_visita = mysqli_real_escape_string($conn, $carta['fecha_visita']);
+        $pagos_fecha_inicial = mysqli_real_escape_string($conn, $aval['pagos_fecha_inicial']);
+        $pagos_fecha_final = mysqli_real_escape_string($conn, $aval['pagos_fecha_final']);
+        $modalidad = mysqli_real_escape_string($conn, $aval['modalidad']);
+        $tipo_credito = mysqli_real_escape_string($conn, $aval['tipo_credito']);
+        $fecha_otorgamiento = mysqli_real_escape_string($conn, $aval['fecha_otorgamiento']);
+        $monto_inicial = floatval(mysqli_real_escape_string($conn, $aval['monto_inicial']));
+        $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $aval['mensualidades_vencidas']));
+        $adeudo_total = floatval(mysqli_real_escape_string($conn, $aval['adeudo_total']));
+        $fecha_visita = mysqli_real_escape_string($conn, $aval['fecha_visita']);
 
 // Query
-        $sql = "INSERT INTO carta(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, nombre-aval, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
+        $sql = "INSERT INTO aval(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, nombre_aval, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                   pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
                   mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente','$nombre_aval' '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                                 '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
@@ -230,13 +230,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir('./files/');
             }
 
-            if (!is_dir('./files/cartas/')) {
-                mkdir('./files/cartas/');
+            if (!is_dir('./files/aval/')) {
+                mkdir('./files/aval/');
             }
 
-            if (file_exists('./files/cartas/')) {
+            if (file_exists('./files/aval/')) {
                 // Path where generated file is saved
-                $ruta_guardado = './files/cartas/' . $nombre_archivo;
+                $ruta_guardado = './files/aval/' . $nombre_archivo;
                 $templateProcessor->saveAs($ruta_guardado);
 
                 if (file_exists($ruta_guardado)) {
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>:</label>
                     <input class="form__input" type="text" id="numero_expediente"
                            name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+$)"
-                           value="<?= $carta['numero_expediente'] === '' ? 'IYE' : htmlspecialchars($carta['numero_expediente']) ?>"
+                           value="<?= $aval['numero_expediente'] === '' ? 'IYE' : htmlspecialchars($aval['numero_expediente']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -287,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="nombre_cliente">Nombre del cliente<span
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="text" id="nombre_cliente"
-                           name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
+                           name="nombre_cliente" value="<?= htmlspecialchars($aval['nombre_cliente']) ?>"
                            required>
                 </div>
               <div class="form__division">
@@ -295,40 +295,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="nombre_cliente">Nombre del Aval<span
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="text" id="nombre_aval"
-                           name="nombre_aval" value="<?= htmlspecialchars($carta['nombre_aval']) ?>"
+                           name="nombre_aval" value="<?= htmlspecialchars($aval['nombre_aval']) ?>"
                            required>
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['calle'] ?></p>
                     <label class="form__label" for="calle">Calle: </label>
                     <input class="form__input" type="text" id="calle" name="calle"
-                           value="<?= htmlspecialchars($carta['calle']) ?>">
+                           value="<?= htmlspecialchars($aval['calle']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['cruzamientos'] ?></p>
                     <label class="form__label" for="cruzamientos">Cruzamientos: </label>
                     <input class="form__input" type="text" id="cruzamientos" name="cruzamientos"
-                           value="<?= htmlspecialchars($carta['cruzamientos']) ?>">
+                           value="<?= htmlspecialchars($aval['cruzamientos']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['numero_direccion'] ?></p>
                     <label class="form__label" for="numero_direccion">Número: </label>
                     <input class="form__input" type="text" id="numero_direccion"
-                           name="numero_direccion" value="<?= htmlspecialchars($carta['numero_direccion']) ?>">
+                           name="numero_direccion" value="<?= htmlspecialchars($aval['numero_direccion']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['colonia_fraccionamiento'] ?></p>
                     <label class="form__label" for="colonia_fraccionamiento">Colonia/fraccionamiento: </label>
                     <input class="form__input" type="text" id="colonia_fraccionamiento"
                            name="colonia_fraccionamiento"
-                           value="<?= htmlspecialchars($carta['colonia_fraccionamiento']) ?>">
+                           value="<?= htmlspecialchars($aval['colonia_fraccionamiento']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['localidad'] ?></p>
                     <label class="form__label" for="localidad">Localidad<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="text" id="localidad" name="localidad"
-                           value="<?= htmlspecialchars($carta['localidad']) ?>"
+                           value="<?= htmlspecialchars($aval['localidad']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -336,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="municipio">Municipio<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="text" id="municipio" name="municipio"
-                           value="<?= htmlspecialchars($carta['municipio']) ?>"
+                           value="<?= htmlspecialchars($aval['municipio']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -344,7 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="fecha_firma">Fecha de firma de anexos<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="date" id="fecha_firma" name="fecha_firma"
-                           value="<?= htmlspecialchars($carta['fecha_firma']) ?>"
+                           value="<?= htmlspecialchars($aval['fecha_firma']) ?>"
                            required>
                 </div>
             </fieldset>
@@ -358,7 +358,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="month" id="pagos_fecha_inicial"
                            name="pagos_fecha_inicial"
-                           value="<?= htmlspecialchars($carta['pagos_fecha_inicial']) ?>" required>
+                           value="<?= htmlspecialchars($aval['pagos_fecha_inicial']) ?>" required>
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['pagos_fecha_final'] ?></p>
@@ -366,7 +366,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="month" id="pagos_fecha_final"
                            name="pagos_fecha_final"
-                           value="<?= htmlspecialchars($carta['pagos_fecha_final']) ?>"
+                           value="<?= htmlspecialchars($aval['pagos_fecha_final']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -375,7 +375,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <select class="form__input" id="modalidad" name="modalidad" required>
                         <?php foreach ($modalidades as $modalidad) : ?>
-                            <option value="<?= htmlspecialchars($modalidad) ?>" <?= $carta['modalidad'] === $modalidad ? 'selected' : '' ?>><?= htmlspecialchars($modalidad) ?></option>
+                            <option value="<?= htmlspecialchars($modalidad) ?>" <?= $aval['modalidad'] === $modalidad ? 'selected' : '' ?>><?= htmlspecialchars($modalidad) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <select class="form__input" id="tipo_credito" name="tipo_credito" required>
                         <?php foreach ($tipos_credito as $tipos) : ?>
-                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $carta['tipo_credito'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
+                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $aval['tipo_credito'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -396,14 +396,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <input class="form__input" type="date" id="fecha_otorgamiento"
                            name="fecha_otorgamiento"
-                           value="<?= htmlspecialchars($carta['fecha_otorgamiento']) ?>" required>
+                           value="<?= htmlspecialchars($aval['fecha_otorgamiento']) ?>" required>
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['monto_inicial'] ?></p>
                     <label class="form__label" for="monto_inicial">Monto inicial<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="number" id="monto_inicial" name="monto_inicial" step="0.01"
-                           min="0" value="<?= htmlspecialchars($carta['monto_inicial']) ?>"
+                           min="0" value="<?= htmlspecialchars($aval['monto_inicial']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -411,7 +411,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="adeudo_total">Adeudo total<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="number" id="adeudo_total" name="adeudo_total" step="0.01"
-                           min="0" value="<?= htmlspecialchars($carta['adeudo_total']) ?>"
+                           min="0" value="<?= htmlspecialchars($aval['adeudo_total']) ?>"
                            required>
                 </div>
             </fieldset>
@@ -422,7 +422,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="fecha_visita"></label>
                     <input class="form__input" type="date" id="fecha_visita"
                            name="fecha_visita"
-                           value="<?= htmlspecialchars($carta['fecha_visita']) ?>">
+                           value="<?= htmlspecialchars($aval['fecha_visita']) ?>">
                 </div>
             </fieldset>
             <div class="form__container--btn">
