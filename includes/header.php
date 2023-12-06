@@ -49,7 +49,7 @@
                             </svg>
                             <span>Bitácoras</span></a></li>
                     <li><a href="./generador-carta-aval.php"
-                           class="sidebar__link <?php if (isset($sidebar_active)) {echo $sidebar_active == 'carta' ? 'sidebar__link--active' : '';} else { echo ''; } ?>">
+                           class="sidebar__link <?php if (isset($sidebar_active)) {echo $sidebar_active == 'aval' ? 'sidebar__link--active' : '';} else { echo ''; } ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" class="sidebar__icon" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
