@@ -14,7 +14,7 @@ if ($_POST) {
     $user = pg_escape_string($conn, $_POST['user']);
     $password = pg_escape_string($conn, $_POST['password']);
 
-    $query = "SELECT * FROM users WHERE usuario = " . $user . " AND password = " . $password;
+    $query = "SELECT * FROM usuario WHERE nombre = " . $user . " AND password = " . $password;
 
     $result = pg_query($conn, $query);
 
