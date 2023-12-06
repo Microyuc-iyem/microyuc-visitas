@@ -22,9 +22,9 @@ if (isset($_SESSION['login'])) {
     }
 
     // Verificar si se envió el formulario
-   // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-     //   $user = $_POST['user'];
-      //  $password = $_POST['password'];
+   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $user = $_POST['user'];
+       $password = $_POST['password'];
 
         // Verificar las credenciales (aquí deberías realizar la verificación segura, por ejemplo, mediante hash de contraseñas)
         if ($user === 'admin' && $password === 'admin') {
