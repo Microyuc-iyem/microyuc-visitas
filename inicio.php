@@ -69,7 +69,7 @@ require_once './includes/header.php';
             </svg>
             Cartas Aval generadas
         </h2>
-        <a href="cartas.php" class="card__number">
+        <a href="aval.php" class="card__number">
             <?php
             $dash_carta_query = "SELECT * FROM carta";
             $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
