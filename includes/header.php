@@ -15,7 +15,7 @@
         <a href="./inicio.php"><img src="./img/microyucfondo.png" alt="Logo de microyuc" class="sidebar__image"></a>
         <nav class="sidebar__nav">
             <div class="sidebar__dashboard">
-                <h2 class="sidebar__title">Tablero</h2>
+                <h2 class="sidebar__title">Menu</h2>
                 <ul class="sidebar__list">
                     <li><a href="./inicio.php"
                            class="sidebar__link <?php if (isset($sidebar_active)) {echo $sidebar_active == 'inicio' ? 'sidebar__link--active' : '';} else { echo ''; } ?>">
@@ -29,7 +29,7 @@
                 </ul>
             </div>
             <div class="sidebar__apps">
-                <h2 class="sidebar__title">Apps</h2>
+                <h2 class="sidebar__title">Funciones</h2>
                 <ul class="sidebar__list">
                     <li><a href="./generador-carta.php"
                            class="sidebar__link <?php if (isset($sidebar_active)) {echo $sidebar_active == 'carta' ? 'sidebar__link--active' : '';} else { echo ''; } ?>">
