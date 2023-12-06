@@ -1,5 +1,5 @@
 <?php
-require 'conexion.php';
+require './config/db_connect.php';
 require './includes/functions.php';
 
 $sidebar_active = 'carta';
@@ -13,19 +13,19 @@ check_login();
 $sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY id DESC;';
 
 // make query and & get result
-$result = pg_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
 // Fetch the resulting rows as an array
-$cartas = pg_fetch_all($result);
+$cartas = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Free result from memory
-pg_free_result($result);
+mysqli_free_result($result);
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $resultado = pg_query_params($conn, "SELECT nombre_archivo FROM carta WHERE id = $1", array($id));
-    $filename = pg_fetch_result($resultado, 0, 'nombre_archivo') ?? '';
-    $delete = pg_query_params($conn, "DELETE FROM carta WHERE id = $1", array($id));
+    $resultado = mysqli_query($conn, "SELECT nombre_archivo FROM carta WHERE id = '$id';");
+    $filename = $resultado->fetch_array()['nombre_archivo'] ?? '';
+    $delete = mysqli_query($conn, "DELETE FROM carta WHERE id = '$id';");
     unlink('./files/cartas/' . $filename);
     header('Location: cartas.php');
 }
@@ -36,9 +36,9 @@ if (isset($_GET['id'])) {
             <h1 class="main__title">Cartas</h1>
             <span class="main__subtitle"><?php
                 $dash_carta_query = "SELECT * FROM carta";
-                $dash_carta_query_run = pg_query($conn, $dash_carta_query);
+                $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
 
-                if ($cartas_total = pg_num_rows($dash_carta_query_run)) {
+                if ($cartas_total = mysqli_num_rows($dash_carta_query_run)) {
                     echo $cartas_total . ' cartas';
                 } else {
                     echo "Sin datos";
