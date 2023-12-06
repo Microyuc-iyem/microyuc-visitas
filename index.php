@@ -19,7 +19,14 @@ if ($_POST) {
 
     if (pg_num_rows($result) == 1) {
         $_SESSION['login'] = true;
-        header("Location: inicio.php");
+
+        // Redirigir a inicio.php si el usuario es microyuc.iyem@yucatan.gob.mx y la contraseña es MicroYuc.19
+        if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
+            header("Location: inicio.php");
+        } else {
+            // Otras redirecciones si es necesario
+            // header("Location: otra_pagina.php");
+        }
     } else {
         echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
     }
