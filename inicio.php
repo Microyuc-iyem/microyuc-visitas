@@ -71,7 +71,7 @@ require_once './includes/header.php';
         </h2>
         <a href="aval.php" class="card__number">
             <?php
-            $dash_carta_query = "SELECT * FROM carta";
+            $dash_carta_query = "SELECT * FROM aval";
             $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
 
             if ($cartas_total = mysqli_num_rows($dash_carta_query_run)) {
