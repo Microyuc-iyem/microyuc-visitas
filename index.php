@@ -27,7 +27,7 @@ if (isset($_SESSION['login'])) {
         $password = $_POST['password'];
 
         // Verificar las credenciales (aquí deberías realizar la verificación segura, por ejemplo, mediante hash de contraseñas)
-        if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
+        if ($user === 'admin' && $password === 'admin') {
             $_SESSION['login'] = true;
             header("Location: inicio.php");
             exit();
