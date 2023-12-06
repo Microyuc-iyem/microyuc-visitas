@@ -3,7 +3,7 @@ session_start();
 require_once 'conexion.php';
 
 if (isset($_SESSION['login'])) {
-     echo "<h1 style='text-align: center'>ESE ECHO 1</h1>";
+    echo "<h1 style='text-align: center'>ESE ECHO 1</h1>";
     header("Location: inicio.php");
 }
 
@@ -15,26 +15,24 @@ if ($_POST) {
     echo "<h1 style='text-align: center'>ESE ECHO 2</h1>";
     $user = pg_escape_string($conn, $_POST['user']);
     $password = pg_escape_string($conn, $_POST['password']);
-     
-     $query = "SELECT * FROM users WHERE nombre = " . $user . " AND password = " . $password;
 
-    $result = pg_query($conn, $query);
+    // Modifica la consulta para comparar con el usuario y la contraseña adecuados
+    $query = "SELECT * FROM usuario WHERE nombre = '$user' AND password = '$password'";
+    
+    $result = pg_query($conn, $query);
 
     if (pg_num_rows($result) == 1) {
-        
         $_SESSION['login'] = true;
 
-        // Redirigir a inicio.php si el usuario es microyuc.iyem@yucatan.gob.mx y la contraseña es MicroYuc.19
+        // Redirigir a inicio.php si el usuario es "microyuc" y la contraseña es "admin"
         if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
-            
             header("Location: inicio.php");
         } else {
             // Otras redirecciones si es necesario
-           //  header("Location: inicio.php");
+            // header("Location: otra_pagina.php");
         }
     } else {
         echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
-
     }
 }
 ?>
