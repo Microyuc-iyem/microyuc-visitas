@@ -29,7 +29,7 @@ if ($_POST) {
         }
     } else {
         echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
-header("Location: inicio.php");
+
     }
 }
 ?>
