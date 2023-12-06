@@ -4,36 +4,24 @@ require_once 'conexion.php';
 
 if (isset($_SESSION['login'])) {
     header("Location: inicio.php");
-}
-
-$sql = 'SELECT nombre, password FROM usuario';
-$result = pg_query($conn, $sql);
-$usuarios = pg_fetch_all($result);
-
-if ($_POST) {
-    $user = pg_escape_string($conn, $_POST['user']);
-    $password = pg_escape_string($conn, $_POST['password']);
-
-    // Modifica la consulta para comparar con el usuario y la contraseña adecuados
-    $query = "SELECT * FROM usuario WHERE nombre = '$user'  AND password = '$password'";
-    $result = pg_query($conn, $query);
-
-    
-    if (pg_num_rows($result) == 1) {
-        $_SESSION['login'] = true;
-
-        // Redirigir a inicio.php si el usuario es "microyuc" y la contraseña es "admin"
-        if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
-            header("Location: inicio.php");
-        } else {
-            // Otras redirecciones si es necesario
-            // header("Location: otra_pagina.php");
-        }
-    } else {
-        echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
+        exit();
     }
-}
-?>
+
+    // Verificar si se envió el formulario
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $user = $_POST['user'];
+        $password = $_POST['password'];
+
+        // Verificar las credenciales (aquí deberías realizar la verificación segura, por ejemplo, mediante hash de contraseñas)
+        if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
+            $_SESSION['login'] = true;
+            header("Location: inicio.php");
+            exit();
+        } else {
+            echo "<p>Usuario o contraseña incorrectos.</p>";
+        }
+    }
+    ?>
 
 <!doctype html>
 <html lang="es">
