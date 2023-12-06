@@ -10,7 +10,7 @@ $password = "jwd9jkw5u0fgmd7i";
 // Establecer la conexión
 
 // Connect to DB
-$conn = new mysqli($d6rii63wp64rsfb5.cbetxkdyhwsb.us-east-1.rds.amazonaws.com, $qybk61orec077c8s, $jwd9jkw5u0fgmd7i, $xa5i7us8zbh7oqz7);
+$conn = new mysqli($servername, $username, $password, $database);
 
 
 if ($conn->connect_error) {
