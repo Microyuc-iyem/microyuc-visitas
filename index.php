@@ -1,35 +1,30 @@
 <?php
-// Archivo de conexión a la base de datos
+session_start();
 require_once 'conexion.php';
 
-// Inicia la sesión (si no está iniciada)
-session_start();
-
-// Verifica si el formulario de inicio de sesión fue enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recupera los datos del formulario
-    $nombre = $_POST['nombre'];
-    $password = $_POST['password'];
-
-    // Consulta SQL para verificar las credenciales
-    $query = "SELECT * FROM usuarios WHERE nombre = $1 AND password = $2";
-    $result = pg_query_params($conn, $query, array($nombre, $password));
-
-    // Verifica si se encontraron coincidencias
-    if (pg_num_rows($result) == 1) {
-        // Inicia la sesión y redirige al usuario a la página de inicio
-        $_SESSION['nombre'] = $nombre;
-        header("location: inicio.php");
-        exit(); // Asegura que el script se detenga después de redirigir
-    } else {
-        $error = "Credenciales incorrectas. Por favor, inténtalo de nuevo.";
-    }
+if (isset($_SESSION['login'])) {
+    header("Location: inicio.php");
 }
 
-// Cierra la conexión
-pg_close($conn);
-?>
+$sql = 'SELECT nombre, password FROM usuario';
+$result = pg_query($conn, $sql);
+$usuarios = pg_fetch_all($result);
 
+if ($_POST) {
+    $user = pg_escape_string($conn, $_POST['user']);
+    $password = pg_escape_string($conn, $_POST['password']);
+
+    $query = "SELECT nombre, password FROM usuario WHERE nombre = '$user' AND password = '$password'";
+    $result = pg_query($conn, $query);
+
+    if (pg_num_rows($result) == 1) {
+        $_SESSION['login'] = true;
+        header("Location: inicio.php");
+    } else {
+        echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
+    }
+}
+?>
 
 <!doctype html>
 <html lang="es">
