@@ -102,7 +102,7 @@ if ($_GET['id']) {
                             }
                         }
                     }
-                }  else {
+                } else {
                     $errores['evidencia_fotografia' . $new_counter] = 'Se deben llenar ambos campos para registrar la evidencia.';
                 }
 
@@ -110,15 +110,15 @@ if ($_GET['id']) {
 
                 if (!$generacion_invalida) {
 
-                    // Create variable with filename
+// Create variable with filename
                     $nombre_archivo = $bitacora[0]['acreditado_folio'] . ' ' . $bitacora[0]['acreditado_nombre'] . ' - Bitácora.docx';
-                    // Encode filename so that UTF-8 characters work
+// Encode filename so that UTF-8 characters work
                     $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
-                    // Create new instance of PHPWord template processor using the required template file
+// Create new instance of PHPWord template processor using the required template file
                     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
-                    // Set values in template with post received input variables
+// Set values in template with post received input variables
                     $values = [];
                     for ($i = 1; $i < $new_counter; $i++) {
                         if ($bitacora[0]['gestion_fecha' . $i]) {
@@ -154,7 +154,7 @@ if ($_GET['id']) {
                     $AT_query .= ", ADD " . $AT_evidencia_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_evidencia_fotografia . " VARCHAR(255) DEFAULT '';";
 
                     if (!isset($bitacora[0]['gestion_fecha' . $new_counter]) || $bitacora[0]['gestion_fecha' . $new_counter] !== '') {
-                        pg_query($conn, $AT_query);
+                        mysqli_query($conn, $AT_query);
                     }
                     if ($movido) {
                         $templateProcessor->cloneBlock('evidencia', $new_counter, true, true);
