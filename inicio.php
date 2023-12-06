@@ -81,6 +81,8 @@ require_once './includes/header.php';
             }
             ?>
         </a>
+</div>
+</div>
 
 
 
