@@ -1,6 +1,6 @@
 <?php
 // Require database connection and PHPWord library
-require 'conexion.php';
+require './config/db_connect.php';
 require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
@@ -15,15 +15,15 @@ $fmt = set_date_format_logbook();
 
 // Check if there is an ID query
 if ($_GET['id']) {
-    // Write query to get a carta according to the ID
+// Write query to get a bitacora according to the ID
     $sql = 'SELECT * FROM carta WHERE id = ' . $_GET['id'] . ';';
 
-    // make query and get result
-    $result = pg_query($conn, $sql);
+    // make query and & get result
+    $result = mysqli_query($conn, $sql);
     if ($result) {
 
-        // Fetch the resulting rows as an associative array
-        $carta = pg_fetch_all($result);
+// Fetch the resulting rows as an associative array
+        $carta = mysqli_fetch_all($result, MYSQLI_ASSOC);
         if ($carta) {
 
             $fecha = [
@@ -48,17 +48,18 @@ if ($_GET['id']) {
                 $generacion_invalida = implode($errores);
 
                 if (!$generacion_invalida) {
-                    $fecha_visita = pg_escape_string($conn, $fecha['fecha_visita']);
+                    $fecha_visita = mysqli_real_escape_string($conn, $fecha['fecha_visita']);
                     // Query
                     $sql = "UPDATE carta SET fecha_visita = '" . $fecha_visita . "' WHERE id = " . $_GET['id'] . ';';
 
-                    // Validation of query
-                    if (pg_query($conn, $sql)) {
+// Validation of query
+                    if (mysqli_query($conn, $sql)) {
                         header('Location: ./cartas.php');
                         exit;
                     } else {
-                        echo 'Error de consulta: ' . pg_last_error($conn);
+                        echo 'Error de consulta: ' . mysqli_error($conn);
                     }
+
                 }
             }
         } else {
