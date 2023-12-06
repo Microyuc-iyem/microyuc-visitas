@@ -35,7 +35,7 @@ if ($_POST) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="dist/css/styles.css">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <title>Microyuc Emprendedores | Alexuc</title>
+    <title>Microyuc Emprendedores | Inicio de Sesión</title>
 </head>
 <body>
 <div class="login">
