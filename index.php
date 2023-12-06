@@ -9,14 +9,14 @@ if (isset($_SESSION['login'])) {
 
 $sql = 'SELECT nombre, password FROM usuario';
 $result = pg_query($conn, $sql);
-$usuario = pg_fetch_all($result);
+$usuarios = pg_fetch_all($result);
 
 if ($_POST) {
     echo "<h1 style='text-align: center'>ESE ECHO 2</h1>";
-    $nombre = pg_escape_string($conn, $_POST['nombre']);
+    $user = pg_escape_string($conn, $_POST['user']);
     $password = pg_escape_string($conn, $_POST['password']);
      
-     $query = "SELECT * FROM users WHERE username = " . $user . " AND password = " . $password;
+     $query = "SELECT * FROM users WHERE nombre = " . $user . " AND password = " . $password;
 
     $result = pg_query($conn, $query);
 
@@ -25,7 +25,7 @@ if ($_POST) {
         $_SESSION['login'] = true;
 
         // Redirigir a inicio.php si el usuario es microyuc.iyem@yucatan.gob.mx y la contraseña es MicroYuc.19
-        if ($nombre === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
+        if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
             
             header("Location: inicio.php");
         } else {
