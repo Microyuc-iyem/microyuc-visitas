@@ -24,8 +24,8 @@ if ($_POST) {
         if ($user === 'microyuc.iyem@yucatan.gob.mx' && $password === 'MicroYuc.19') {
             header("Location: inicio.php");
         } else {
-             Otras redirecciones si es necesario
-             header("Location: inicio.php");
+            // Otras redirecciones si es necesario
+           //  header("Location: inicio.php");
         }
     } else {
         echo "<h1 style='text-align: center'>Usuario o contraseña incorrectos</h1>";
