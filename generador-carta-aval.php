@@ -346,33 +346,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p class="form__error"><?= $errores['calle'] ?></p>
                     <label class="form__label" for="calle">Calle: </label>
                     <input class="form__input" type="text" id="calle" name="calle"
-                           value="<?= htmlspecialchars($carta['calle']) ?>">
+                           value="<?= htmlspecialchars($aval['calle']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['cruzamientos'] ?></p>
                     <label class="form__label" for="cruzamientos">Cruzamientos: </label>
                     <input class="form__input" type="text" id="cruzamientos" name="cruzamientos"
-                           value="<?= htmlspecialchars($carta['cruzamientos']) ?>">
+                           value="<?= htmlspecialchars($aval['cruzamientos']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['numero_direccion'] ?></p>
                     <label class="form__label" for="numero_direccion">Número: </label>
                     <input class="form__input" type="text" id="numero_direccion"
-                           name="numero_direccion" value="<?= htmlspecialchars($carta['numero_direccion']) ?>">
+                           name="numero_direccion" value="<?= htmlspecialchars($aval['numero_direccion']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['colonia_fraccionamiento'] ?></p>
                     <label class="form__label" for="colonia_fraccionamiento">Colonia/fraccionamiento: </label>
                     <input class="form__input" type="text" id="colonia_fraccionamiento"
                            name="colonia_fraccionamiento"
-                           value="<?= htmlspecialchars($carta['colonia_fraccionamiento']) ?>">
+                           value="<?= htmlspecialchars($aval['colonia_fraccionamiento']) ?>">
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['localidad'] ?></p>
                     <label class="form__label" for="localidad">Localidad<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="text" id="localidad" name="localidad"
-                           value="<?= htmlspecialchars($carta['localidad']) ?>"
+                           value="<?= htmlspecialchars($aval['localidad']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -380,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="municipio">Municipio<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="text" id="municipio" name="municipio"
-                           value="<?= htmlspecialchars($carta['municipio']) ?>"
+                           value="<?= htmlspecialchars($aval['municipio']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -388,7 +388,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="fecha_firma">Fecha de firma de anexos<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="date" id="fecha_firma" name="fecha_firma"
-                           value="<?= htmlspecialchars($carta['fecha_firma']) ?>"
+                           value="<?= htmlspecialchars($aval['fecha_firma']) ?>"
                            required>
                 </div>
             </fieldset>
@@ -404,7 +404,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="month" id="pagos_fecha_inicial"
                            name="pagos_fecha_inicial"
-                           value="<?= htmlspecialchars($carta['pagos_fecha_inicial']) ?>" required>
+                           value="<?= htmlspecialchars($aval['pagos_fecha_inicial']) ?>" required>
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['pagos_fecha_final'] ?></p>
@@ -412,7 +412,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="month" id="pagos_fecha_final"
                            name="pagos_fecha_final"
-                           value="<?= htmlspecialchars($carta['pagos_fecha_final']) ?>"
+                           value="<?= htmlspecialchars($aval['pagos_fecha_final']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -421,7 +421,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <select class="form__input" id="modalidad" name="modalidad" required>
                         <?php foreach ($modalidades as $modalidad) : ?>
-                            <option value="<?= htmlspecialchars($modalidad) ?>" <?= $carta['modalidad'] === $modalidad ? 'selected' : '' ?>><?= htmlspecialchars($modalidad) ?></option>
+                            <option value="<?= htmlspecialchars($modalidad) ?>" <?= $aval['modalidad'] === $modalidad ? 'selected' : '' ?>><?= htmlspecialchars($modalidad) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -431,7 +431,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <select class="form__input" id="tipo_credito" name="tipo_credito" required>
                         <?php foreach ($tipos_credito as $tipos) : ?>
-                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $carta['tipo_credito'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
+                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $aval['tipo_credito'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -442,14 +442,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <input class="form__input" type="date" id="fecha_otorgamiento"
                            name="fecha_otorgamiento"
-                           value="<?= htmlspecialchars($carta['fecha_otorgamiento']) ?>" required>
+                           value="<?= htmlspecialchars($aval['fecha_otorgamiento']) ?>" required>
                 </div>
                 <div class="form__division">
                     <p class="form__error"><?= $errores['monto_inicial'] ?></p>
                     <label class="form__label" for="monto_inicial">Monto inicial<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="number" id="monto_inicial" name="monto_inicial" step="0.01"
-                           min="0" value="<?= htmlspecialchars($carta['monto_inicial']) ?>"
+                           min="0" value="<?= htmlspecialchars($aval['monto_inicial']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -457,7 +457,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="adeudo_total">Adeudo total<span class="asterisk">*</span>:
                     </label>
                     <input class="form__input" type="number" id="adeudo_total" name="adeudo_total" step="0.01"
-                           min="0" value="<?= htmlspecialchars($carta['adeudo_total']) ?>"
+                           min="0" value="<?= htmlspecialchars($aval['adeudo_total']) ?>"
                            required>
                 </div>
             </fieldset>
@@ -468,7 +468,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="fecha_visita"></label>
                     <input class="form__input" type="date" id="fecha_visita"
                            name="fecha_visita"
-                           value="<?= htmlspecialchars($carta['fecha_visita']) ?>">
+                           value="<?= htmlspecialchars($aval['fecha_visita']) ?>">
                 </div>
             </fieldset>
             <div class="form__container--btn">
