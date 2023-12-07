@@ -54,7 +54,7 @@ if ($_GET['id']) {
 
 // Validation of query
                     if (mysqli_query($conn, $sql)) {
-                        header('Location: ./cartas.php');
+                        header('Location: ./aval.php');
                         exit;
                     } else {
                         echo 'Error de consulta: ' . mysqli_error($conn);
