@@ -2,6 +2,9 @@
 require 'conexion.php';
 require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 
 $sidebar_active = 'carta aval';
 $header_title = 'Generador de carta aval';
