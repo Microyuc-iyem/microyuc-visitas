@@ -253,9 +253,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Query
         $sql = "INSERT INTO carta(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
-                  documentacion, comprobacion_monto, comprobacion_tipo, pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
-                  mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
-                                                               '$documentacion', '$comprobacion_monto', '$comprobacion_tipo', '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
+                                    pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
+                                      mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
+                                                            '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 
 // Validation of query
@@ -294,14 +294,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <div class="main__app">
     <div class="main__header">
-        <h1 class="main__title">Generador de cartas</h1>
+        <h1 class="main__title">Generador de cartas de Aval</h1>
         <a href="cartas.php" class="main__btn main__btn--main">
             <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                       d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
-            Gestionar cartas
+            Gestionar cartas de Aval
         </a>
     </div>
     <div>
@@ -328,7 +328,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form__division">
                     <p class="form__error"><?= $errores['nombre_cliente'] ?></p>
-                    <label class="form__label" for="nombre_cliente">Nombre del Aval<span
+                    <label class="form__label" for="nombre_cliente">Nombre del aval<span
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="text" id="nombre_cliente"
                            name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
