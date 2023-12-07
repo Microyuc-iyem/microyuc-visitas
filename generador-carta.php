@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta4.docx');
 
 // Set values in template with post received inputs and calculated variables
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
