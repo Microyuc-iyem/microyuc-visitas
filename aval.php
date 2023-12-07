@@ -10,7 +10,7 @@ require './includes/header.php';
 check_login();
 
 // Write query for all acreditados
-$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY id DESC;';
+$sql = 'SELECT id, nombre_cliente, nombre_aval, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM aval ORDER BY id DESC;';
 
 // make query and & get result
 $result = mysqli_query($conn, $sql);
@@ -112,10 +112,10 @@ if (isset($_GET['id'])) {
                     </td>
                 <?php endif; ?>
                 <td class="table__data"><a class="table__data--green"
-                                           href="agregar-fecha-aval.php?id=<?= $carta['id'] ?>">Agregar fecha</a>
+                                           href="agregar-fecha-aval.php?id=<?= $aval['id'] ?>">Agregar fecha</a>
                 </td>
                 <td class="table__data"><a class="table__data--red"
-                                           href="cartas.php?id=<?= $aval['id'] ?>">Eliminar</a>
+                                           href="aval.php?id=<?= $aval['id'] ?>">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
