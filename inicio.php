@@ -71,11 +71,11 @@ require_once './includes/header.php';
         </h2>
         <a href="aval.php" class="card__number">
             <?php
-            $dash_carta_query = "SELECT * FROM aval";
-            $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
+            $dash_aval_query = "SELECT * FROM aval";
+            $dash_aval_query_run = mysqli_query($conn, $dash_aval_query);
 
-            if ($cartas_total = mysqli_num_rows($dash_carta_query_run)) {
-                echo $cartas_total;
+            if ($aval_total = mysqli_num_rows($dash_aval_query_run)) {
+                echo $aval_total;
             } else {
                 echo "Sin datos";
             }
@@ -83,18 +83,6 @@ require_once './includes/header.php';
         </a>
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 </main>
 </div>
 </body>
