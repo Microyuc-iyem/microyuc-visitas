@@ -1,6 +1,10 @@
 <?php
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
+echo 'SimpleXLSXGen library loaded successfully!'
+
+    error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $tz_CMX = new DateTimeZone('America/Mexico_City');
 $CMX = new DateTime('now', $tz_CMX);
