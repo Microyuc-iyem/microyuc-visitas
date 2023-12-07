@@ -16,7 +16,7 @@ $sql = 'SELECT id, nombre_cliente, nombre_aval, numero_expediente, fecha_creacio
 $result = mysqli_query($conn, $sql);
 
 // Fetch the resulting rows as an array
-$cartas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$aval = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Free result from memory
 mysqli_free_result($result);
