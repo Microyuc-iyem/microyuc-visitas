@@ -15,6 +15,7 @@ $fmt = set_date_format_letter();
 $aval = [
     'numero_expediente' => '',
     'nombre_cliente' => '',
+    'nombre_aval' => '',
     'calle' => '',
     'cruzamientos' => '',
     'numero_direccion' => '',
@@ -39,6 +40,7 @@ $aval = [
 $errores = [
     'numero_expediente' => '',
     'nombre_cliente' => '',
+    'nombre_aval' => '',
     'calle' => '',
     'cruzamientos' => '',
     'numero_direccion' => '',
@@ -77,6 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['numero_expediente']['options']['regexp'] = '/(^IYE{1,1})([\d\-]+$)/';
     $filtros['nombre_cliente']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['nombre_cliente']['options']['regexp'] = '/^[A-zÀ-ÿ ]+$/';
+    $filtros['nombre_aval']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['nombre_aval']['options']['regexp'] = '/^[A-zÀ-ÿ ]+$/';
     $filtros['calle']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['calle']['options']['regexp'] = '/[\s\S]+/';
     $filtros['calle']['options']['default'] = '';
@@ -137,29 +141,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
     //if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
 
-    $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
-    $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
-    $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
-    $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
-    $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['numero_expediente'] = $aval['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
+    $errores['nombre_cliente'] = $aval['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
+    $errores['nombre_aval'] = $aval['nombre_aval'] ? '' : 'El nombre solo debe contener letras y espacios.';
+    $errores['localidad'] = $aval['localidad'] ? '' : 'Este campo es requerido.';
+    $errores['municipio'] = $aval['municipio'] ? '' : 'Este campo es requerido.';
+    $errores['fecha_firma'] = $aval['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     //$errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0.';
     //if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
       //  $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
     //} else {
       //  $errores['comprobacion_tipo'] = '';
    // }
-    $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
-    $errores['modalidad'] = $carta['modalidad'] ? '' : 'Seleccione una opción válida.';
-    $errores['tipo_credito'] = $carta['tipo_credito'] ? '' : 'Seleccione una opción válida.';
-    $errores['fecha_otorgamiento'] = $carta['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['monto_inicial'] = $carta['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
-    $errores['adeudo_total'] = $carta['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
+    $errores['pagos_fecha_inicial'] = $aval['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['pagos_fecha_final'] = $aval['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
+    $errores['modalidad'] = $aval['modalidad'] ? '' : 'Seleccione una opción válida.';
+    $errores['tipo_credito'] = $aval['tipo_credito'] ? '' : 'Seleccione una opción válida.';
+    $errores['fecha_otorgamiento'] = $aval['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
+    $errores['monto_inicial'] = $aval['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
+    $errores['adeudo_total'] = $aval['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
 
     if (!$errores['pagos_fecha_inicial'] && !$errores['pagos_fecha_final']) {
 // Create a DateTime object using the dates recieved by post
-        $pagos_fecha_inicial_conv = new DateTime($carta['pagos_fecha_inicial']);
-        $pagos_fecha_final_conv = new DateTime($carta['pagos_fecha_final']);
+        $pagos_fecha_inicial_conv = new DateTime($aval['pagos_fecha_inicial']);
+        $pagos_fecha_final_conv = new DateTime($aval['pagos_fecha_final']);
 
 // Add 1 day to the created days, so it's easier to calculate the difference between dates
         $interval = new DateInterval('P1D');
@@ -173,11 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total_meses = 12 * $intervalo_meses->y + $intervalo_meses->m;
 
 // Assign the total months to variable to set the value in the template
-            $carta['mensualidades_vencidas'] = $total_meses + 1;
+            $aval['mensualidades_vencidas'] = $total_meses + 1;
 
-            if ($carta['mensualidades_vencidas'] > 1) {
+            if ($aval['mensualidades_vencidas'] > 1) {
                 $pagos = 'Correspondientes a los meses de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv) . ' a ' . datefmt_format($fmt, $pagos_fecha_final_conv);
-            } elseif ($carta['mensualidades_vencidas'] === 1) {
+            } elseif ($aval['mensualidades_vencidas'] === 1) {
                 $pagos = 'Correspondientes al mes de ' . datefmt_format($fmt, $pagos_fecha_inicial_conv);
             } else {
                 $errores['pagos_fecha_final'] = 'Los meses escogidos dan un número de mensualidades vencidas negativo o incorrecto.';
@@ -199,13 +204,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$generacion_invalida) {
 
         // Create variable with filename
-        $nombre_archivo = $carta['numero_expediente'] . ' ' . $carta['nombre_cliente'] . '.docx';
+        $nombre_archivo = $aval['numero_expediente'] . ' ' . $aval['nombre_cliente'] . '.docx';
 
         // Encode filename so that UTF-8 characters work
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-aval.docx');
 
 // Set values in template with post received inputs and calculated variables
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
