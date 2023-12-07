@@ -375,14 +375,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            required>
                 </div>
             </fieldset>
-            <fieldset class="form__fieldset">
-                <legend class="form__legend">Documentación</legend>
-                <div class="form__division">
-                    <p class="form__error"><?= $errores['documentacion'] ?></p>
-                    <label class="form__label" for="documentacion"></label>
-                    <textarea class="form__input" id="documentacion"
-                              name="documentacion"><?= htmlspecialchars($carta['documentacion']) ?></textarea>
-                </div>
+            
             </fieldset>
             <fieldset class="form__fieldset form__fieldset--verification">
                 <legend class="form__legend">Comprobación</legend>
