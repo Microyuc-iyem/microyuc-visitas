@@ -15,7 +15,7 @@ $sql = 'SELECT * FROM aval;';
 $res = mysqli_query($conn, $sql);
 if (mysqli_num_rows($res) > 0) {
     foreach ($res as $row) {
-        $cartas[] = array_values($row);
+        $aval[] = array_values($row);
     }
 }
 
