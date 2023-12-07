@@ -8,8 +8,9 @@ $current_timestamp = $CMX->format('d-m-Y');
 
 $aval = [];
 $aval = [
-    ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Fecha de visita</b>', '<b>Folio</b>', '<b>Nombre</b>','<b>Nombre del Aval</b>' '<b>Colonia/Fraccionamiento', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>', '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Tipo de crédito</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>',],
+    ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Fecha de visita</b>', '<b>Folio</b>', '<b>Nombre</b>', '<b>Nombre del Aval</b>', '<b>Colonia/Fraccionamiento</b>', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>', '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Tipo de crédito</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>',],
 ];
+
 
 $sql = 'SELECT * FROM aval;';
 $res = mysqli_query($conn, $sql);
