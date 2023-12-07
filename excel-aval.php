@@ -8,8 +8,9 @@ $current_timestamp = $CMX->format('d-m-Y');
 
 $aval = [];
 $aval = [
-    ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Fecha de visita</b>', '<b>Folio</b>', '<b>Nombre</b>', '<b>Nombre del Aval</b>', '<b>Colonia/Fraccionamiento</b>', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>', '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Tipo de crédito</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>',],
+    ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Fecha de visita</b>', '<b>Folio</b>', '<b>Nombre</b>', '<b>Nombre del Aval</b>', '<b>Colonia/Fraccionamiento</b>', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>', '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Tipo de crédito</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>'],
 ];
+
 
 
 $sql = 'SELECT * FROM aval;';
@@ -23,7 +24,7 @@ if (mysqli_num_rows($res) > 0) {
 for ($i = 1; $i < count($aval); $i++) {
     $aval[$i][0] = '<b>' . $i . '</b>';
     $aval[$i][1] = date('d-m-Y H:i:s', strtotime($aval[$i][1]));
-    $aval[$i][2] = $aval[$i][2] ? date('d-m-Y', strtotime($aval[$i][2])) : '';
+   $aval[$i][2] = $aval[$i][2] ? date('d-m-Y', strtotime($aval[$i][2])) : '';
     $aval[$i][11] = date('d-m-Y', strtotime($aval[$i][11]));
     $aval[$i][13] = number_format($aval[$i][13], 2);
     $aval[$i][14] = ucfirst($aval[$i][14]);
