@@ -4,7 +4,7 @@ require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
 $sidebar_active = 'carta';
-$header_title = 'Generador de cartas';
+$header_title = 'Generador de cartas aval';
 
 require './includes/header.php';
 
