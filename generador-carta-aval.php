@@ -213,51 +213,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-aval.docx');
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
-        $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
-        $templateProcessor->setValue('calle', $carta['calle']);
-        $templateProcessor->setValue('cruzamientos', $carta['cruzamientos']);
-        $templateProcessor->setValue('numero_direccion', $carta['numero_direccion']);
-        $templateProcessor->setValue('colonia_fraccionamiento', $carta['colonia_fraccionamiento']);
-        $templateProcessor->setValue('localidad', $carta['localidad']);
-        $templateProcessor->setValue('municipio', $carta['municipio']);
-        $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
+        $templateProcessor->setValue('numero_expediente', $aval['numero_expediente']);
+        $templateProcessor->setValue('nombre_cliente', $aval['nombre_cliente']);
+        $templateProcessor->setValue('nombre_aval', $aval['nombre_aval']);
+        $templateProcessor->setValue('calle', $aval['calle']);
+        $templateProcessor->setValue('cruzamientos', $aval['cruzamientos']);
+        $templateProcessor->setValue('numero_direccion', $aval['numero_direccion']);
+        $templateProcessor->setValue('colonia_fraccionamiento', $aval['colonia_fraccionamiento']);
+        $templateProcessor->setValue('localidad', $aval['localidad']);
+        $templateProcessor->setValue('municipio', $aval['municipio']);
+        $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($aval['fecha_firma'])));
       //  $templateProcessor->setValue('documentacion', $carta['documentacion']);
        // $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
        // $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
-        $templateProcessor->setValue('modalidad', $carta['modalidad']);
-        $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
-        $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($carta['fecha_otorgamiento'])));
-        $templateProcessor->setValue('monto_inicial', number_format($carta['monto_inicial'], 2));
-        $templateProcessor->setValue('mensualidades_vencidas', $carta['mensualidades_vencidas']);
-        $templateProcessor->setValue('adeudo_total', number_format($carta['adeudo_total'], 2));
+        $templateProcessor->setValue('modalidad', $aval['modalidad']);
+        $templateProcessor->setValue('tipo_credito', $aval['tipo_credito']);
+        $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($aval['fecha_otorgamiento'])));
+        $templateProcessor->setValue('monto_inicial', number_format($aval['monto_inicial'], 2));
+        $templateProcessor->setValue('mensualidades_vencidas', $aval['mensualidades_vencidas']);
+        $templateProcessor->setValue('adeudo_total', number_format($aval['adeudo_total'], 2));
 
 // Escape strings to insert into the database table
-        $numero_expediente = mysqli_real_escape_string($conn, $carta['numero_expediente']);
-        $nombre_cliente = mysqli_real_escape_string($conn, $carta['nombre_cliente']);
-        $calle = mysqli_real_escape_string($conn, $carta['calle']);
-        $cruzamientos = mysqli_real_escape_string($conn, $carta['cruzamientos']);
-        $numero_direccion = mysqli_real_escape_string($conn, $carta['numero_direccion']);
-        $colonia_fraccionamiento = mysqli_real_escape_string($conn, $carta['colonia_fraccionamiento']);
-        $localidad = mysqli_real_escape_string($conn, $carta['localidad']);
-        $municipio = mysqli_real_escape_string($conn, $carta['municipio']);
-        $fecha_firma = mysqli_real_escape_string($conn, $carta['fecha_firma']);
+        $numero_expediente = mysqli_real_escape_string($conn, $aval['numero_expediente']);
+        $nombre_cliente = mysqli_real_escape_string($conn, $aval['nombre_cliente']);
+        $nombre_aval = mysqli_real_escape_string($conn, $aval['nombre_aval']);
+        $calle = mysqli_real_escape_string($conn, $aval['calle']);
+        $cruzamientos = mysqli_real_escape_string($conn, $aval['cruzamientos']);
+        $numero_direccion = mysqli_real_escape_string($conn, $aval['numero_direccion']);
+        $colonia_fraccionamiento = mysqli_real_escape_string($conn, $aval['colonia_fraccionamiento']);
+        $localidad = mysqli_real_escape_string($conn, $aval['localidad']);
+        $municipio = mysqli_real_escape_string($conn, $aval['municipio']);
+        $fecha_firma = mysqli_real_escape_string($conn, $aval['fecha_firma']);
         //$documentacion = mysqli_real_escape_string($conn, $carta['documentacion']);
         //$comprobacion_monto = floatval(mysqli_real_escape_string($conn, $carta['comprobacion_monto']));
         //$comprobacion_tipo = mysqli_real_escape_string($conn, $carta['comprobacion_tipo']);
-        $pagos_fecha_inicial = mysqli_real_escape_string($conn, $carta['pagos_fecha_inicial']);
-        $pagos_fecha_final = mysqli_real_escape_string($conn, $carta['pagos_fecha_final']);
-        $modalidad = mysqli_real_escape_string($conn, $carta['modalidad']);
-        $tipo_credito = mysqli_real_escape_string($conn, $carta['tipo_credito']);
-        $fecha_otorgamiento = mysqli_real_escape_string($conn, $carta['fecha_otorgamiento']);
-        $monto_inicial = floatval(mysqli_real_escape_string($conn, $carta['monto_inicial']));
-        $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $carta['mensualidades_vencidas']));
-        $adeudo_total = floatval(mysqli_real_escape_string($conn, $carta['adeudo_total']));
-        $fecha_visita = mysqli_real_escape_string($conn, $carta['fecha_visita']);
+        $pagos_fecha_inicial = mysqli_real_escape_string($conn, $aval['pagos_fecha_inicial']);
+        $pagos_fecha_final = mysqli_real_escape_string($conn, $aval['pagos_fecha_final']);
+        $modalidad = mysqli_real_escape_string($conn, $aval['modalidad']);
+        $tipo_credito = mysqli_real_escape_string($conn, $aval['tipo_credito']);
+        $fecha_otorgamiento = mysqli_real_escape_string($conn, $aval['fecha_otorgamiento']);
+        $monto_inicial = floatval(mysqli_real_escape_string($conn, $aval['monto_inicial']));
+        $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $aval['mensualidades_vencidas']));
+        $adeudo_total = floatval(mysqli_real_escape_string($conn, $aval['adeudo_total']));
+        $fecha_visita = mysqli_real_escape_string($conn, $aval['fecha_visita']);
 
 // Query
-        $sql = "INSERT INTO carta(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
+        $sql = "INSERT INTO aval(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                                     pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
                                       mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                             '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
@@ -270,13 +272,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir('./files/');
             }
 
-            if (!is_dir('./files/cartas/')) {
-                mkdir('./files/cartas/');
+            if (!is_dir('./files/aval/')) {
+                mkdir('./files/aval/');
             }
 
-            if (file_exists('./files/cartas/')) {
+            if (file_exists('./files/aval/')) {
                 // Path where generated file is saved
-                $ruta_guardado = './files/cartas/' . $nombre_archivo;
+                $ruta_guardado = './files/aval/' . $nombre_archivo;
                 $templateProcessor->saveAs($ruta_guardado);
 
                 if (file_exists($ruta_guardado)) {
@@ -300,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="main__app">
     <div class="main__header">
         <h1 class="main__title">Generador de cartas de Aval</h1>
-        <a href="cartas.php" class="main__btn main__btn--main">
+        <a href="aval.php" class="main__btn main__btn--main">
             <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -310,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </a>
     </div>
     <div>
-        <form class="form" action="generador-carta.php" method="post">
+        <form class="form" action="generador-carta-aval.php" method="post">
             <fieldset class="form__fieldset form__fieldset--accredited">
                 <legend class="form__legend">Información del acreditado</legend>
                 <div class="form__division">
@@ -319,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 class="asterisk">*</span>:</label>
                     <input class="form__input" type="text" id="numero_expediente"
                            name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+$)"
-                           value="<?= $carta['numero_expediente'] === '' ? 'IYE' : htmlspecialchars($carta['numero_expediente']) ?>"
+                           value="<?= $aval['numero_expediente'] === '' ? 'IYE' : htmlspecialchars($aval['numero_expediente']) ?>"
                            required>
                 </div>
                 <div class="form__division">
@@ -327,16 +329,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form__label" for="nombre_cliente">Nombre del cliente<span
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="text" id="nombre_cliente"
-                           name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
+                           name="nombre_cliente" value="<?= htmlspecialchars($aval['nombre_cliente']) ?>"
                            required>
                 </div>
 
                 <div class="form__division">
-                    <p class="form__error"><?= $errores['nombre_cliente'] ?></p>
-                    <label class="form__label" for="nombre_cliente">Nombre del aval<span
+                    <p class="form__error"><?= $errores['nombre_aval'] ?></p>
+                    <label class="form__label" for="nombre_aval">Nombre del aval<span
                                 class="asterisk">*</span>: </label>
-                    <input class="form__input" type="text" id="nombre_cliente"
-                           name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
+                    <input class="form__input" type="text" id="nombre_aval"
+                           name="nombre_aval" value="<?= htmlspecialchars($aval['nombre_cliente']) ?>"
                            required>
                 </div>
                 
