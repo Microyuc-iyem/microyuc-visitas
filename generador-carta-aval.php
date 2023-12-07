@@ -29,7 +29,7 @@ $aval = [
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
     'modalidad' => '',
-    'tipo_credito' => '',
+    //'tipo_credito' => '',
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
     'mensualidades_vencidas' => '',
@@ -54,7 +54,7 @@ $errores = [
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
     'modalidad' => '',
-    'tipo_credito' => '',
+    //'tipo_credito' => '',
     'fecha_otorgamiento' => '',
     'monto_inicial' => '',
     'adeudo_total' => '',
@@ -64,7 +64,7 @@ $errores = [
 //$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
 //$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
 $modalidades = ['MYE', 'MYV',];
-$tipos_credito = ['GP', 'Aval', 'Hipotecario'];
+//$tipos_credito = ['GP', 'Aval', 'Hipotecario'];
 
 $filtros = [];
 
@@ -120,8 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['pagos_fecha_final']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['modalidad']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['modalidad']['options']['regexp'] = '/^(MYE|MYV)+$/';
-    $filtros['tipo_credito']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['tipo_credito']['options']['regexp'] = '/^(GP|Aval|Hipotecario)+$/';
+    //$filtros['tipo_credito']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['tipo_credito']['options']['regexp'] = '/^(GP|Aval|Hipotecario)+$/';
     $filtros['fecha_otorgamiento']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['fecha_otorgamiento']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['monto_inicial']['filter'] = FILTER_VALIDATE_FLOAT;
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['pagos_fecha_inicial'] = $aval['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $aval['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
     $errores['modalidad'] = $aval['modalidad'] ? '' : 'Seleccione una opción válida.';
-    $errores['tipo_credito'] = $aval['tipo_credito'] ? '' : 'Seleccione una opción válida.';
+    //$errores['tipo_credito'] = $aval['tipo_credito'] ? '' : 'Seleccione una opción válida.';
     $errores['fecha_otorgamiento'] = $aval['fecha_otorgamiento'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['monto_inicial'] = $aval['monto_inicial'] ? '' : 'El monto debe ser mayor a 0.';
     $errores['adeudo_total'] = $aval['adeudo_total'] ? '' : 'El monto debe ser mayor a 0.';
@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        // $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
         $templateProcessor->setValue('modalidad', $aval['modalidad']);
-        $templateProcessor->setValue('tipo_credito', $aval['tipo_credito']);
+      //  $templateProcessor->setValue('tipo_credito', $aval['tipo_credito']);
         $templateProcessor->setValue('fecha_otorgamiento', date("d-m-Y", strtotime($aval['fecha_otorgamiento'])));
         $templateProcessor->setValue('monto_inicial', number_format($aval['monto_inicial'], 2));
         $templateProcessor->setValue('mensualidades_vencidas', $aval['mensualidades_vencidas']);
@@ -251,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pagos_fecha_inicial = mysqli_real_escape_string($conn, $aval['pagos_fecha_inicial']);
         $pagos_fecha_final = mysqli_real_escape_string($conn, $aval['pagos_fecha_final']);
         $modalidad = mysqli_real_escape_string($conn, $aval['modalidad']);
-        $tipo_credito = mysqli_real_escape_string($conn, $aval['tipo_credito']);
+        //$tipo_credito = mysqli_real_escape_string($conn, $aval['tipo_credito']);
         $fecha_otorgamiento = mysqli_real_escape_string($conn, $aval['fecha_otorgamiento']);
         $monto_inicial = floatval(mysqli_real_escape_string($conn, $aval['monto_inicial']));
         $mensualidades_vencidas = intval(mysqli_real_escape_string($conn, $aval['mensualidades_vencidas']));
@@ -260,9 +260,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Query
         $sql = "INSERT INTO aval(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
-                                    pagos_fecha_inicial, pagos_fecha_final, modalidad, tipo_credito, fecha_otorgamiento, monto_inicial,
+                                    pagos_fecha_inicial, pagos_fecha_final, modalidad, fecha_otorgamiento, monto_inicial,
                                       mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
-                                                            '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$tipo_credito', '$fecha_otorgamiento', '$monto_inicial',
+                                                            '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 
 // Validation of query
@@ -425,16 +425,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="form__division">
-                    <label class="form__label" for="tipo_credito">Tipo de crédito<span
-                                class="asterisk">*</span>:
-                    </label>
-                    <select class="form__input" id="tipo_credito" name="tipo_credito" required>
-                        <?php foreach ($tipos_credito as $tipos) : ?>
-                            <option value="<?= htmlspecialchars($tipos) ?>" <?= $aval['tipo_credito'] === $tipos ? 'selected' : '' ?>><?= htmlspecialchars($tipos) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+               
                 <div class="form__division">
                     <p class="form__error"><?= $errores['fecha_otorgamiento'] ?></p>
                     <label class="form__label" for="fecha_otorgamiento">Fecha de otorgamiento del crédito<span
