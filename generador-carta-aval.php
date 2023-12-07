@@ -325,6 +325,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
                            required>
                 </div>
+
+                <div class="form__division">
+                    <p class="form__error"><?= $errores['nombre_cliente'] ?></p>
+                    <label class="form__label" for="nombre_cliente">Nombre del Aval<span
+                                class="asterisk">*</span>: </label>
+                    <input class="form__input" type="text" id="nombre_cliente"
+                           name="nombre_cliente" value="<?= htmlspecialchars($carta['nombre_cliente']) ?>"
+                           required>
+                </div>
+                
                 <div class="form__division">
                     <p class="form__error"><?= $errores['calle'] ?></p>
                     <label class="form__label" for="calle">Calle: </label>
