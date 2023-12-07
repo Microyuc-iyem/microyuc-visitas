@@ -1,3 +1,5 @@
+
+<!DOCTYPE html>
 <?php
 require 'conexion.php';
 require './lib/phpword/vendor/autoload.php';
