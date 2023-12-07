@@ -3,7 +3,7 @@ require './config/db_connect.php';
 require './lib/phpword/vendor/autoload.php';
 require './includes/functions.php';
 
-$sidebar_active = 'carta';
+$sidebar_active = 'aval';
 $header_title = 'Generador de cartas aval';
 
 require './includes/header.php';
