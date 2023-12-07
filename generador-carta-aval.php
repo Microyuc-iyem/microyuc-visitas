@@ -259,9 +259,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_visita = mysqli_real_escape_string($conn, $aval['fecha_visita']);
 
 // Query
-        $sql = "INSERT INTO aval(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
+        $sql = "INSERT INTO aval(fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, nombre_aval, calle, cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
                                     pagos_fecha_inicial, pagos_fecha_final, modalidad, fecha_otorgamiento, monto_inicial,
-                                      mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
+                                      mensualidades_vencidas, adeudo_total, nombre_archivo) VALUES('$current_timestamp', '$fecha_visita', '$numero_expediente', '$nombre_cliente', '$nombre_aval', '$calle', '$cruzamientos', '$numero_direccion', '$colonia_fraccionamiento', '$localidad', '$municipio', '$fecha_firma',
                                                             '$pagos_fecha_inicial', '$pagos_fecha_final', '$modalidad', '$fecha_otorgamiento', '$monto_inicial',
                                                                '$mensualidades_vencidas', '$adeudo_total', '$nombre_archivo')";
 
