@@ -12,7 +12,7 @@ check_login();
 
 $fmt = set_date_format_letter();
 
-$carta = [
+$aval = [
     'numero_expediente' => '',
     'nombre_cliente' => '',
     'calle' => '',
@@ -22,9 +22,9 @@ $carta = [
     'localidad' => '',
     'municipio' => '',
     'fecha_firma' => '',
-    'documentacion' => '',
-    'comprobacion_monto' => '',
-    'comprobacion_tipo' => '',
+    //'documentacion' => '',
+    //'comprobacion_monto' => '',
+    //'comprobacion_tipo' => '',
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
     'modalidad' => '',
@@ -46,9 +46,9 @@ $errores = [
     'localidad' => '',
     'municipio' => '',
     'fecha_firma' => '',
-    'documentacion' => '',
-    'comprobacion_monto' => '',
-    'comprobacion_tipo' => '',
+    //'documentacion' => '',
+    //'comprobacion_monto' => '',
+    //'comprobacion_tipo' => '',
     'pagos_fecha_inicial' => '',
     'pagos_fecha_final' => '',
     'modalidad' => '',
@@ -59,8 +59,8 @@ $errores = [
     'fecha_visita' => '',
 ];
 
-$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
-$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
+//$tipos_comprobacion = ['Capital de trabajo', 'Activo fijo', 'Adecuaciones', 'Insumos', 'Certificaciones',];
+//$tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',];
 $modalidades = ['MYE', 'MYV',];
 $tipos_credito = ['GP', 'Aval', 'Hipotecario'];
 
@@ -95,21 +95,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['municipio']['options']['regexp'] = '/[\s\S]+/';
     $filtros['fecha_firma']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['fecha_firma']['options']['regexp'] = '/^[\d\-]+$/';
-    $filtros['documentacion']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['documentacion']['options']['default'] = '';
-    $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
-    $filtros['comprobacion_monto']['options']['min_range'] = 0;
-    $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['activo_fijo']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['adecuaciones']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['adecuaciones']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['insumos']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['insumos']['options']['regexp'] = '/[\s\S]+/';
-    $filtros['certificaciones']['filter'] = FILTER_VALIDATE_REGEXP;
-    $filtros['certificaciones']['options']['regexp'] = '/[\s\S]+/';
+   // $filtros['documentacion']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
+    //$filtros['documentacion']['options']['default'] = '';
+    //$filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
+    //$filtros['comprobacion_monto']['options']['min_range'] = 0;
+    //$filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
+    //$filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['activo_fijo']['options']['regexp'] = '/[\s\S]+/';
+    //$filtros['adecuaciones']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['adecuaciones']['options']['regexp'] = '/[\s\S]+/';
+    //$filtros['insumos']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['insumos']['options']['regexp'] = '/[\s\S]+/';
+    //$filtros['certificaciones']['filter'] = FILTER_VALIDATE_REGEXP;
+    //$filtros['certificaciones']['options']['regexp'] = '/[\s\S]+/';
     $filtros['pagos_fecha_inicial']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -128,26 +128,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['fecha_visita']['options']['regexp'] = '/[\s\S]+/';
     $filtros['fecha_visita']['options']['default'] = '';
 
-    $carta = filter_input_array(INPUT_POST, $filtros);
+    $aval = filter_input_array(INPUT_POST, $filtros);
 
-    $carta['comprobacion_tipo'] = [];
-    if (!is_null($carta['capital_de_trabajo'])) $carta['comprobacion_tipo'][] = 'capital de trabajo';
-    if (!is_null($carta['activo_fijo'])) $carta['comprobacion_tipo'][] = 'activo fijo';
-    if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
-    if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
-    if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
+    //$carta['comprobacion_tipo'] = [];
+    //if (!is_null($carta['capital_de_trabajo'])) $carta['comprobacion_tipo'][] = 'capital de trabajo';
+    //if (!is_null($carta['activo_fijo'])) $carta['comprobacion_tipo'][] = 'activo fijo';
+    //if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
+    //if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
+    //if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
 
     $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
     $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0.';
-    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
-        $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
-    } else {
-        $errores['comprobacion_tipo'] = '';
-    }
+    //$errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0.';
+    //if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
+      //  $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
+    //} else {
+      //  $errores['comprobacion_tipo'] = '';
+   // }
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
     $errores['modalidad'] = $carta['modalidad'] ? '' : 'Seleccione una opción válida.';
@@ -189,12 +189,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $generacion_invalida = implode($errores);
 
-    if (count($carta['comprobacion_tipo']) > 1) {
-        $carta['comprobacion_tipo'] = implode(", ", $carta['comprobacion_tipo']);
-        $carta['comprobacion_tipo'] = str_lreplace(',', ' y', $carta['comprobacion_tipo']);
-    } else {
-        $carta['comprobacion_tipo'] = implode($carta['comprobacion_tipo']);
-    }
+   // if (count($carta['comprobacion_tipo']) > 1) {
+     //   $carta['comprobacion_tipo'] = implode(", ", $carta['comprobacion_tipo']);
+      //  $carta['comprobacion_tipo'] = str_lreplace(',', ' y', $carta['comprobacion_tipo']);
+    //} else {
+      //  $carta['comprobacion_tipo'] = implode($carta['comprobacion_tipo']);
+    //}
 
     if (!$generacion_invalida) {
 
@@ -217,9 +217,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('localidad', $carta['localidad']);
         $templateProcessor->setValue('municipio', $carta['municipio']);
         $templateProcessor->setValue('fecha_firma', date("d-m-Y", strtotime($carta['fecha_firma'])));
-        $templateProcessor->setValue('documentacion', $carta['documentacion']);
-        $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
-        $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
+      //  $templateProcessor->setValue('documentacion', $carta['documentacion']);
+       // $templateProcessor->setValue('comprobacion_monto', number_format($carta['comprobacion_monto'], 2));
+       // $templateProcessor->setValue('comprobacion_tipo', $carta['comprobacion_tipo']);
         $templateProcessor->setValue('pagos', $pagos);
         $templateProcessor->setValue('modalidad', $carta['modalidad']);
         $templateProcessor->setValue('tipo_credito', $carta['tipo_credito']);
@@ -238,9 +238,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $localidad = mysqli_real_escape_string($conn, $carta['localidad']);
         $municipio = mysqli_real_escape_string($conn, $carta['municipio']);
         $fecha_firma = mysqli_real_escape_string($conn, $carta['fecha_firma']);
-        $documentacion = mysqli_real_escape_string($conn, $carta['documentacion']);
-        $comprobacion_monto = floatval(mysqli_real_escape_string($conn, $carta['comprobacion_monto']));
-        $comprobacion_tipo = mysqli_real_escape_string($conn, $carta['comprobacion_tipo']);
+        //$documentacion = mysqli_real_escape_string($conn, $carta['documentacion']);
+        //$comprobacion_monto = floatval(mysqli_real_escape_string($conn, $carta['comprobacion_monto']));
+        //$comprobacion_tipo = mysqli_real_escape_string($conn, $carta['comprobacion_tipo']);
         $pagos_fecha_inicial = mysqli_real_escape_string($conn, $carta['pagos_fecha_inicial']);
         $pagos_fecha_final = mysqli_real_escape_string($conn, $carta['pagos_fecha_final']);
         $modalidad = mysqli_real_escape_string($conn, $carta['modalidad']);
