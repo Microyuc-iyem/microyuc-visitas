@@ -375,36 +375,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            required>
                 </div>
             </fieldset>
+    
+
+
             
-            </fieldset>
-            <fieldset class="form__fieldset form__fieldset--verification">
-                <legend class="form__legend">Comprobación</legend>
-                <div class="form__division">
-                    <p class="form__error"><?= $errores['comprobacion_monto'] ?></p>
-                    <label class="form__label" for="comprobacion_monto">Monto de comprobación<span
-                                class="asterisk">*</span>:
-                    </label>
-                    <input class="form__input" type="number" id="comprobacion_monto"
-                           name="comprobacion_monto" step="0.01" min="0"
-                           value="<?= htmlspecialchars($carta['comprobacion_monto']) ?>" required>
-                </div>
-                <div class="form__division">
-                    <p class="form__error"><?= $errores['comprobacion_tipo'] ?></p>
-                    <p class="form__label">Tipo de comprobación<span
-                                class="asterisk">*</span>: </p>
-                    <?php $i = 0 ?>
-                    <?php foreach ($tipos_comprobacion as $tipos) : ?>
-                        <div>
-                            <input type="checkbox"
-                                   id="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"
-                                   name="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"
-                                   value="<?= htmlspecialchars($tipos) ?>" <?= str_contains($carta['comprobacion_tipo'], strtolower($tipos)) ? 'checked' : '' ?>>
-                            <label for="<?= htmlspecialchars($tipos_comprobacion_input[$i]) ?>"><?= htmlspecialchars($tipos) ?></label>
-                        </div>
-                        <?php $i++ ?>
-                    <?php endforeach; ?>
-                </div>
-            </fieldset>
             <fieldset class="form__fieldset form__fieldset--payment">
                 <legend class="form__legend">Pagos</legend>
                 <div class="form__division">
