@@ -128,32 +128,6 @@ if ($_GET['id']) {
 ?>
     
 
-
-<?php
-// Ordenar las bitácoras por la fecha más reciente
-usort($bitacoras, function($a, $b) use ($column_number) {
-    $latest_date_a = '';
-    $latest_date_b = '';
-    
-    // Encuentra la fecha más reciente de la bitácora $a
-    for ($i = 1; $i <= $column_number; $i++) {
-        if (!empty($a['gestion_fecha' . $i])) {
-            $latest_date_a = max($latest_date_a, strtotime($a['gestion_fecha' . $i]));
-        }
-    }
-    
-    // Encuentra la fecha más reciente de la bitácora $b
-    for ($i = 1; $i <= $column_number; $i++) {
-        if (!empty($b['gestion_fecha' . $i])) {
-            $latest_date_b = max($latest_date_b, strtotime($b['gestion_fecha' . $i]));
-        }
-    }
-    
-    // Compara las fechas más recientes de las bitácoras
-    return $latest_date_b - $latest_date_a;
-});
-?>
-
 <div class="main__app">
     <div class="main__header">
         <h1 class="main__title">Administrar gestiones de <?= $bitacoras[0]['acreditado_nombre']; ?></h1>
