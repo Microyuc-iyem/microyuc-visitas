@@ -157,7 +157,14 @@ if ($_GET['id']) {
             </tr>
             </thead>
             <tbody class="table__body">
-            <?php foreach ($bitacoras as $bitacora): ?>
+            <?php 
+            // Ordenar $bitacoras por fecha
+            usort($bitacoras, function($a, $b) {
+                return strtotime($b['gestion_fecha']) - strtotime($a['gestion_fecha']);
+            });
+            
+            // Iterar sobre las bitácoras ordenadas
+            foreach ($bitacoras as $bitacora): ?>
                 <?php for ($i = 1; $i <= $column_number; $i++): ?>
                     <?php if ($bitacora['gestion_fecha' . $i] !== ''): ?>
                         <tr class="table__row--body">
