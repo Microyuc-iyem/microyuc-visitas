@@ -159,18 +159,27 @@ if ($_GET['id']) {
             </tr>
             </thead>
             <tbody class="table__body">
-            <?php foreach ($bitacoras as $bitacora): ?>
-                <?php
-                // Encuentra la fecha más reciente de la bitácora actual
-                $latest_date = '';
+            <?php
+            // Crear un array para almacenar las fechas y sus índices correspondientes
+            $dates = [];
+            foreach ($bitacoras as $index => $bitacora) {
                 for ($i = 1; $i <= $column_number; $i++) {
                     if (!empty($bitacora['gestion_fecha' . $i])) {
-                        $latest_date = max($latest_date, strtotime($bitacora['gestion_fecha' . $i]));
+                        // Almacenar la fecha y el índice
+                        $dates[$index] = strtotime($bitacora['gestion_fecha' . $i]);
+                        break; // Salir del bucle al encontrar la primera fecha
                     }
                 }
-                ?>
+            }
+            
+            // Ordenar los índices de acuerdo a las fechas almacenadas
+            arsort($dates);
+            
+            // Iterar sobre los índices ordenados y mostrar las filas correspondientes
+            foreach (array_keys($dates) as $index): ?>
+                <?php $bitacora = $bitacoras[$index]; ?>
                 <?php for ($i = 1; $i <= $column_number; $i++): ?>
-                    <?php if ($bitacora['gestion_fecha' . $i] !== ''): ?>
+                    <?php if (!empty($bitacora['gestion_fecha' . $i])): ?>
                         <tr class="table__row--body">
                             <td class="table__data table__data--left"><?= date("d-m-Y", strtotime($bitacora['gestion_fecha' . $i])) ?></td>
                             <td class="table__data table__data--left"><?= $bitacora['gestion_via' . $i] ?></td>
