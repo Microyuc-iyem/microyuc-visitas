@@ -2,18 +2,14 @@
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
 
-// Añadiendo huso horario de México para generar la marca de fecha actual
-$tz_CMX = new DateTimeZone('America/Mexico_City');
-$CMX = new DateTime('now', $tz_CMX);
-$current_timestamp = $CMX->format('d-m-Y');
-
 // Número total de gestiones
 $column_number = 0;
 
 // Arreglo para generar la tabla de excel
 $bitacoras = [];
 $bitacoras = [
-    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],];
+    ['N.º', 'Fecha de creación', 'Nombre', 'Folio', 'Municipio', 'Localidad', 'Tipo de garantía', 'Garantía', 'Número de teléfono', 'Correo electrónico', 'Nombre del aval', 'Fecha de gestión', 'Vía de gestión', 'Comentarios de gestión', 'Fecha de evidencia', 'Fotografía de evidencia'],
+];
 
 $sql = "SELECT * FROM bitacora;";
 $res = mysqli_query($conn, $sql);
@@ -44,41 +40,29 @@ if (mysqli_num_rows($res) > 0) {
     }
 }
 
-// Declarar variable para contar el número de filas de las bitácoras
-$id_counter = 1;
-// Pasar por todos los arreglos dentro del arreglo bitácoras excepto el primero
-// para unsetear los campos innecesarios y darle formato a otros campos
-for ($i = 1; $i < count($bitacoras); $i++) {
-    // Darle formato a todas las fechas a partir del índice 11
-    for ($j = 11; $j < count($bitacoras[$i]); $j++) {
-        if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
-            $bitacoras[$i][$j] = date('d/m/Y', strtotime($bitacoras[$i][$j]));
+// Formatear las fechas
+foreach ($bitacoras as &$row) {
+    for ($i = 11; $i < count($row); $i++) {
+        if (DateTime::createFromFormat('Y-m-d', $row[$i]) !== false) {
+            $row[$i] = date('d/m/Y', strtotime($row[$i]));
         }
-    }
-    // Hacer solo si el índice 0 de los arreglos es numérico
-    // Esto para evitar los arreglos que solo continen las gestiones
-    if (is_numeric($bitacoras[$i][0])) {
-        $bitacoras[$i][0] = '<b>' . $id_counter . '</b>';
-        $bitacoras[$i][1] = date('d/m/Y H:i:s', strtotime($bitacoras[$i][1]));
-
-        $num = count($bitacoras[$i]);
-        for ($j = 23; $j <= $num; $j++) {
-            unset($bitacoras[$i][$j]);
-        }
-        unset($bitacoras[$i][10]);
-        unset($bitacoras[$i][11]);
-        unset($bitacoras[$i][13]);
-        unset($bitacoras[$i][14]);
-        unset($bitacoras[$i][15]);
-        unset($bitacoras[$i][19]);
-        unset($bitacoras[$i][22]);
-        $id_counter++;
     }
 }
 
-// Declarar nombre con el que se va a guardar el archivo
-$filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
+// Eliminar las columnas innecesarias
+foreach ($bitacoras as &$row) {
+    unset($row[10], $row[11], $row[13], $row[14], $row[15], $row[19], $row[22]);
+}
 
-// Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
-$xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
+// Declarar nombre con el que se va a guardar el archivo
+$filename = 'Reporte_de_bitácoras.xlsx';
+
+// Instanciar la clase SimpleXLSXGen
+$xlsx = new SimpleXLSXGen();
+
+// Agregar las filas al archivo Excel
+$xlsx->addRows($bitacoras);
+
+// Descargar el archivo
 $xlsx->downloadAs($filename);
+?>
