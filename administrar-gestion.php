@@ -126,6 +126,7 @@ if ($_GET['id']) {
     header('Location: ./bitacoras.php');
 }
 ?>
+
 <div class="main__app">
     <div class="main__header">
         <h1 class="main__title">Administrar gestiones de <?= $bitacoras[0]['acreditado_nombre']; ?></h1>
@@ -182,6 +183,9 @@ if ($_GET['id']) {
         </table>
     </div>
 </div>
+
+
+
 </main>
 </div>
 </body>
