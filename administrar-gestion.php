@@ -57,7 +57,7 @@ if ($_GET['id']) {
 // Create new instance of PHPWord template processor using the required template file
                 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
-                $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] .;
+                 $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
 
                 $result = mysqli_query($conn, $sql);
                 // Fetch the resulting rows as an associative array
