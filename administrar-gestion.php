@@ -159,8 +159,8 @@ if ($_GET['id']) {
             </tr>
             </thead>
             <tbody class="table__body">
-
-            <?php
+                
+<?php
 // Crear un array para almacenar las fechas y sus índices correspondientes
 $dates = [];
 foreach ($bitacoras as $index => $bitacora) {
@@ -176,8 +176,8 @@ foreach ($bitacoras as $index => $bitacora) {
     }
 }
 
-// Ordenar los índices de acuerdo a las fechas almacenadas
-arsort($dates);
+// Ordenar los índices de acuerdo a las fechas almacenadas (de manera ascendente)
+asort($dates);
 
 // Iterar sobre los índices ordenados y mostrar las filas correspondientes
 foreach ($dates as $date): 
@@ -193,6 +193,7 @@ foreach ($dates as $date):
         </td>
     </tr>
 <?php endforeach; ?>
+
 
 
 
