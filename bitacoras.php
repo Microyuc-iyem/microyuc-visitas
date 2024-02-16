@@ -112,7 +112,7 @@ if (isset($_GET['id'])) {
                                            href="bitacoras.php?id=<?= $bitacora['id'] ?>">Eliminar</a>
                 </td>
                 <td class="table__data"><a class="table__data--gold"
-                                           href="administrar-gestion.php?id=<?= $bitacora['id'] ?>">Gestionar</a>
+                                           href="administrar-gestiones.php?id=<?= $bitacora['id'] ?>">Gestionar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
