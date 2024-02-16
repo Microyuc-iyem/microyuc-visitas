@@ -52,21 +52,39 @@ if ($_GET['id']) {
                 // Encode filename so that UTF-8 characters work
                 $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
-                // Create new instance of PHPWord template processor using the required template file
-                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
-                // Set values in template with post received input variables
-                $values = [];
-                foreach ($bitacoras as $bitacora) {
-                    if ($bitacora['gestion_fecha']) {
-                        $values[] = [
-                            'gestion_fecha' => date("d-m-Y", strtotime($bitacora['gestion_fecha'])),
-                            'gestion_via' => $bitacora['gestion_via'],
-                            'gestion_comentarios' => $bitacora['gestion_comentarios']
-                        ];
-                    }
-                }
 
+// Obtener las fechas de gestión y sus índices
+$fechas_gestion = [];
+foreach ($bitacoras as $bitacora) {
+    for ($i = 1; $i <= $column_number; $i++) {
+        if (!empty($bitacora['gestion_fecha' . $i])) {
+            $fechas_gestion[] = [
+                'fecha' => strtotime($bitacora['gestion_fecha' . $i]),
+                'indice' => $i,
+                'bitacora' => $bitacora // También puedes almacenar la bitácora completa si es necesario
+            ];
+        }
+    }
+}
+
+// Ordenar las fechas de gestión por fecha
+usort($fechas_gestion, function($a, $b) {
+    return $a['fecha'] - $b['fecha'];
+});
+
+// Iniciar el procesador de plantillas de PHPWord
+$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
+
+// Iterar sobre las fechas de gestión ordenadas e insertarlas en la plantilla de Word
+foreach ($fechas_gestion as $fecha_gestion) {
+    $gestion = $fecha_gestion['bitacora'];
+    $indice = $fecha_gestion['indice'];
+
+    $templateProcessor->setValue('gestion_fecha#' . $indice, date("d-m-Y", $fecha_gestion['fecha']));
+    $templateProcessor->setValue('gestion_via#' . $indice, $gestion['gestion_via' . $indice]);
+    $templateProcessor->setValue('gestion_comentarios#' . $indice, $gestion['gestion_comentarios' . $indice]);
+}
                 $templateProcessor->setValue('acreditado_nombre', $bitacoras[0]['acreditado_nombre']);
                 $templateProcessor->setValue('acreditado_folio', $bitacoras[0]['acreditado_folio']);
                 $templateProcessor->setValue('acreditado_municipio', $bitacoras[0]['acreditado_municipio']);
