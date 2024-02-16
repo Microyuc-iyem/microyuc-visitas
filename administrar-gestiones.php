@@ -16,8 +16,8 @@ $fmt = set_date_format_logbook();
 // Check if there is an ID query
 if ($_GET['id']) {
     $id = $_GET['id'];
-    // Write query to get a bitacora according to the ID
-    $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
+    // Write query to get a bitacora according to the ID and order by gestion_fecha
+    $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . " ORDER BY gestion_fecha;";
 
     // make query and get result
     $result = mysqli_query($conn, $sql);
@@ -46,11 +46,6 @@ if ($_GET['id']) {
                 if (file_exists('./uploads/' . $imagename)) {
                     unlink('./uploads/' . $imagename);
                 }
-
-                // Ordenar las gestiones por fecha
-                usort($bitacoras, function ($a, $b) {
-                    return strtotime($a['gestion_fecha']) - strtotime($b['gestion_fecha']);
-                });
 
                 // Create variable with filename
                 $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
