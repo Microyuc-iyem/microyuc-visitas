@@ -37,23 +37,6 @@ if ($_GET['id']) {
             }
         }
 
-         if ($bitacoras) {
-            // Obtener las gestiones ordenadas por fecha
-            $gestiones = [];
-            for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
-                if ($bitacoras[0]['gestion_fecha' . $i]) {
-                    $gestiones[] = [
-                        'fecha' => strtotime($bitacoras[0]['gestion_fecha' . $i]),
-                        'via' => $bitacoras[0]['gestion_via' . $i],
-                        'comentarios' => $bitacoras[0]['gestion_comentarios' . $i]
-                    ];
-                }
-            }
-
-            // Ordenar las gestiones por fecha
-            usort($gestiones, function ($a, $b) {
-                return $a['fecha'] - $b['fecha'];
-            });
         
 
         if ($bitacoras) {
