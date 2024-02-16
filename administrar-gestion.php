@@ -159,38 +159,44 @@ if ($_GET['id']) {
             </tr>
             </thead>
             <tbody class="table__body">
+
             <?php
-            // Crear un array para almacenar las fechas y sus índices correspondientes
-            $dates = [];
-            foreach ($bitacoras as $index => $bitacora) {
-                for ($i = 1; $i <= $column_number; $i++) {
-                    if (!empty($bitacora['gestion_fecha' . $i])) {
-                        // Almacenar la fecha y el índice
-                        $dates[$index] = strtotime($bitacora['gestion_fecha' . $i]);
-                        break; // Salir del bucle al encontrar la primera fecha
-                    }
-                }
-            }
-            
-            // Ordenar los índices de acuerdo a las fechas almacenadas
-            arsort($dates);
-            
-            // Iterar sobre los índices ordenados y mostrar las filas correspondientes
-            foreach (array_keys($dates) as $index): ?>
-                <?php $bitacora = $bitacoras[$index]; ?>
-                <?php for ($i = 1; $i <= $column_number; $i++): ?>
-                    <?php if (!empty($bitacora['gestion_fecha' . $i])): ?>
-                        <tr class="table__row--body">
-                            <td class="table__data table__data--left"><?= date("d-m-Y", strtotime($bitacora['gestion_fecha' . $i])) ?></td>
-                            <td class="table__data table__data--left"><?= $bitacora['gestion_via' . $i] ?></td>
-                            <td class="table__data table__data--left"><?= $bitacora['gestion_comentarios' . $i] ?></td>
-                            <td class="table__data"><a class="table__data--red"
-                                                       href="administrar-gestion.php?id=<?= $bitacora['id'] ?>&num=<?= $i ?>">Eliminar</a>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                <?php endfor; ?>
-            <?php endforeach; ?>
+// Crear un array para almacenar las fechas y sus índices correspondientes
+$dates = [];
+foreach ($bitacoras as $index => $bitacora) {
+    for ($i = 1; $i <= $column_number; $i++) {
+        if (!empty($bitacora['gestion_fecha' . $i])) {
+            // Almacenar la fecha, el índice y el id de la bitácora
+            $dates[$index.$i] = [
+                'fecha' => strtotime($bitacora['gestion_fecha' . $i]),
+                'index' => $index,
+                'num'   => $i
+            ];
+        }
+    }
+}
+
+// Ordenar los índices de acuerdo a las fechas almacenadas
+arsort($dates);
+
+// Iterar sobre los índices ordenados y mostrar las filas correspondientes
+foreach ($dates as $date): 
+    $index = $date['index'];
+    $num = $date['num'];
+    $bitacora = $bitacoras[$index]; ?>
+    <tr class="table__row--body">
+        <td class="table__data table__data--left"><?= date("d-m-Y", $date['fecha']) ?></td>
+        <td class="table__data table__data--left"><?= $bitacora['gestion_via' . $num] ?></td>
+        <td class="table__data table__data--left"><?= $bitacora['gestion_comentarios' . $num] ?></td>
+        <td class="table__data"><a class="table__data--red"
+                                   href="administrar-gestion.php?id=<?= $bitacora['id'] ?>&num=<?= $num ?>">Eliminar</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+
+
+
+                
             </tbody>
         </table>
     </div>
