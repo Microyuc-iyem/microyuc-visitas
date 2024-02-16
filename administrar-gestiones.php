@@ -47,6 +47,11 @@ if ($_GET['id']) {
                     unlink('./uploads/' . $imagename);
                 }
 
+                // Ordenar las gestiones por fecha
+                usort($bitacoras, function ($a, $b) {
+                    return strtotime($a['gestion_fecha']) - strtotime($b['gestion_fecha']);
+                });
+
                 // Create variable with filename
                 $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
                 // Encode filename so that UTF-8 characters work
@@ -55,16 +60,15 @@ if ($_GET['id']) {
                 // Create new instance of PHPWord template processor using the required template file
                 $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
-                $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
-
-                $result = mysqli_query($conn, $sql);
-                // Fetch the resulting rows as an associative array
-                $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 // Set values in template with post received input variables
                 $values = [];
-                for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
-                    if ($bitacoras[0]['gestion_fecha' . $i]) {
-                        $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacoras[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacoras[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacoras[0]['gestion_comentarios' . $i]];
+                foreach ($bitacoras as $bitacora) {
+                    if ($bitacora['gestion_fecha']) {
+                        $values[] = [
+                            'gestion_fecha' => date("d-m-Y", strtotime($bitacora['gestion_fecha'])),
+                            'gestion_via' => $bitacora['gestion_via'],
+                            'gestion_comentarios' => $bitacora['gestion_comentarios']
+                        ];
                     }
                 }
 
@@ -83,20 +87,7 @@ if ($_GET['id']) {
                 $templateProcessor->setValue('aval_email', $bitacoras[0]['aval_email']);
                 $templateProcessor->setValue('aval_direccion', $bitacoras[0]['aval_direccion']);
                 $templateProcessor->cloneRowAndSetValues('gestion_fecha', $values);
-                $templateProcessor->cloneBlock('evidencia', $bitacoras[0]['evidencia_contador'], true, true);
-                for ($i = 1; $i <= $bitacoras[0]['evidencia_contador']; $i++) {
-                    $templateProcessor->setValue('evidencia_fecha#' . $i, $bitacoras[0]['evidencia_fecha' . $i] ? "Se visitó el negocio el " . datefmt_format($fmt, new DateTime($bitacoras[0]['evidencia_fecha' . $i])) . ".</w:t><w:br/><w:t>Fachada del negocio." : '');
-                    if ($bitacoras[0]['evidencia_fotografia' . $i]) {
-                        if (file_exists('./uploads/' . $bitacoras[0]['evidencia_fotografia' . $i])) {
-                            $templateProcessor->setImageValue('evidencia_fotografia#' . $i, array('path' => './uploads/' . $bitacoras[0]['evidencia_fotografia' . $i], 'width' => 720, 'height' => 480));
-                        } else {
-                            $templateProcessor->setValue('evidencia_fotografia#' . $i, '');
-                        }
-                    } else {
-                        $templateProcessor->setValue('evidencia_fotografia#' . $i, '');
-                    }
-                }
-
+                
                 if (!is_dir('./files/')) {
                     mkdir('./files/');
                 }
@@ -123,6 +114,7 @@ if ($_GET['id']) {
     header('Location: ./bitacoras.php');
 }
 ?>
+
     
 
 <div class="main__app">
