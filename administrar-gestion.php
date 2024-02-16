@@ -37,7 +37,7 @@ if ($_GET['id']) {
             }
         }
 
-        f ($bitacoras) {
+         if ($bitacoras) {
             // Obtener las gestiones ordenadas por fecha
             $gestiones = [];
             for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
