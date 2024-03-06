@@ -32,6 +32,7 @@ if (!empty($columnas[0])) {
 }
 
 // Crear nueva variable con la tabla de bitácoras de la base de datos
+// Crear nueva variable con la tabla de bitácoras de la base de datos
 $bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
@@ -55,14 +56,14 @@ for ($i = 1; $i < count($bitacoras); $i++) {
     // Darle formato a todas las fechas a partir del índice 11
     for ($j = 11; $j < count($bitacoras[$i]); $j++) {
         if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
-            $bitacoras[$i][$j] = date('d/m/Y', strtotime($bitacoras[$i][$j]));
+            $bitacoras[$i][$j] = PHPExcel_Style_NumberFormat::toFormattedString(date('d/m/Y', strtotime($bitacoras[$i][$j])));
         }
     }
     // Hacer solo si el índice 0 de los arreglos es numérico
     // Esto para evitar los arreglos que solo continen las gestiones
     if (is_numeric($bitacoras[$i][0])) {
         $bitacoras[$i][0] = '<b>' . $id_counter . '</b>';
-        $bitacoras[$i][1] = date('d/m/Y H:i:s', strtotime($bitacoras[$i][1]));
+        $bitacoras[$i][1] = PHPExcel_Style_NumberFormat::toFormattedString(date('d/m/Y H:i:s', strtotime($bitacoras[$i][1])));
 
         $num = count($bitacoras[$i]);
         for ($j = 23; $j <= $num; $j++) {
@@ -80,7 +81,7 @@ for ($i = 1; $i < count($bitacoras); $i++) {
 }
 
 // Declarar nombre con el que se va a guardar el archivo
-$filename = 'Reporte de bitácoras.xlsx';
+$filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
 
 // Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
