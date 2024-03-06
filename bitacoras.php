@@ -46,7 +46,7 @@ if (isset($_GET['id'])) {
                 ?></span>
         </div>
         <div class="main__btnContainer">
-            <a href="excel-bitacoras1.php" class="main__btn main__btn--excel">
+            <a href="excel-bitacoras.php" class="main__btn main__btn--excel">
                 <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                      stroke-width="1.5"
                      stroke="currentColor">
