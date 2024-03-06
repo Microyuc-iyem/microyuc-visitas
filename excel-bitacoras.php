@@ -14,6 +14,7 @@ require './includes/SimpleXLSXGen.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+
 // Número total de gestiones
 $column_number = 0;
 
