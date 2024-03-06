@@ -6,13 +6,16 @@ require './includes/SimpleXLSXGen.php';
 $column_number = 0;
 
 // Arreglo para generar la tabla de excel
-$bitacoras = [];
 $bitacoras = [
     ['N.º', 'Fecha de creación', 'Nombre', 'Folio', 'Municipio', 'Localidad', 'Tipo de garantía', 'Garantía', 'Número de teléfono', 'Correo electrónico', 'Nombre del aval', 'Fecha de gestión', 'Vía de gestión', 'Comentarios de gestión', 'Fecha de evidencia', 'Fotografía de evidencia'],
 ];
 
 $sql = "SELECT * FROM bitacora;";
 $res = mysqli_query($conn, $sql);
+if (!$res) {
+    die('Error en la consulta SQL: ' . mysqli_error($conn));
+}
+
 $columnas = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 // Conseguir el número total de columnas de gestiones que hay en la base de datos
@@ -63,6 +66,8 @@ $xlsx = new SimpleXLSXGen();
 // Agregar las filas al archivo Excel
 $xlsx->addRows($bitacoras);
 
-// Descargar el archivo
-$xlsx->downloadAs($filename);
+// Intentar descargar el archivo
+if (!$xlsx->downloadAs($filename)) {
+    echo "No se pudo descargar el archivo. Error: " . $xlsx->error();
+}
 ?>
