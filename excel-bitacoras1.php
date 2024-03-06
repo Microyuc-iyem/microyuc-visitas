@@ -9,6 +9,8 @@
 <?php
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Añadiendo huso horario de México para generar la marca de fecha actual
 $tz_CMX = new DateTimeZone('America/Mexico_City');
