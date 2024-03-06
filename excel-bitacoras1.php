@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroYuc</title>
+</head>
+<body>
 <?php
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
@@ -82,3 +90,6 @@ $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
 // Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
 $xlsx->downloadAs($filename);
+?>
+</body>
+</html>
