@@ -28,7 +28,8 @@ for ($i = 1; $i < count($cartas); $i++) {
     $cartas[$i][1] = date('d-m-Y H:i:s', strtotime($cartas[$i][1]));
     $cartas[$i][2] = $cartas[$i][2] ? date('d-m-Y', strtotime($cartas[$i][2])) : '';
     $cartas[$i][11] = date('d-m-Y', strtotime($cartas[$i][11]));
-   $cartas[$i][13] = number_format($cartas[$i][13], 2);
+    //Convertir a número
+                       $cartas[$i][13] = number_format($cartas[$i][13], 2);
     $cartas[$i][14] = ucfirst($cartas[$i][14]);
     $cartas[$i][15] = date('m-Y', strtotime($cartas[$i][15]));
     $cartas[$i][16] = date('m-Y', strtotime($cartas[$i][16]));
