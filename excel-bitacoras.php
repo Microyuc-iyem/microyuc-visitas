@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MicroYuc</title>
-</head>
-<body>
+
 <?php
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
@@ -84,5 +77,4 @@ if (!$xlsx->downloadAs($filename)) {
     echo "No se pudo descargar el archivo. Error: " . $xlsx->error();
 }
 ?>
-</body>
-</html>
+
