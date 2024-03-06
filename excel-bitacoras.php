@@ -1,6 +1,8 @@
 <?php
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
+require_once('path/to/PHPExcel.php');
+
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -54,10 +56,12 @@ $id_counter = 1;
 // para unsetear los campos innecesarios y darle formato a otros campos
 for ($i = 1; $i < count($bitacoras); $i++) {
     // Darle formato a todas las fechas a partir del índice 11
-    for ($j = 11; $j < count($bitacoras[$i]); $j++) {
-        if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
-            $bitacoras[$i][$j] = PHPExcel_Style_NumberFormat::toFormattedString(date('d/m/Y', strtotime($bitacoras[$i][$j])));
-        }
+    // Darle formato a todas las fechas a partir del índice 11
+for ($j = 11; $j < count($bitacoras[$i]); $j++) {
+    if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
+        $bitacoras[$i][$j] = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::toFormattedString(date('d/m/Y', strtotime($bitacoras[$i][$j])));
+    }
+}
     }
     // Hacer solo si el índice 0 de los arreglos es numérico
     // Esto para evitar los arreglos que solo continen las gestiones
