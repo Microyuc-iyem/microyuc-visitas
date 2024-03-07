@@ -81,7 +81,7 @@ for ($i = 1; $i < count($bitacoras); $i++) {
 }
 
 // Declarar nombre con el que se va a guardar el archivo
-$filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
+$filename = 'Reporte de bitácoras.xlsx';
 
 // Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
