@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Reporte de bitácoras</title>
+</head>
+<body>
+
+
 <?php
 
 require './config/db_connect.php';
@@ -84,14 +93,6 @@ $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
 // Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
 $xlsx->downloadAs($filename);
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Resto de las etiquetas HTML... -->
-</head>
-<body>
-    <!-- Resto del cuerpo del documento HTML... -->
+  ?>
 </body>
 </html>
