@@ -29,7 +29,7 @@ for ($i = 1; $i < count($aval); $i++) {
     $aval[$i][2] = $aval[$i][2] ? date('d-m-Y', strtotime($aval[$i][2])) : '';
     $aval[$i][11] = date('d-m-Y', strtotime($aval[$i][11]));
     //Convertir a número
-                       $aval[$i][13] = number_format($aval[$i][13], 2);
+                       $aval[$i][13] = number_format(intval($aval[$i][13]), 2); 
     $aval[$i][14] = ucfirst($aval[$i][14]);
     $aval[$i][15] = date('m-Y', strtotime($aval[$i][15]));
     $aval[$i][16] = date('m-Y', strtotime($aval[$i][16]));
