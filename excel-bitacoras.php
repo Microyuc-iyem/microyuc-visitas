@@ -37,16 +37,17 @@ $bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
 if (mysqli_num_rows($res) > 0) {
-    while ($row = mysqli_fetch_assoc($res)) {
+    foreach ($res as $row) {
         $bitacoras[] = array_values($row);
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
-                $bitacoras[] = ['', '', $row['acreditado_nombre' . $i], '', '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+                $bitacoras[] = ['', '', '', '', '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
             }
         }
     }
 }
+
 
 
 // Declarar variable para contar el número de filas de las bitácoras
