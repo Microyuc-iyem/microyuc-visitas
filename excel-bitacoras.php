@@ -53,19 +53,19 @@ $bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
 if (mysqli_num_rows($res) > 0) {
     foreach ($res as $row) {
-        $bitacoras[] = array_values($row);
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
-                // Agregar el valor de acreditado_folio en la primera celda de la gestión
-                $bitacoras[] = '', '', '', [$row['acreditado_folio'], '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+                // Crear un arreglo para representar una fila de gestión
+                $gestion_row = ['', '', '', '', '', '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+                // Insertar acreditado_folio en la cuarta posición del arreglo de gestión
+                array_splice($gestion_row, 3, 0, $row['acreditado_folio']);
+                // Agregar la fila de gestión al arreglo de bitácoras
+                $bitacoras[] = $gestion_row;
             }
         }
     }
 }
-
-
-
 
 ////////////////////////////////////////////////////
 
