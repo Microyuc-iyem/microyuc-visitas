@@ -61,7 +61,7 @@ $datos[] = [
     'Monto inicial',
     'Mensualidades vencidas',
     'Adeudo total',
-    'Nombre del archivo'
+    
 ];
 
 // Obtener los datos de la consulta y agregarlos al arreglo
@@ -88,7 +88,7 @@ while ($fila = mysqli_fetch_assoc($resultado)) {
         $fila['monto_inicial'],
         $fila['mensualidades_vencidas'],
         $fila['adeudo_total'],
-        $fila['nombre_archivo']
+  
     ];
 }
 
