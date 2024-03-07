@@ -52,7 +52,7 @@ $bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
 if (mysqli_num_rows($res) > 0) {
-    while ($row = mysqli_fetch_assoc($res)) {
+    foreach ($res as $row) {
         $bitacoras[] = array_values($row);
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
         for ($i = 2; $i <= $column_number; $i++) {
