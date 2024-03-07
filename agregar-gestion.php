@@ -141,13 +141,15 @@ if ($_GET['id']) {
 // Define un arreglo para almacenar todas las gestiones
 $values = [];
 
-// Itera sobre las gestiones
+// Itera sobre los resultados de la consulta
 foreach ($res as $row) {
+    // Itera sobre las columnas desde la segunda hasta el número de columnas
     for ($i = 2; $i <= $column_number; $i++) {
+        // Verifica si existe la fecha de la gestión
         if (!empty($row['gestion_fecha' . $i])) {
             // Agrega la gestión al arreglo de valores
             $values[] = [
-                'fecha' => strtotime($row['gestion_fecha' . $i]), // Convierte la fecha a un timestamp para facilitar la comparación
+                'fecha' => strtotime($row['gestion_fecha' . $i]),
                 'via' => $row['gestion_via' . $i],
                 'comentarios' => $row['gestion_comentarios' . $i],
                 'evidencia_fecha' => $row['evidencia_fecha' . $i],
@@ -158,21 +160,13 @@ foreach ($res as $row) {
     }
 }
 
-// Define una función de comparación para ordenar las gestiones por fecha
-function compararFechas($a, $b) {
-    return $a['fecha'] - $b['fecha'];
-}
-
 // Ordena las gestiones por fecha
 usort($values, 'compararFechas');
 
-                    
-// Agrega la última gestión después de ordenar las gestiones por fecha
-$values[] = [
-    'gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])),
-    'gestion_via' => $gestion['gestion_via' . $new_counter],
-    'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]
-];
+// No es necesario agregar la última gestión nuevamente aquí
+
+// Continúa con el resto de tu código...
+
 
 
    // $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
