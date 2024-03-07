@@ -59,7 +59,8 @@ if (mysqli_num_rows($res) > 0) {
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
                 // Agregar el valor de acreditado_folio en la primera celda de la gestión
-                $bitacoras[] = [$row['id'], $row['fecha_creacion'], $row['acreditado_nombre'], $row['acreditado_folio'], '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+                $bitacoras[] = ['--', '--', '--', $row['acreditado_folio'], '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+               // $bitacoras[] = [$row['id'], $row['fecha_creacion'], $row['acreditado_nombre'], $row['acreditado_folio'], '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
             }
         }
     }
