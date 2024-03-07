@@ -10,39 +10,94 @@ $tz_CMX = new DateTimeZone('America/Mexico_City');
 $CMX = new DateTime('now', $tz_CMX);
 $current_timestamp = $CMX->format('d-m-Y');
 
-$aval = [];
-$aval = [
-    ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Fecha de visita</b>', '<b>Folio</b>', '<b>Nombre del Cliente</b>', '<b>Nombre del Aval</b>', '<b>Colonia/Fraccionamiento', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>',  '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>',],
+//$aval = [];
+//$aval = [
+ //   ['<b>N.°</b>', '<b>Fecha de creación</b>', '<b>Fecha de visita</b>', '<b>Folio</b>', '<b>Nombre del Cliente</b>', '<b>Nombre del Aval</b>', '<b>Colonia/Fraccionamiento', '<b>Localidad</b>', '<b>Municipio</b>', '<b>Fecha de firma de anexos</b>',  '<b>Fecha de pago inicial</b>', '<b>Fecha de pago final</b>', '<b>Modalidad</b>', '<b>Fecha de otorgamiento</b>', '<b>Monto inicial</b>', '<b>Mensualidades vencidas</b>', '<b>Adeudo total</b>',],
+//];
+
+//$sql = 'SELECT * FROM aval;';
+//$res = mysqli_query($conn, $sql);
+//if (mysqli_num_rows($res) > 0) {
+  //  foreach ($res as $row) {
+    //    $aval[] = array_values($row);
+    //}
+//}
+
+
+
+
+// Consulta SQL para obtener todos los datos de la tabla `aval`
+$sql = "SELECT * FROM aval";
+$resultado = mysqli_query($conn, $sql);
+
+// Verificar si la consulta fue exitosa
+if (!$resultado) {
+    die('Error en la consulta SQL: ' . mysqli_error($conn));
+}
+
+// Arreglo para almacenar los datos
+$datos = [];
+
+// Agregar la primera fila con los nombres de las columnas
+$datos[] = [
+    'ID',
+    'Fecha de creación',
+    'Fecha de visita',
+    'Número de expediente',
+    'Nombre del cliente',
+    'Nombre del aval',
+    'Calle',
+    'Cruzamientos',
+    'Número de dirección',
+    'Colonia/Fraccionamiento',
+    'Localidad',
+    'Municipio',
+    'Fecha de firma',
+    'Pagos Fecha Inicial',
+    'Pagos Fecha Final',
+    'Modalidad',
+    'Tipo de crédito',
+    'Fecha de otorgamiento',
+    'Monto inicial',
+    'Mensualidades vencidas',
+    'Adeudo total',
+    'Nombre del archivo'
 ];
 
-$sql = 'SELECT * FROM aval;';
-$res = mysqli_query($conn, $sql);
-if (mysqli_num_rows($res) > 0) {
-    foreach ($res as $row) {
-        $aval[] = array_values($row);
-    }
+// Obtener los datos de la consulta y agregarlos al arreglo
+while ($fila = mysqli_fetch_assoc($resultado)) {
+    $datos[] = [
+        $fila['id'],
+        $fila['fecha_creacion'],
+        $fila['fecha_visita'],
+        $fila['numero_expediente'],
+        $fila['nombre_cliente'],
+        $fila['nombre_aval'],
+        $fila['calle'],
+        $fila['cruzamientos'],
+        $fila['numero_direccion'],
+        $fila['colonia_fraccionamiento'],
+        $fila['localidad'],
+        $fila['municipio'],
+        $fila['fecha_firma'],
+        $fila['pagos_fecha_inicial'],
+        $fila['pagos_fecha_final'],
+        $fila['modalidad'],
+        $fila['tipo_credito'],
+        $fila['fecha_otorgamiento'],
+        $fila['monto_inicial'],
+        $fila['mensualidades_vencidas'],
+        $fila['adeudo_total'],
+        $fila['nombre_archivo']
+    ];
 }
 
-for ($i = 1; $i < count($aval); $i++) {
-    $aval[$i][0] = '<b>' . $i . '</b>';
-    $aval[$i][1] = date('d-m-Y H:i:s', strtotime($aval[$i][1]));
-    $aval[$i][2] = $aval[$i][2] ? date('d-m-Y', strtotime($aval[$i][2])) : '';
-   // $aval[$i][11] = date('d-m-Y', strtotime($aval[$i][11]));
-    //Convertir a número
-     //                  $aval[$i][13] = number_format(intval($aval[$i][13]), 2); 
-    //$aval[$i][14] = ucfirst($aval[$i][14]);
-   // $aval[$i][15] = date('m-Y', strtotime($aval[$i][15]));
-    //$aval[$i][16] = date('m-Y', strtotime($aval[$i][16]));
-    //$aval[$i][19] = date('d-m-Y', strtotime($aval[$i][19]));
-    //$aval[$i][20] = number_format($aval[$i][20], 2);
-    //$aval[$i][22] = number_format($aval[$i][22], 2);
-    unset($aval[$i][1]);
-    unset($aval[$i][2]);
-    unset($aval[$i][3]);
-    //unset($aval[$i][23]);
-}
+// Declarar nombre con el que se va a guardar el archivo
+$filename = 'Reporte_de_aval.xlsx';
 
-$filename = 'Reporte de cartas de avales.xlsx';
-
-$xlsx = Shuchkin\SimpleXLSXGen::fromArray($aval);
+// Crear el archivo Excel con los datos y mandar el archivo a descargar desde el navegador
+$xlsx = Shuchkin\SimpleXLSXGen::fromArray($datos);
 $xlsx->downloadAs($filename);
+
+?>
+
