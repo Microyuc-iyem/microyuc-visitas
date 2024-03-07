@@ -36,9 +36,9 @@ for ($i = 1; $i < count($aval); $i++) {
     //$aval[$i][19] = date('d-m-Y', strtotime($aval[$i][19]));
     //$aval[$i][20] = number_format($aval[$i][20], 2);
     //$aval[$i][22] = number_format($aval[$i][22], 2);
+    unset($aval[$i][1]);
+    unset($aval[$i][2]);
     unset($aval[$i][3]);
-    unset($aval[$i][4]);
-    unset($aval[$i][5]);
     //unset($aval[$i][23]);
 }
 
