@@ -44,5 +44,5 @@ for ($i = 1; $i < count($aval); $i++) {
 
 $filename = 'Reporte de cartas de avales.xlsx';
 
-$xlsx = Shuchkin\SimpleXLSXGen::fromArray($cartas);
+$xlsx = Shuchkin\SimpleXLSXGen::fromArray($aval);
 $xlsx->downloadAs($filename);
