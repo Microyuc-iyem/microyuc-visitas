@@ -119,55 +119,14 @@ if ($_GET['id']) {
                     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
 // Set values in template with post received input variables
-                 //   $values = [];
-                   // for ($i = 1; $i < $new_counter; $i++) {
-                     //   if ($bitacora[0]['gestion_fecha' . $i]) {
-                      //      $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacora[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacora[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacora[0]['gestion_comentarios' . $i]];
-                       // }
-                    //}
+                   $values = [];
+                    for ($i = 1; $i < $new_counter; $i++) {
+                        if ($bitacora[0]['gestion_fecha' . $i]) {
+                            $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacora[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacora[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacora[0]['gestion_comentarios' . $i]];
+                        }
+                    }
 
-                   // $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
-
-                    //$AT_gestion_fecha = 'gestion_fecha' . $new_counter;
-                    //$AT_gestion_via = 'gestion_via' . $new_counter;
-                    //$AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
-
-                    //$AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-// Define un arreglo para almacenar todas las gestiones
-$values = [];
-
-// Itera sobre los resultados de la consulta
-foreach ($res as $row) {
-    // Itera sobre las columnas desde la segunda hasta el número de columnas
-    for ($i = 2; $i <= $column_number; $i++) {
-        // Verifica si existe la fecha de la gestión
-        if (!empty($row['gestion_fecha' . $i])) {
-            // Agrega la gestión al arreglo de valores
-            $values[] = [
-                'fecha' => strtotime($row['gestion_fecha' . $i]),
-                'via' => $row['gestion_via' . $i],
-                'comentarios' => $row['gestion_comentarios' . $i],
-                'evidencia_fecha' => $row['evidencia_fecha' . $i],
-                'evidencia_fotografia' => $row['evidencia_fotografia' . $i],
-                'acreditado_nombre' => $row['acreditado_nombre']
-            ];
-        }
-    }
-}
-
-// Ordena las gestiones por fecha
-usort($values, 'compararFechas');
-
-
-
-
-
-   $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
+                    $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
 
                     $AT_gestion_fecha = 'gestion_fecha' . $new_counter;
                     $AT_gestion_via = 'gestion_via' . $new_counter;
@@ -175,19 +134,6 @@ usort($values, 'compararFechas');
 
                     $AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
