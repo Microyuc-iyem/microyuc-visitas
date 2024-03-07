@@ -51,26 +51,127 @@ if ($_GET['id']) {
                     unlink('./uploads/' . $imagename);
                 }
 
+
+
+
+
+
+
+
+                
                 // Create variable with filename
-                $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
+              //  $nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
 // Encode filename so that UTF-8 characters work
-                $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
+               // $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
+               // $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
-                 $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
+                // $sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . ";";
 
-                $result = mysqli_query($conn, $sql);
+                //$result = mysqli_query($conn, $sql);
                 // Fetch the resulting rows as an associative array
-                $bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                //$bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
 // Set values in template with post received input variables
-                $values = [];
-                for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
-                    if ($bitacoras[0]['gestion_fecha' . $i]) {
-                        $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacoras[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacoras[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacoras[0]['gestion_comentarios' . $i]];
-                    }
-                }
+                //$values = [];
+                //for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
+                  //  if ($bitacoras[0]['gestion_fecha' . $i]) {
+                    //    $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacoras[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacoras[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacoras[0]['gestion_comentarios' . $i]];
+                    //}
+                //}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+// Create variable with filename
+$nombre_archivo = $bitacoras[0]['acreditado_folio'] . ' ' . $bitacoras[0]['acreditado_nombre'] . ' - Bitácora.docx';
+// Encode filename so that UTF-8 characters work
+$nombre_archivo_decodificado = rawurlencode($nombre_archivo);
+
+// Create new instance of PHPWord template processor using the required template file
+$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
+
+// SQL query to fetch all entries associated with the provided ID and order by date
+$sql = "SELECT * FROM bitacora WHERE id = " . $_GET['id'] . " ORDER BY gestion_fecha1, gestion_fecha2, ..."; // You need to order by all possible date columns
+
+$result = mysqli_query($conn, $sql);
+
+// Fetch the resulting rows as an associative array
+$bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+// Set values in template with post received input variables
+$values = [];
+for ($i = 1; $i <= $bitacoras[0]['gestion_contador']; $i++) {
+    if ($bitacoras[0]['gestion_fecha' . $i]) {
+        $values[] = [
+            'gestion_fecha' => date("d-m-Y", strtotime($bitacoras[0]['gestion_fecha' . $i])),
+            'gestion_via' => $bitacoras[0]['gestion_via' . $i],
+            'gestion_comentarios' => $bitacoras[0]['gestion_comentarios' . $i]
+        ];
+    }
+}
+
+// Rest of your code...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+                
 
                 $templateProcessor->setValue('acreditado_nombre', $bitacoras[0]['acreditado_nombre']);
                 $templateProcessor->setValue('acreditado_folio', $bitacoras[0]['acreditado_folio']);
