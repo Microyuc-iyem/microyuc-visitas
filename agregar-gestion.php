@@ -142,24 +142,21 @@ if ($_GET['id']) {
 $values = [];
 
 // Itera sobre las gestiones
-for ($i = 1; $i <= $new_counter; $i++) {
-    // Verifica si existe la fecha de la gestión
-    if ($bitacora[0]['gestion_fecha' . $i]) {
-        // Agrega la gestión al arreglo de valores
-        $values[] = [
-            'fecha' => strtotime($bitacora[0]['gestion_fecha' . $i]), // Convierte la fecha a un timestamp para facilitar la comparación
-            'via' => $bitacora[0]['gestion_via' . $i],
-            'comentarios' => $bitacora[0]['gestion_comentarios' . $i]
-        ];
+foreach ($res as $row) {
+    for ($i = 2; $i <= $column_number; $i++) {
+        if (!empty($row['gestion_fecha' . $i])) {
+            // Agrega la gestión al arreglo de valores
+            $values[] = [
+                'fecha' => strtotime($row['gestion_fecha' . $i]), // Convierte la fecha a un timestamp para facilitar la comparación
+                'via' => $row['gestion_via' . $i],
+                'comentarios' => $row['gestion_comentarios' . $i],
+                'evidencia_fecha' => $row['evidencia_fecha' . $i],
+                'evidencia_fotografia' => $row['evidencia_fotografia' . $i],
+                'acreditado_nombre' => $row['acreditado_nombre']
+            ];
+        }
     }
 }
-
-// Agrega la última gestión (la que se está procesando actualmente)
-$values[] = [
-    'fecha' => strtotime($gestion['gestion_fecha' . $new_counter]),
-    'via' => $gestion['gestion_via' . $new_counter],
-    'comentarios' => $gestion['gestion_comentarios' . $new_counter]
-];
 
 // Define una función de comparación para ordenar las gestiones por fecha
 function compararFechas($a, $b) {
@@ -169,6 +166,7 @@ function compararFechas($a, $b) {
 // Ordena las gestiones por fecha
 usort($values, 'compararFechas');
 
+                    
 // Agrega la última gestión después de ordenar las gestiones por fecha
 $values[] = [
     'gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])),
