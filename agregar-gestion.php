@@ -126,13 +126,13 @@ if ($_GET['id']) {
                        // }
                     //}
 
-                    $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
+                   // $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
 
-                    $AT_gestion_fecha = 'gestion_fecha' . $new_counter;
-                    $AT_gestion_via = 'gestion_via' . $new_counter;
-                    $AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
+                    //$AT_gestion_fecha = 'gestion_fecha' . $new_counter;
+                    //$AT_gestion_via = 'gestion_via' . $new_counter;
+                    //$AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
 
-                    $AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
+                    //$AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
