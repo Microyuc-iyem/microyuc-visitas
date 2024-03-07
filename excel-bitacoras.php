@@ -1,12 +1,8 @@
 <?php
+
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
 require_once('path/to/PHPExcel.php');
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 // Añadiendo huso horario de México para generar la marca de fecha actual
 $tz_CMX = new DateTimeZone('America/Mexico_City');
@@ -19,9 +15,8 @@ $column_number = 0;
 // Arreglo para generar la tabla de excel
 $bitacoras = [];
 $bitacoras = [
-    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],];
+    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],];$sql = "SELECT * FROM bitacora;";
 
-$sql = "SELECT * FROM bitacora;";
 $res = mysqli_query($conn, $sql);
 $columnas = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
@@ -89,3 +84,14 @@ $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
 // Hacer la tabla de Excel con el arreglo bitácoras y mandar el archivo a descargar desde el navegador
 $xlsx = Shuchkin\SimpleXLSXGen::fromArray($bitacoras);
 $xlsx->downloadAs($filename);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Resto de las etiquetas HTML... -->
+</head>
+<body>
+    <!-- Resto del cuerpo del documento HTML... -->
+</body>
+</html>
