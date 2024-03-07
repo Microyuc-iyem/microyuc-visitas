@@ -163,13 +163,11 @@ foreach ($res as $row) {
 // Ordena las gestiones por fecha
 usort($values, 'compararFechas');
 
-// No es necesario agregar la última gestión nuevamente aquí
-
-// Continúa con el resto de tu código...
 
 
 
-   // $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
+
+   $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
 
                     $AT_gestion_fecha = 'gestion_fecha' . $new_counter;
                     $AT_gestion_via = 'gestion_via' . $new_counter;
