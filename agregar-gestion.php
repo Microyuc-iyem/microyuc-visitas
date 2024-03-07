@@ -111,34 +111,103 @@ if ($_GET['id']) {
                 if (!$generacion_invalida) {
 
 // Create variable with filename
-                    $nombre_archivo = $bitacora[0]['acreditado_folio'] . ' ' . $bitacora[0]['acreditado_nombre'] . ' - Bitácora.docx';
+                 //   $nombre_archivo = $bitacora[0]['acreditado_folio'] . ' ' . $bitacora[0]['acreditado_nombre'] . ' - Bitácora.docx';
 // Encode filename so that UTF-8 characters work
-                    $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
+                   // $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-                    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
+                    //$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
 
 // Set values in template with post received input variables
-                   $values = [];
-                    for ($i = 1; $i < $new_counter; $i++) {
-                        if ($bitacora[0]['gestion_fecha' . $i]) {
-                            $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacora[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacora[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacora[0]['gestion_comentarios' . $i]];
-                        }
-                    }
+                   //$values = [];
+                    //for ($i = 1; $i < $new_counter; $i++) {
+                      //  if ($bitacora[0]['gestion_fecha' . $i]) {
+                        //    $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($bitacora[0]['gestion_fecha' . $i])), 'gestion_via' => $bitacora[0]['gestion_via' . $i], 'gestion_comentarios' => $bitacora[0]['gestion_comentarios' . $i]];
+                        //}
+                    //}
 
-                    $values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
+                    //$values[] = ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha' . $new_counter])), 'gestion_via' => $gestion['gestion_via' . $new_counter], 'gestion_comentarios' => $gestion['gestion_comentarios' . $new_counter]];
 
-                    $AT_gestion_fecha = 'gestion_fecha' . $new_counter;
-                    $AT_gestion_via = 'gestion_via' . $new_counter;
-                    $AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
+                    //$AT_gestion_fecha = 'gestion_fecha' . $new_counter;
+                    //$AT_gestion_via = 'gestion_via' . $new_counter;
+                    //$AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
 
-                    $AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
+                    //$AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
+                    
+// Create variable with filename
+$nombre_archivo = $bitacora[0]['acreditado_folio'] . ' ' . $bitacora[0]['acreditado_nombre'] . ' - Bitácora.docx';
+// Encode filename so that UTF-8 characters work
+$nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
+// Create new instance of PHPWord template processor using the required template file
+$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-bitacora.docx');
+
+// Set values in template with post received input variables
+$values = [];
+
+// Obtener todas las gestiones y ordenar por fecha
+$gestiones = [];
+
+// Agregar gestiones existentes a la lista
+for ($i = 1; $i < $new_counter; $i++) {
+    if ($bitacora[0]['gestion_fecha' . $i]) {
+        $gestiones[] = [
+            'fecha' => strtotime($bitacora[0]['gestion_fecha' . $i]),
+            'via' => $bitacora[0]['gestion_via' . $i],
+            'comentarios' => $bitacora[0]['gestion_comentarios' . $i]
+        ];
+    }
+}
+
+// Agregar nueva gestión
+$gestiones[] = [
+    'fecha' => strtotime($gestion['gestion_fecha' . $new_counter]),
+    'via' => $gestion['gestion_via' . $new_counter],
+    'comentarios' => $gestion['gestion_comentarios' . $new_counter]
+];
+
+// Ordenar gestiones por fecha
+usort($gestiones, function ($a, $b) {
+    return $a['fecha'] - $b['fecha'];
+});
+
+// Insertar gestiones ordenadas en el template de Word
+foreach ($gestiones as $gestion) {
+    $values[] = [
+        'gestion_fecha' => date("d-m-Y", $gestion['fecha']),
+        'gestion_via' => $gestion['via'],
+        'gestion_comentarios' => $gestion['comentarios']
+    ];
+}
+
+// Resto del código
+$AT_gestion_fecha = 'gestion_fecha' . $new_counter;
+                    $AT_gestion_via = 'gestion_via' . $new_counter;
+                    $AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
+
+                    $AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
 
 
 
