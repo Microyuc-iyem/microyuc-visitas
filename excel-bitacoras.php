@@ -6,15 +6,9 @@
 </head>
 <body>
 
-
 <?php
-
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
-require_once('path/to/PHPExcel.php');
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 // Añadiendo huso horario de México para generar la marca de fecha actual
 $tz_CMX = new DateTimeZone('America/Mexico_City');
@@ -27,8 +21,9 @@ $column_number = 0;
 // Arreglo para generar la tabla de excel
 $bitacoras = [];
 $bitacoras = [
-    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],];$sql = "SELECT * FROM bitacora;";
+    ['<b>N.º</b>', '<b>Fecha de creación</b>', '<b>Nombre</b>', '<b>Folio</b>', '<b>Municipio</b>', '<b>Localidad</b>', '<b>Tipo de garantía</b>', '<b>Garantía</b>', '<b>Número de teléfono</b>', '<b>Correo electrónico</b>', '<b>Nombre del aval</b>', '<b>Fecha de gestión</b>', '<b>Vía de gestión</b>', '<b>Comentarios de gestión</b>', '<b>Fecha de evidencia</b>', '<b>Fotografía de evidencia</b>',],];
 
+$sql = "SELECT * FROM bitacora;";
 $res = mysqli_query($conn, $sql);
 $columnas = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
@@ -42,12 +37,12 @@ if (!empty($columnas[0])) {
 }
 
 // Crear nueva variable con la tabla de bitácoras de la base de datos
-$bitacora = mysqli_fetch_assoc($res);
+$bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
 if (mysqli_num_rows($res) > 0) {
-    while ($row = mysqli_fetch_assoc($res)) {
-        $bitacoras[] = $row;
+    foreach ($res as $row) {
+        $bitacoras[] = array_values($row);
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
@@ -65,14 +60,14 @@ for ($i = 1; $i < count($bitacoras); $i++) {
     // Darle formato a todas las fechas a partir del índice 11
     for ($j = 11; $j < count($bitacoras[$i]); $j++) {
         if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
-            $bitacoras[$i][$j] = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::toFormattedString(date('d/m/Y', strtotime($bitacoras[$i][$j])));
+            $bitacoras[$i][$j] = date('d/m/Y', strtotime($bitacoras[$i][$j]));
         }
     }
     // Hacer solo si el índice 0 de los arreglos es numérico
     // Esto para evitar los arreglos que solo continen las gestiones
     if (is_numeric($bitacoras[$i][0])) {
         $bitacoras[$i][0] = '<b>' . $id_counter . '</b>';
-        $bitacoras[$i][1] = PHPExcel_Style_NumberFormat::toFormattedString(date('d/m/Y H:i:s', strtotime($bitacoras[$i][1])));
+        $bitacoras[$i][1] = date('d/m/Y H:i:s', strtotime($bitacoras[$i][1]));
 
         $num = count($bitacoras[$i]);
         for ($j = 23; $j <= $num; $j++) {
@@ -88,7 +83,6 @@ for ($i = 1; $i < count($bitacoras); $i++) {
         $id_counter++;
     }
 }
-
 
 // Declarar nombre con el que se va a guardar el archivo
 $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
