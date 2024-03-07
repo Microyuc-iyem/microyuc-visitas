@@ -133,7 +133,41 @@ if ($_GET['id']) {
                     $AT_gestion_comentarios = 'gestion_comentarios' . $new_counter;
 
                     $AT_query = "ALTER TABLE bitacora ADD " . $AT_gestion_fecha . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_via . " VARCHAR(255) DEFAULT '', ADD " . $AT_gestion_comentarios . " VARCHAR(255) DEFAULT ''";
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     $templateProcessor->setValue('acreditado_nombre', $bitacora[0]['acreditado_nombre']);
                     $templateProcessor->setValue('acreditado_folio', $bitacora[0]['acreditado_folio']);
                     $templateProcessor->setValue('acreditado_municipio', $bitacora[0]['acreditado_municipio']);
