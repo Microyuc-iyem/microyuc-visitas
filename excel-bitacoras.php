@@ -42,7 +42,7 @@ if (mysqli_num_rows($res) > 0) {
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
-                $bitacoras[] = ['', 'XXXXXXXXXX', '', '', '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+                $bitacoras[] = ['', '', $row['acreditado_nombre' . $i`], $row['acreditado_folio' . $i], '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
             }
         }
     }
