@@ -34,13 +34,12 @@ if (!empty($columnas[0])) {
 }
 
 // Crear nueva variable con la tabla de bitácoras de la base de datos
-// Crear nueva variable con la tabla de bitácoras de la base de datos
-$bitacora = mysqli_fetch_all($res, MYSQLI_ASSOC);
+$bitacora = mysqli_fetch_assoc($res);
 
 // Si el número de filas es mayor a 0, añadir al arreglo de bitácoras los valores de todas las filas de la base de datos
 if (mysqli_num_rows($res) > 0) {
-    foreach ($res as $row) {
-        $bitacoras[] = array_values($row);
+    while ($row = mysqli_fetch_assoc($res)) {
+        $bitacoras[] = $row;
         // Añadir al arreglo las gestiones de cada fila como arreglos separados
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
@@ -56,12 +55,10 @@ $id_counter = 1;
 // para unsetear los campos innecesarios y darle formato a otros campos
 for ($i = 1; $i < count($bitacoras); $i++) {
     // Darle formato a todas las fechas a partir del índice 11
-    // Darle formato a todas las fechas a partir del índice 11
-for ($j = 11; $j < count($bitacoras[$i]); $j++) {
-    if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
-        $bitacoras[$i][$j] = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::toFormattedString(date('d/m/Y', strtotime($bitacoras[$i][$j])));
-    }
-}
+    for ($j = 11; $j < count($bitacoras[$i]); $j++) {
+        if (DateTime::createFromFormat('Y-m-d', $bitacoras[$i][$j]) !== false) {
+            $bitacoras[$i][$j] = \PhpOffice\PhpSpreadsheet\Style\NumberFormat::toFormattedString(date('d/m/Y', strtotime($bitacoras[$i][$j])));
+        }
     }
     // Hacer solo si el índice 0 de los arreglos es numérico
     // Esto para evitar los arreglos que solo continen las gestiones
@@ -83,6 +80,7 @@ for ($j = 11; $j < count($bitacoras[$i]); $j++) {
         $id_counter++;
     }
 }
+
 
 // Declarar nombre con el que se va a guardar el archivo
 $filename = 'Reporte de bitácoras ' . $current_timestamp . '.xlsx';
