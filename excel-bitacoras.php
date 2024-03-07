@@ -58,7 +58,7 @@ if (mysqli_num_rows($res) > 0) {
         for ($i = 2; $i <= $column_number; $i++) {
             if (!empty($row['gestion_fecha' . $i])) {
                 // Crear un arreglo para representar una fila de gestión
-                $gestion_row = ['', '', '', $row['acreditado_folio'], '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
+                $gestion_row = [$row['acreditado_folio'], '', '', '', '', '', '', '', '', '', '', $row['gestion_fecha' . $i], $row['gestion_via' . $i], $row['gestion_comentarios' . $i], $row['evidencia_fecha' . $i], $row['evidencia_fotografia' . $i]];
                 // Agregar la fila de gestión al arreglo de bitácoras
                 $bitacoras[] = $gestion_row;
             }
