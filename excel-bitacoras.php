@@ -2,6 +2,7 @@
 require './config/db_connect.php';
 require './includes/SimpleXLSXGen.php';
 require_once('path/to/PHPExcel.php');
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 
 error_reporting(E_ALL);
