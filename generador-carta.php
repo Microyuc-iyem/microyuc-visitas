@@ -212,29 +212,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //////////////////////////////////
 
-  // Consulta SQL para recuperar la fecha de visita de la última carta creada
-$sql = "SELECT fecha_visita FROM carta WHERE id = 8";
 
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // Obtener el resultado de la consulta
-    $row = $result->fetch_assoc();
-    $fecha_visita = $row["fecha_visita"];
-
-    // Formatear la fecha de visita
-    $fecha_visita_formateada = "Mérida, Yucatán, México, " . date("d", strtotime($fecha_visita)) . " de agosto del año " . date("Y", strtotime($fecha_visita));
-} else {
-    $fecha_visita_formateada = "Fecha de visita no encontrada";
-}
-
-        
-
-        
         /////////////////////////////////////
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('fecha_visita_formateada', $carta['fecha_visita_formateada']);
+        $templateProcessor->setValue('fecha_visita', $carta['fecha_visita']);
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
