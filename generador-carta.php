@@ -216,7 +216,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /////////////////////////////////////
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('fecha_visita', $carta['fecha_visita']);
+        //$templateProcessor->setValue('fecha_visita', $carta['fecha_visita']);
+        $fecha_visita = new DateTime($carta['fecha_visita']);
+        $fecha_visita_formatted = $fecha_visita->format('j \d\e F \d\e Y');
+        $templateProcessor->setValue('fecha_visita', "Mérida, Yucatán a $fecha_visita_formatted");
+        
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
