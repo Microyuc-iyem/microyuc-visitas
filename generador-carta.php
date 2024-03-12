@@ -234,7 +234,7 @@ if ($result->num_rows > 0) {
         /////////////////////////////////////
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('fecha_visita', $carta['fecha_visita']);
+        $templateProcessor->setValue('fecha_visita_formateada', $carta['fecha_visita_formateada']);
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
