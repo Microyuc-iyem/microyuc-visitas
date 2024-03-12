@@ -205,9 +205,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta4.docx');
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta5.docx');
+
+
+
+
+        //////////////////////////////////
+
+        // Consulta SQL para recuperar la fecha de visita
+$sql = "SELECT fecha_visita FROM carta WHERE id = 1"; // Modifica la consulta según tus necesidades
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Obtener el resultado de la consulta
+    $row = $result->fetch_assoc();
+    $fecha_visita = $row["fecha_visita"];
+
+    // Formatear la fecha de visita
+    $fecha_visita_formateada = "Mérida, Yucatán, México, " . date("d", strtotime($fecha_visita)) . " de agosto del año " . date("Y", strtotime($fecha_visita));
+} else {
+    $fecha_visita_formateada = "Fecha de visita no encontrada";
+}
+
+        
+
+        /////////////////////////////////////
 
 // Set values in template with post received inputs and calculated variables
+        $templateProcessor->setValue('fecha_visita', $fecha_visita_formateada);
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
@@ -229,6 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('adeudo_total', number_format($carta['adeudo_total'], 2));
 
 // Escape strings to insert into the database table
+        
         $numero_expediente = mysqli_real_escape_string($conn, $carta['numero_expediente']);
         $nombre_cliente = mysqli_real_escape_string($conn, $carta['nombre_cliente']);
         $calle = mysqli_real_escape_string($conn, $carta['calle']);
