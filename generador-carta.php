@@ -212,25 +212,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //////////////////////////////////
 
-    $fecha_visita = new DateTime($carta['fecha_visita']);
+  //  $fecha_visita = new DateTime($carta['fecha_visita']);
 
     // Crear un formateador de fecha usando el idioma español
-    $formatter = new IntlDateFormatter(
-    'es_ES',
-    IntlDateFormatter::FULL,
-    IntlDateFormatter::FULL,
-    'America/Mexico_City',
-    IntlDateFormatter::GREGORIAN
-    );
+//    $formatter = new IntlDateFormatter(
+ //   'es_ES',
+    //IntlDateFormatter::FULL,
+   //IntlDateFormatter::FULL,
+    //'America/Mexico_City',
+    //IntlDateFormatter::GREGORIAN
+    //);
 
     // Formatear la fecha con el nombre del mes en español
-    $fecha_visita_formatted = $formatter->format($fecha_visita);
+    //$fecha_visita_formatted = $formatter->format($fecha_visita);
 
     // Reemplazar el día y el año en la cadena formateada
-    $fecha_visita_formatted = preg_replace('/([0-9]{1,2}\s+de)\s+([A-Za-z]+)\s+de\s+([0-9]{4})/', '$1 $2 de $3', $fecha_visita_formatted);
+    //$fecha_visita_formatted = preg_replace('/([0-9]{1,2}\s+de)\s+([A-Za-z]+)\s+de\s+([0-9]{4})/', '$1 $2 de $3', $fecha_visita_formatted);
 
     // Insertar la fecha formateada en el documento Word
-        $templateProcessor->setValue('fecha_visita', "Mérida, Yucatán, México, $fecha_visita_formatted");
+      
+        
+        $fecha_visita = new DateTime($carta['fecha_visita']);
+
+// Crear un formateador de fecha usando el idioma español
+$formatter = new IntlDateFormatter(
+    'es_ES',
+    IntlDateFormatter::FULL,
+    IntlDateFormatter::NONE,
+    'America/Mexico_City',
+    IntlDateFormatter::GREGORIAN
+);
+
+// Formatear la fecha con el nombre del mes en español
+$fecha_visita_formatted = $formatter->format($fecha_visita);
+
+// Insertar la fecha formateada en el documento Word
+$templateProcessor->setValue('fecha_visita', "Mérida, Yucatán, México a $fecha_visita_formatted");
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
