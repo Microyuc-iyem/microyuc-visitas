@@ -213,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //////////////////////////////////
 
         // Consulta SQL para recuperar la fecha de visita
-$sql = "SELECT fecha_visita FROM carta "; // Modifica la consulta según tus necesidades
+$sql = "SELECT fecha_visita FROM carta WHERE id = 5"; // Modifica la consulta según tus necesidades
 
 $result = $conn->query($sql);
 
