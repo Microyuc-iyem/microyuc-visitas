@@ -212,10 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //////////////////////////////////
 
-        // Consulta SQL para recuperar la fecha de visita
-// Consulta SQL para recuperar la fecha de visita de la última carta creada
+  // Consulta SQL para recuperar la fecha de visita de la última carta creada
 $sql = "SELECT fecha_visita FROM carta ORDER BY id DESC LIMIT 1";
- // Modifica la consulta según tus necesidades
 
 $result = $conn->query($sql);
 
@@ -232,6 +230,7 @@ if ($result->num_rows > 0) {
 
         
 
+        
         /////////////////////////////////////
 
 // Set values in template with post received inputs and calculated variables
