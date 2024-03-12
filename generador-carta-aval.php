@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre_archivo_decodificado = rawurlencode($nombre_archivo);
 
 // Create new instance of PHPWord template processor using the required template file
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-aval.docx');
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-aval3.docx');
 
         
 
