@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Set values in template with post received inputs and calculated variables
 
         //////////////////////////////////       
-       $fecha_visita = new DateTime($carta['fecha_visita']);
+       $fecha_visita = new DateTime($carta['fecha_visita'] . ' 00:00:00');
         $fecha_visita->setTimezone(new DateTimeZone('America/Mexico_City'));
     
 
