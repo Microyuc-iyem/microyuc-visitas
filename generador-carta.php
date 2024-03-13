@@ -211,7 +211,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Set values in template with post received inputs and calculated variables
 
         //////////////////////////////////       
-        $fecha_visita = new DateTime($carta['fecha_visita']);
+       $fecha_visita = new DateTime($carta['fecha_visita']);
+        $fecha_visita->setTimezone(new DateTimeZone('America/Mexico_City'));
+    
 
 // Crear un formateador de fecha usando el idioma español
         $formatter = new IntlDateFormatter(
