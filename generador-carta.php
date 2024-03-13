@@ -213,10 +213,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //////////////////////////////////       
        $fecha_visita = new DateTime($carta['fecha_visita'] . ' 00:00:00');
         $fecha_visita->setTimezone(new DateTimeZone('America/Mexico_City'));
-    
 
-// Crear un formateador de fecha usando el idioma español
-        $formatter = new IntlDateFormatter(
+    // Crear un formateador de fecha usando el idioma español
+            $formatter = new IntlDateFormatter(
             'es_ES',
             IntlDateFormatter::FULL,
             IntlDateFormatter::NONE,
@@ -224,11 +223,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             IntlDateFormatter::GREGORIAN
             );
 
-// Formatear la fecha con el nombre del mes en español
-        $fecha_visita_formatted = $formatter->format($fecha_visita);
-//////////////////////////////////////////////////////////////////////////////////
-//Insertar la fecha formateada en el documento Word//
-        
+            // Formatear la fecha con el nombre del mes en español
+            $fecha_visita_formatted = $formatter->format($fecha_visita);
+
+        // Insertar la fecha formateada en el documento Word
         $templateProcessor->setValue('fecha_visita', "Mérida, Yucatán, México a $fecha_visita_formatted");
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
