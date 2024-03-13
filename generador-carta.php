@@ -211,23 +211,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Set values in template with post received inputs and calculated variables
 
         //////////////////////////////////       
-     $fecha_visita = new DateTime($carta['fecha_visita'] . ' 00:00:00');
-$fecha_visita->setTimezone(new DateTimeZone('America/Mexico_City'));
+          $fecha_visita = new DateTime($carta['fecha_visita'] . ' 00:00:00');
+        $fecha_visita->setTimezone(new DateTimeZone('America/Mexico_City'));
 
-// Crear un formateador de fecha usando el idioma español
-$formatter = new IntlDateFormatter(
-    'es_ES',
-    IntlDateFormatter::NONE,
-    IntlDateFormatter::LONG,
-    'America/Mexico_City',
-    IntlDateFormatter::GREGORIAN
-);
+        // Agregar un día a la fecha
+        $fecha_visita->modify('+1 day');
 
-// Formatear la fecha con el nombre del mes en español
-$fecha_visita_formatted = $formatter->format($fecha_visita);
+        // Crear un formateador de fecha usando el idioma español
+        $formatter = new IntlDateFormatter(
+            'es_ES',
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::NONE,
+            'America/Mexico_City',
+            IntlDateFormatter::GREGORIAN
+        );
 
-// Insertar la fecha formateada en el documento Word
-$templateProcessor->setValue('fecha_visita', "Mérida, Yucatán, México a $fecha_visita_formatted");
+        // Formatear la fecha con el nombre del mes en español
+        $fecha_visita_formatted = $formatter->format($fecha_visita);
+
+        // Insertar la fecha formateada en el documento Word
+        $templateProcessor->setValue('fecha_visita', "Mérida, Yucatán, México a $fecha_visita_formatted");
 
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
