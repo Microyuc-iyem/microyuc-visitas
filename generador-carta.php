@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['documentacion']['options']['regexp'] = '/[\s\S]+/';
     $filtros['documentacion']['options']['default'] = '';
     $filtros['comprobacion_monto']['filter'] = FILTER_VALIDATE_FLOAT;
-    $filtros['comprobacion_monto']['options']['min_range'] = 0;
+   $filtros['comprobacion_monto']['options']['min_range'] = 0;
     $filtros['capital_de_trabajo']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['capital_de_trabajo']['options']['regexp'] = '/[\s\S]+/';
     $filtros['activo_fijo']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -110,6 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filtros['insumos']['options']['regexp'] = '/[\s\S]+/';
     $filtros['certificaciones']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['certificaciones']['options']['regexp'] = '/[\s\S]+/';
+    $filtros['sin_comprobacion']['filter'] = FILTER_VALIDATE_REGEXP;
+    $filtros['sin_comprobacion']['options']['regexp'] = '/[\s\S]+/';
     $filtros['pagos_fecha_inicial']['filter'] = FILTER_VALIDATE_REGEXP;
     $filtros['pagos_fecha_inicial']['options']['regexp'] = '/^[\d\-]+$/';
     $filtros['pagos_fecha_final']['filter'] = FILTER_VALIDATE_REGEXP;
@@ -136,17 +138,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_null($carta['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
     if (!is_null($carta['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
     if (!is_null($carta['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
+  
 
     $errores['numero_expediente'] = $carta['numero_expediente'] ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     $errores['nombre_cliente'] = $carta['nombre_cliente'] ? '' : 'El nombre solo debe contener letras y espacios.';
     $errores['localidad'] = $carta['localidad'] ? '' : 'Este campo es requerido.';
     $errores['municipio'] = $carta['municipio'] ? '' : 'Este campo es requerido.';
     $errores['fecha_firma'] = $carta['fecha_firma'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
-    $errores['comprobacion_monto'] = $carta['comprobacion_monto'] ? '' : 'El monto debe ser mayor o igual a 0.';
-    if (is_null($carta['capital_de_trabajo']) && is_null($carta['activo_fijo']) && is_null($carta['adecuaciones']) && is_null($carta['insumos']) && is_null($carta['certificaciones'])) {
-        $errores['comprobacion_tipo'] = 'Por favor, seleccione al menos una opción.';
-    } else {
-        $errores['comprobacion_tipo'] = '';
+    if($carta['comprobacion_monto'] >= 0){
+        $errores['comprobacion_monto'] = '';
+    }else{
+        $errores['comprobacion_monto'] = 'El monto debe ser mayor o igual a 0';
     }
     $errores['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial'] ? '' : 'Por favor, introduzca un formato de fecha válido.';
     $errores['pagos_fecha_final'] = $carta['pagos_fecha_final'] ? '' : 'Por favor, introduzca un formato de fecha válido. ';
@@ -188,13 +190,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $generacion_invalida = implode($errores);
-
-    if (count($carta['comprobacion_tipo']) > 1) {
+if (count($carta['comprobacion_tipo']) >= 1) {
         $carta['comprobacion_tipo'] = implode(", ", $carta['comprobacion_tipo']);
         $carta['comprobacion_tipo'] = str_lreplace(',', ' y', $carta['comprobacion_tipo']);
-    } else {
-        $carta['comprobacion_tipo'] = implode($carta['comprobacion_tipo']);
+    } else{
+        $carta['comprobacion_tipo'] = 'N/A';
     }
+
+    
 
     if (!$generacion_invalida) {
 
@@ -207,14 +210,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Create new instance of PHPWord template processor using the required template file
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./plantillas/plantilla-carta.docx');
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-        //////////////////////////////////
-
-        
-        //////////////////////////////////       
-          $fecha_visita = new DateTime($carta['fecha_visita'] . ' 00:00:00');
+        $fecha_visita = new DateTime($carta['fecha_visita'] . ' 00:00:00');
         $fecha_visita->setTimezone(new DateTimeZone('America/Mexico_City'));
 
         // Agregar un día a la fecha
@@ -235,17 +233,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insertar la fecha formateada en el documento Word
         $templateProcessor->setValue('fecha_visita', "Mérida, Yucatán, México a $fecha_visita_formatted");
 
-        
-        
-        
-        
-        
-        
-        
-        /////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Set values in template with post received inputs and calculated variables
-        $templateProcessor->setValue('fecha_visita', $fecha_visita_formateada);
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
@@ -267,7 +258,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('adeudo_total', number_format($carta['adeudo_total'], 2));
 
 // Escape strings to insert into the database table
-        
         $numero_expediente = mysqli_real_escape_string($conn, $carta['numero_expediente']);
         $nombre_cliente = mysqli_real_escape_string($conn, $carta['nombre_cliente']);
         $calle = mysqli_real_escape_string($conn, $carta['calle']);
